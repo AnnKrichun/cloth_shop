@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root Main Application Menu Node Link Object Element Token -->
+    <menuitem id="menu_cloth_shop_root"
+              name="Clothing Shop"
+              web_icon="cloth_shop,static/description/icon.png"
+              sequence="5"/>
+
+    <!-- Products master directories warehouse control routing nodes -->
+    <menuitem id="menu_cloth_product"
+              name="Products (Stock)"
+              parent="menu_cloth_shop_root"
+              action="action_cloth_product"
+              sequence="5"/>
+
+    <!-- Documents structural operational registry navigation panels header nodes -->
+    <menuitem id="menu_cloth_shop_documents"
+              name="Operational Documents"
+              parent="menu_cloth_shop_root"
+              sequence="10"/>
+
+    <menuitem id="menu_cloth_receipt"
+              name="Goods Receipts"
+              parent="menu_cloth_shop_documents"
+              action="action_cloth_receipt"
+              sequence="10"/>
+
+    <menuitem id="menu_cloth_order"
+              name="Customer Orders"
+              parent="menu_cloth_shop_documents"
+              action="action_cloth_order"
+              sequence="20"/>
+<menuitem id="menu_cloth_shop_reporting"
+              name="Reporting"
+              parent="menu_cloth_shop_root"
+              sequence="15"/>
+
+    <menuitem id="menu_cloth_inventory_report"
+              name="Inventory Turnover &amp; Valuation"
+              parent="menu_cloth_shop_reporting"
+              action="action_cloth_inventory_report"
+              sequence="10"/>
+    <!-- Configuration registries setup drop-down matrix nodes panels mappings -->
+    <menuitem id="menu_cloth_shop_config"
+              name="Configuration"
+              parent="menu_cloth_shop_root"
+              sequence="20"/>
+
+    <!-- CLEAN ACTION REGISTRY FOR SEPARATE APP SETTINGS EXECUTION -->
+    <record id="action_cloth_shop_settings_final_clean_route" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <!-- FIXED FOR ODOO 19: Replaced invalid 'inline' value with canonical platform standard 'current' -->
+        <field name="target">current</field>
+        <field name="view_id" ref="view_cloth_shop_config_settings_form"/>
+    </record>
+
+    <menuitem id="menu_cloth_config_settings"
+              name="Settings"
+              parent="menu_cloth_shop_config"
+              action="action_cloth_shop_settings_final_clean_route"
+              sequence="5"/>
+
+    <menuitem id="menu_cloth_brand"
+              name="Brands"
+              parent="menu_cloth_shop_config"
+              action="action_cloth_brand"
+              sequence="10"/>
+
+    <menuitem id="menu_cloth_size"
+              name="Sizes"
+              parent="menu_cloth_shop_config"
+              action="action_cloth_size"
+              sequence="20"/>
+
+    <menuitem id="menu_cloth_collection"
+              name="Collections"
+              parent="menu_cloth_shop_config"
+              action="action_cloth_collection"
+              sequence="30"/>
+
+    <menuitem id="menu_cloth_markup"
+              name="Markup Coefficients"
+              parent="menu_cloth_shop_config"
+              action="action_cloth_markup"
+              sequence="40"/>
+
+</odoo>

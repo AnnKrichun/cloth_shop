@@ -1,0 +1,496 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * cloth_shop
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-24 12:00+0000\n"
+"PO-Revision-Date: 2026-05-24 12:00+0000\n"
+"Last-Translator: AI Assistant\n"
+"Language-Team: Ukrainian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+
+#. module: cloth_shop
+msgid "Clothing Shop"
+msgstr "Магазин одягу"
+
+#. module: cloth_shop
+msgid "Products (Stock)"
+msgstr "Товари (Залишки)"
+
+#. module: cloth_shop
+msgid "Operational Documents"
+msgstr "Операційні документи"
+
+#. module: cloth_shop
+msgid "Goods Receipts"
+msgstr "Надходження товарів"
+
+#. module: cloth_shop
+msgid "Customer Orders"
+msgstr "Замовлення покупців"
+
+#. module: cloth_shop
+msgid "Configuration"
+msgstr "Довідники"
+
+#. module: cloth_shop
+msgid "Brands"
+msgstr "Бренди"
+
+#. module: cloth_shop
+msgid "Sizes"
+msgstr "Розміри"
+
+#. module: cloth_shop
+msgid "Collections"
+msgstr "Колекції"
+
+#. module: cloth_shop
+msgid "Markup Coefficients"
+msgstr "Коефіцієнти націнок"
+
+#. module: cloth_shop
+msgid "Clothing Brands"
+msgstr "Бренди одягу"
+
+#. module: cloth_shop
+msgid "Brand Name"
+msgstr "Назва бренду"
+
+#. module: cloth_shop
+msgid "Country of Origin"
+msgstr "Країна походження"
+
+#. module: cloth_shop
+msgid "Logo"
+msgstr "Логотип"
+
+#. module: cloth_shop
+msgid "Cloth Product Stock Card"
+msgstr "Картка товару (Залишки)"
+
+#. module: cloth_shop
+msgid "SKU"
+msgstr "Артикул"
+
+#. module: cloth_shop
+msgid "Product Name"
+msgstr "Назва товару"
+
+#. module: cloth_shop
+msgid "Brand"
+msgstr "Бренд"
+
+#. module: cloth_shop
+msgid "Collection"
+msgstr "Колекція"
+
+#. module: cloth_shop
+msgid "Size"
+msgstr "Розмір"
+
+#. module: cloth_shop
+msgid "Quantity Available"
+msgstr "Залишок у магазині"
+
+#. module: cloth_shop
+msgid "Purchase Price"
+msgstr "Ціна закупівлі"
+
+#. module: cloth_shop
+msgid "Retail Price"
+msgstr "Роздрібна ціна"
+
+#. module: cloth_shop
+msgid "A product with this SKU code already exists!"
+msgstr "Товар з такому артикулом вже існує!"
+
+#. module: cloth_shop
+msgid "New"
+msgstr "Новий"
+
+#. module: cloth_shop
+msgid "Goods Receipt Note"
+msgstr "Надходження товару"
+
+#. module: cloth_shop
+msgid "Document Number"
+msgstr "Номер документа"
+
+#. module: cloth_shop
+msgid "Date"
+msgstr "Дата"
+
+#. module: cloth_shop
+msgid "Product Lines"
+msgstr "Товари"
+
+#. module: cloth_shop
+msgid "Status"
+msgstr "Статус"
+
+#. module: cloth_shop
+msgid "Draft"
+msgstr "Чернетка"
+
+#. module: cloth_shop
+msgid "Validated"
+msgstr "Проведено"
+
+#. module: cloth_shop
+msgid "The document cannot be validated without a calculated retail price for SKU %s!"
+msgstr "Документ не можна провести без розрахованої роздрібної ціни для артикулу %s!"
+
+#. module: cloth_shop
+msgid "Goods Receipt Line"
+msgstr "Рядок надходження товару"
+
+#. module: cloth_shop
+msgid "Quantity"
+msgstr "Кількість"
+
+#. module: cloth_shop
+msgid "Customer Sales Order"
+msgstr "Замовлення покупця"
+
+#. module: cloth_shop
+msgid "Order Reference"
+msgstr "Номер замовлення"
+
+#. module: cloth_shop
+msgid "Draft Order"
+msgstr "Чернетка замовлення"
+
+#. module: cloth_shop
+msgid "Confirmed / Paid"
+msgstr "Проведено"
+
+#. module: cloth_shop
+msgid "Quantity Sold"
+msgstr "Продана кількість"
+
+#. module: cloth_shop
+msgid "Customer Sales Order"
+msgstr "Замовлення товару"
+
+#. module: cloth_shop
+msgid "Order Reference"
+msgstr "Номер замовлення"
+
+#. module: cloth_shop
+msgid "Customer"
+msgstr "Клієнт"
+
+#. module: cloth_shop
+msgid "Phone"
+msgstr "Телефон"
+
+#. module: cloth_shop
+msgid "Email"
+msgstr "Е-мейл"
+
+#. module: cloth_shop
+msgid "Order Date"
+msgstr "Дата замовлення"
+
+#. module: cloth_shop
+msgid "Delivery Address"
+msgstr "Адреса доставки"
+
+#. module: cloth_shop
+msgid "Personal Discount (%)"
+msgstr "Персональна знижка (%)"
+
+#. module: cloth_shop
+msgid "Total Amount"
+msgstr "Загальна сума"
+
+#. module: cloth_shop
+msgid "In Progress"
+msgstr "В роботі"
+
+#. module: cloth_shop
+msgid "Shipped"
+msgstr "Відправлено"
+
+#. module: cloth_shop
+msgid "Received"
+msgstr "Отримано"
+
+#. module: cloth_shop
+msgid "Customer Return"
+msgstr "Відмова клієнта"
+
+#. module: cloth_shop
+msgid "Cancelled"
+msgstr "Скасовано"
+
+#. module: cloth_shop
+msgid "Insufficient stock level inventory available for product SKU %s!"
+msgstr "Недостатньо товару на залишку для артикулу %s!"
+
+#. module: cloth_shop
+msgid "Sales Order Line"
+msgstr "Рядок замовлення товару"
+
+#. module: cloth_shop
+msgid "Subtotal"
+msgstr "Сума рядка"
+
+#. module: cloth_shop
+msgid "Clothing Sizes"
+msgstr "Розміри одягу"
+
+#. module: cloth_shop
+msgid "Size Registry Dictionary"
+msgstr "Довідник розмірів"
+
+#. module: cloth_shop
+msgid "Sizes"
+msgstr "Розміри"
+
+#. module: cloth_shop
+msgid "Size"
+msgstr "Розмір"
+
+#. module: cloth_shop
+msgid "Size Chart"
+msgstr "Розмір (XS, S, M, L, XL)"
+
+#. module: cloth_shop
+msgid "Sequence Order"
+msgstr "Порядок сортування"
+
+#. module: cloth_shop
+msgid "e.g. XS, S, M, L, XL"
+msgstr "XS, S, M, L, XL"
+
+#. module: cloth_shop
+msgid "Clothing Collections"
+msgstr "Колекції одягу"
+
+#. module: cloth_shop
+msgid "Collections Dictionary"
+msgstr "Колекції"
+
+#. module: cloth_shop
+msgid "Collections"
+msgstr "Колекції"
+
+#. module: cloth_shop
+msgid "Collection"
+msgstr "Колекція"
+
+#. module: cloth_shop
+msgid "Year"
+msgstr "Рік"
+
+#. module: cloth_shop
+msgid "Season"
+msgstr "Сезон"
+
+#. module: cloth_shop
+msgid "Collection Theme"
+msgstr "Тема колекції"
+
+#. module: cloth_shop
+msgid "Spring / Summer"
+msgstr "Весна / Літо"
+
+#. module: cloth_shop
+msgid "Autumn / Winter"
+msgstr "Осінь / Зима"
+
+#. module: cloth_shop
+msgid "e.g. Denim, Urban"
+msgstr "Тема (напр. Denim, Urban)"
+
+#. module: cloth_shop
+msgid "Pricing Markup Coefficients"
+msgstr "Коефіцієнти націнок"
+
+#. module: cloth_shop
+msgid "Markup Ratios Matrix"
+msgstr "Коефіцієнти націнок"
+
+#. module: cloth_shop
+msgid "Markup Multipliers"
+msgstr "Коефіцієнти націнок"
+
+#. module: cloth_shop
+msgid "Markup Multiplier"
+msgstr "Коефіцієнт націнки"
+
+#. module: cloth_shop
+msgid "Brand"
+msgstr "Бренд"
+
+#. module: cloth_shop
+msgid "Collection"
+msgstr "Колекція"
+
+#. module: cloth_shop
+msgid "Markup Multiplier"
+msgstr "Коефіцієнт націнки"
+
+#. module: cloth_shop
+msgid "A pricing multiplier rule has already been registered for this specific brand and collection combination!"
+msgstr "Для цієї комбінації Бренду та Колекції коефіцієнт уже задано!"
+
+#. module: cloth_shop
+msgid "The markup multiplier coefficient value must be greater than 0!"
+msgstr "Коефіцієнт націнки повинен бути більшим за 0!"
+
+#. module: cloth_shop
+msgid "Goods Receipts"
+msgstr "Надходження товарів"
+
+#. module: cloth_shop
+msgid "Goods Receipt"
+msgstr "Надходження товару"
+
+#. module: cloth_shop
+msgid "Search Receipts"
+msgstr "Пошук надходжень"
+
+#. module: cloth_shop
+msgid "Document Number"
+msgstr "Номер документа"
+
+#. module: cloth_shop
+msgid "Calculate Retail Prices"
+msgstr "Розрахувати роздрібну ціну"
+
+#. module: cloth_shop
+msgid "Validate"
+msgstr "Провести"
+
+#. module: cloth_shop
+msgid "Are you sure you want to validate this document and post the products to inventory stock?"
+msgstr "Ви впевнені, що хочете провести документ та оприбуткувати товар на залишки?"
+
+#. module: cloth_shop
+msgid "Products"
+msgstr "Товари"
+
+#. module: cloth_shop
+msgid "Drafts"
+msgstr "Чернетка"
+
+#. module: cloth_shop
+msgid "Status"
+msgstr "Статус"
+
+#. module: cloth_shop
+msgid "Purchase Price Unit"
+msgstr "Ціна закупівлі"
+
+#. module: cloth_shop
+msgid "Retail Price Unit"
+msgstr "Роздрібна ціна"
+
+#. module: cloth_shop
+msgid "Purchase Subtotal"
+msgstr "Сума закупівлі"
+
+#. module: cloth_shop
+msgid "Retail Subtotal"
+msgstr "Сума роздріб"
+
+#. module: cloth_shop
+msgid "Customer Sales Orders"
+msgstr "Замовлення покупців"
+
+#. module: cloth_shop
+msgid "Customer Sales Order"
+msgstr "Замовлення покупця"
+
+#. module: cloth_shop
+msgid "Total Sales Volume"
+msgstr "Загальна сума продажів"
+
+#. module: cloth_shop
+msgid "Ship to Customer"
+msgstr "Відправити клієнту"
+
+#. module: cloth_shop
+msgid "Mark as Received"
+msgstr "Отримано"
+
+#. module: cloth_shop
+msgid "Customer Rejection"
+msgstr "Відмова клієнта"
+
+#. module: cloth_shop
+msgid "Cancel Order"
+msgstr "Скасувати замовлення"
+
+#. module: cloth_shop
+msgid "Customer Information"
+msgstr "Клієнт"
+
+#. module: cloth_shop
+msgid "Order Logistics Details"
+msgstr "Деталі замовлення"
+
+#. module: cloth_shop
+msgid "Order Contents Matrix"
+msgstr "Склад замовлення"
+
+#. module: cloth_shop
+msgid "Unit Price"
+msgstr "Ціна"
+
+#. module: cloth_shop
+msgid "Gross Subtotal"
+msgstr "Сума без знижки"
+
+#. module: cloth_shop
+msgid "Personal Discount (%)"
+msgstr "Персональна знижка (%)"
+
+#. module: cloth_shop
+msgid "Search Customer Orders"
+msgstr "Пошук замовлень"
+
+#. module: cloth_shop
+msgid "Order Reference"
+msgstr "Номер замовлення"
+
+#. module: cloth_shop
+msgid "Customer"
+msgstr "Клієнт"
+
+#. module: cloth_shop
+msgid "Phone Number"
+msgstr "Телефон"
+
+#. module: cloth_shop
+msgid "In Progress (Draft)"
+msgstr "В роботі"
+
+#. module: cloth_shop
+msgid "Outbound Delivery (Shipped)"
+msgstr "Доставляються"
+
+#. module: cloth_shop
+msgid "Successfully Finalized (Received)"
+msgstr "Завершені"
+
+#. module: cloth_shop
+msgid "Group Data By"
+msgstr "Групувати за"
+
+#. module: cloth_shop
+msgid "Customer Profile"
+msgstr "Клієнт"
+
+#. module: cloth_shop
+msgid "Lifecycle Status"
+msgstr "Статус"

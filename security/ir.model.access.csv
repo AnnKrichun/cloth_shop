@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cloth_brand,cloth.brand,model_cloth_brand,base.group_user,1,1,1,1
+access_cloth_collection,cloth.collection,model_cloth_collection,base.group_user,1,1,1,1
+access_cloth_size,cloth.size,model_cloth_size,base.group_user,1,1,1,1
+access_cloth_markup_coefficient,cloth.markup.coefficient,model_cloth_markup_coefficient,base.group_user,1,1,1,1
+access_cloth_product,cloth.product,model_cloth_product,base.group_user,1,1,1,1
+access_cloth_receipt,cloth.receipt,model_cloth_receipt,base.group_user,1,1,1,1
+access_cloth_receipt_line,cloth.receipt.line,model_cloth_receipt_line,base.group_user,1,1,1,1
+access_cloth_order,cloth.order,model_cloth_order,base.group_user,1,1,1,1
+access_cloth_order_line,cloth.order.line,model_cloth_order_line,base.group_user,1,1,1,1
+access_cloth_recalculate_markup_wizard,cloth.recalculate.markup.wizard,model_cloth_recalculate_markup_wizard,base.group_user,1,1,1,1
+access_cloth_inventory_report,cloth.inventory.report,model_cloth_inventory_report,base.group_user,1,0,0,0
+access_cloth_product_stock_line,cloth.product.stock.line,model_cloth_product_stock_line,base.group_user,1,1,1,1

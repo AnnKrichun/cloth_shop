@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+            ===================================================================
+            CLOTH.MARKUP.COEFFICIENT LIST VIEW DEFINITION
+            Provides an inline editable spreadsheet grid configuration.
+            ===================================================================
+        -->
+        <record id="view_cloth_markup_list" model="ir.ui.view">
+            <field name="name">cloth.markup.coefficient.list</field>
+            <field name="model">cloth.markup.coefficient</field>
+            <field name="arch" type="xml">
+                <!-- Native Odoo 19 list view layout with spreadsheet editing allowed -->
+                <list string="Markup Multipliers" editable="bottom">
+                    <!-- Dropdown lookups restricted to prevent rapid dummy record creation -->
+                    <field name="brand_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="collection_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="coefficient"/>
+                </list>
+            </field>
+        </record>
+
+        <!--
+            ===================================================================
+            CLOTH.MARKUP.COEFFICIENT FORM VIEW DEFINITION
+            Defines individual modal cards for detailed background configuration.
+            ===================================================================
+        -->
+        <record id="view_cloth_markup_form" model="ir.ui.view">
+            <field name="name">cloth.markup.coefficient.form</field>
+            <field name="model">cloth.markup.coefficient</field>
+            <field name="arch" type="xml">
+                <form string="Markup Multiplier">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="brand_id" options="{'no_create': True}"/>
+                                <field name="collection_id" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="coefficient"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--
+            ===================================================================
+            CLOTH.MARKUP.COEFFICIENT ACTION WINDOW
+            Registers application execution routes and navigation title indices.
+            ===================================================================
+        -->
+        <record id="action_cloth_markup" model="ir.actions.act_window">
+            <field name="name">Markup Ratios Matrix</field>
+            <field name="res_model">cloth.markup.coefficient</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

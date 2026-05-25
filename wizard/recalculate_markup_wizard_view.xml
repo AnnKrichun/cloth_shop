@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cloth_recalculate_markup_wizard_form" model="ir.ui.view">
+        <field name="name">cloth.recalculate.markup.wizard.form</field>
+        <field name="model">cloth.recalculate.markup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Масовий перерахунок націнки">
+                <group>
+                    <field name="new_coefficient"/>
+                </group>
+                <footer>
+                    <button name="action_apply_markup" string="Застосувати до рядків" type="object" class="btn-primary"/>
+                    <button string="Скасувати" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cloth_recalculate_markup_wizard" model="ir.actions.act_window">
+        <field name="name">Масова націнка</field>
+        <field name="res_model">cloth.recalculate.markup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- 1. CUSTOMER SALES ORDERS MASTER LIST GRID VIEW -->
+        <record id="view_cloth_order_list" model="ir.ui.view">
+            <field name="name">cloth.order.list</field>
+            <field name="model">cloth.order</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                    <field name="state" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- 2. ОКРЕМИЙ ВИД ДЛЯ РЯДКІВ ЗАМОВЛЕННЯ (ВИПРАВЛЕНО ДЛЯ ODOO 19) -->
+        <record id="view_cloth_order_line_tree" model="ir.ui.view">
+            <field name="name">cloth.order.line.tree</field>
+            <field name="model">cloth.order.line</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="product_id" options="{'no_create': True, 'no_quick_create': True}"/>
+
+                    <!-- 🛠️ ADDED FOR SIZE-MATRIX BREAKDOWN: Manual size descriptor selection row -->
+                    <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
+
+                    <field name="qty"/>
+                    <field name="price_unit"/>
+                    <field name="price_subtotal"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- 3. CUSTOMER SALES ORDER DETAILED PROFILE FORM VIEW -->
+        <record id="view_cloth_order_form" model="ir.ui.view">
+            <field name="name">cloth.order.form</field>
+            <field name="model">cloth.order</field>
+            <field name="arch" type="xml">
+                <form string="Customer Sales Order">
+                    <header>
+                        <button name="action_state_shipped" string="Ship to Customer" type="object"
+                                invisible="state != 'draft'" class="btn-primary"/>
+                        <button name="action_state_received" string="Mark as Received" type="object"
+                                invisible="state != 'shipped'" class="btn-success"/>
+                        <button name="action_state_cancelled" string="Cancel Order" type="object"
+                                invisible="state != 'draft'" class="btn-secondary"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,shipped,received"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group string="Customer Details">
+                                <field name="partner_id"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                            </group>
+                            <group string="Logistics">
+                                <field name="date_order"/>
+                                <field name="delivery_address"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Order Lines" name="order_lines">
+                                <field name="line_ids" readonly="state != 'draft'"/>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="discount"/>
+                                    <field name="amount_total"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- 4. CUSTOMER SALES ORDERS ADVANCED FILTER CONTROL PANEL -->
+        <record id="view_cloth_order_search" model="ir.ui.view">
+            <field name="name">cloth.order.search</field>
+            <field name="model">cloth.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer Orders">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- 5. CORE ACTION WINDOW ACCESS POINT -->
+        <record id="action_cloth_order" model="ir.actions.act_window">
+            <field name="name">Customer Orders</field>
+            <field name="res_model">cloth.order</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_cloth_order_search"/>
+        </record>
+
+    </data>
+</odoo>

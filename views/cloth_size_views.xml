@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+            ===================================================================
+            CLOTH.SIZE LIST VIEW DEFINITION
+            Standard grid view configuration layout.
+            ===================================================================
+        -->
+        <record id="view_cloth_size_list" model="ir.ui.view">
+            <field name="name">cloth.size.list</field>
+            <field name="model">cloth.size</field>
+            <field name="arch" type="xml">
+                <!-- FIXED: Removed editable="bottom" to restore the native top layout control bar -->
+                <list string="Sizes">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <!--
+            ===================================================================
+            CLOTH.SIZE FORM VIEW DEFINITION
+            Defines the individual detailed popup modal card configuration layout.
+            ===================================================================
+        -->
+        <record id="view_cloth_size_form" model="ir.ui.view">
+            <field name="name">cloth.size.form</field>
+            <field name="model">cloth.size</field>
+            <field name="arch" type="xml">
+                <form string="Size">
+                    <sheet>
+                        <group>
+                            <field name="name" placeholder="e.g. XS, S, M, L, XL"/>
+                            <field name="sequence"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--
+            ===================================================================
+            CLOTH.SIZE ACTION WINDOW
+            Registers application execution routes and navigation title indices.
+            ===================================================================
+        -->
+        <record id="action_cloth_size" model="ir.actions.act_window">
+            <field name="name">Size Registry Dictionary</field>
+            <field name="res_model">cloth.size</field>
+            <!-- FIXED: Returned to list,form so the spreadsheet opens first -->
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

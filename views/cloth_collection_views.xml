@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+            ===================================================================
+            CLOTH.COLLECTION LIST VIEW DEFINITION
+            Provides the master tabular grid overview panel layout.
+            ===================================================================
+        -->
+        <record id="view_cloth_collection_list" model="ir.ui.view">
+            <field name="name">cloth.collection.list</field>
+            <field name="model">cloth.collection</field>
+            <field name="arch" type="xml">
+                <!-- Displays lists first with direct creation routing support via top actions bar -->
+                <list string="Collections">
+                    <field name="year"/>
+                    <field name="season"/>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <!--
+            ===================================================================
+            CLOTH.COLLECTION FORM VIEW DEFINITION
+            Defines the individual detailed card configuration layout.
+            ===================================================================
+        -->
+        <record id="view_cloth_collection_form" model="ir.ui.view">
+            <field name="name">cloth.collection.form</field>
+            <field name="model">cloth.collection</field>
+            <field name="arch" type="xml">
+                <form string="Collection">
+                    <sheet>
+                        <!-- Structured dual-column input fields layout context box -->
+                        <group>
+                            <group>
+                                <field name="name" placeholder="e.g. Denim, Urban"/>
+                                <field name="year"/>
+                            </group>
+                            <group>
+                                <field name="season"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--
+            ===================================================================
+            CLOTH.COLLECTION ACTION WINDOW
+            Registers application execution routes and navigation parameters.
+            ===================================================================
+        -->
+        <record id="action_cloth_collection" model="ir.actions.act_window">
+            <field name="name">Collections Dictionary</field>
+            <field name="res_model">cloth.collection</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

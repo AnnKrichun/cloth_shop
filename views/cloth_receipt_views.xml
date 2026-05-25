@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- 1. GOODS RECEIPTS LIST VIEW -->
+        <record id="view_cloth_receipt_list" model="ir.ui.view">
+            <field name="name">cloth.receipt.list</field>
+            <field name="model">cloth.receipt</field>
+            <field name="arch" type="xml">
+                <list string="Goods Receipts">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="state" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- 2. GOODS RECEIPT FORM VIEW -->
+        <record id="view_cloth_receipt_form" model="ir.ui.view">
+            <field name="name">cloth.receipt.form</field>
+            <field name="model">cloth.receipt</field>
+            <field name="arch" type="xml">
+                <form string="Goods Receipt">
+                    <header>
+                        <button name="action_calculate_retail_prices"
+                                string="Calculate Retail Prices"
+                                type="object"
+                                invisible="state == 'done'"
+                                class="btn-primary"
+                                icon="fa-calculator"/>
+
+                        <button name="action_button_validate"
+                                string="Validate"
+                                type="object"
+                                invisible="state == 'done'"
+                                class="btn-success"
+                                confirm="Are you sure you want to validate this document and post the products to inventory stock?"
+                                icon="fa-check"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date" readonly="state == 'done'"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Products" name="receipt_lines">
+                                <field name="line_ids" readonly="state == 'done'">
+                                                                        <list editable="bottom">
+                                        <!-- СТОВПЧИК SKU: ФІКС! Замість зламаного 'text' ми передаємо чисте очищення
+                                             контексту 'default_name': False. Це повністю безпечно і запустить сервер -->
+                                        <field name="sku_id"
+                                               string="SKU"
+                                               placeholder="Select or Type SKU..."
+                                               always_reload="1"
+                                               context="{'default_name': False}"
+                                               options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': False, 'always_reload': True}"/>
+
+                                        <!-- СТОВПЧИК PRODUCT NAME: Захищений від редагування автономний рядок -->
+                                        <field name="name" string="Product Name" readonly="1" force_save="1"/>
+                                        <field name="brand_id" readonly="1" force_save="1"/>
+                                        <field name="collection_id" readonly="1" force_save="1"/>
+
+                                        <!-- 🛠️ ACTIVATED FOR MATRIX MATRIX MATRIX: Manual editable size selector dropdown -->
+                                        <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
+
+                                        <field name="purchase_price" string="Purchase Price"/>
+                                        <field name="purchase_currency_id" string="Currency" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="qty"/>
+
+                                        <!-- 🛠️ FIXED MULTI-CURRENCY CONFLICT: Додано readonly для автоматичних розрахункових полів -->
+                                        <field name="purchase_subtotal" string="Purchase Subtotal" readonly="1"/>
+                                        <field name="retail_price" string="Retail Price"/>
+                                        <field name="retail_subtotal" string="Retail Subtotal" readonly="1"/>
+                                    </list>
+
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- 3. GOODS RECEIPT SEARCH PANEL -->
+        <record id="view_cloth_receipt_search" model="ir.ui.view">
+            <field name="name">cloth.receipt.search</field>
+            <field name="model">cloth.receipt</field>
+            <field name="arch" type="xml">
+                <search string="Search Receipts">
+                    <field name="name" string="Document Number"/>
+                    <field name="date"/>
+                    <filter string="Drafts" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Validated" name="done" domain="[('state', '=', 'done')]"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- 4. ACTION WINDOW ROUTE -->
+        <record id="action_cloth_receipt" model="ir.actions.act_window">
+            <field name="name">Goods Receipts</field>
+            <field name="res_model">cloth.receipt</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_cloth_receipt_search"/>
+        </record>
+
+    </data>
+</odoo>

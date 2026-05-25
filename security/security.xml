@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+        <!-- Категорія для ієрархії (залишаємо для звітності) -->
+        <record id="module_category_cloth_shop" model="ir.module.category">
+            <field name="name">Магазин одягу</field>
+            <field name="description">Рівень доступу для модуля Магазин одягу</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Група User (БЕЗ category_id) -->
+        <record id="group_cloth_shop_user" model="res.groups">
+            <field name="name">Магазин одягу: Користувач</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Група Admin (БЕЗ category_id) -->
+        <record id="group_cloth_shop_admin" model="res.groups">
+            <field name="name">Магазин одягу: Адміністратор</field>
+            <field name="implied_ids" eval="[(4, ref('group_cloth_shop_user'))]"/>
+        </record>
+    </data>
+</odoo>

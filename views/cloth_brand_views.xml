@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- 1. CLOTH BRAND LIST VIEW -->
+        <record id="view_cloth_brand_list" model="ir.ui.view">
+            <field name="name">cloth.brand.list</field>
+            <field name="model">cloth.brand</field>
+            <field name="arch" type="xml">
+                <list string="Brands">
+                    <field name="name"/>
+                    <field name="country_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- 2. CLOTH BRAND FORM VIEW -->
+        <record id="view_cloth_brand_form" model="ir.ui.view">
+            <field name="name">cloth.brand.form</field>
+            <field name="model">cloth.brand</field>
+            <field name="arch" type="xml">
+                <form string="Brand">
+                    <sheet>
+                        <field name="logo" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="e.g. Zara, Nike..."/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="country_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- 3. CLOTH BRAND WINDOW ACTION -->
+        <record id="action_cloth_brand" model="ir.actions.act_window">
+            <field name="name">Clothing Brands</field>
+            <field name="res_model">cloth.brand</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

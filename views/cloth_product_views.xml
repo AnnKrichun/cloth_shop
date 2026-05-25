@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- 1. PRODUCT SEARCH AND FILTERS PANEL -->
+        <record id="view_cloth_product_search" model="ir.ui.view">
+            <field name="name">cloth.product.search</field>
+            <field name="model">cloth.product</field>
+            <field name="arch" type="xml">
+                <search string="Product Search">
+                    <!-- Індекс суворого пошуку за артикулом попереду -->
+                    <field name="sku"/>
+                    <field name="name"/>
+                    <field name="brand_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- 2. PRODUCT MASTER LIST GRID VIEW -->
+        <record id="view_cloth_product_list" model="ir.ui.view">
+            <field name="name">cloth.product.list</field>
+            <field name="model">cloth.product</field>
+            <field name="arch" type="xml">
+                <list string="Products">
+                    <field name="sku"/>
+                    <field name="name"/>
+                    <field name="brand_id"/>
+                    <field name="collection_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- 3. PRODUCT KANBAN VISUAL CARDS VIEW -->
+        <record id="view_cloth_product_kanban" model="ir.ui.view">
+            <field name="name">cloth.product.kanban</field>
+            <field name="model">cloth.product</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title"><field name="sku"/></strong>
+                                    <div>Name: <field name="name"/></div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- 4. BUTTON BOX NAVIGATION ACTIONS REFERENCE MAPPING -->
+        <record id="action_cloth_brand_stat" model="ir.actions.act_window">
+            <field name="name">Brands</field>
+            <field name="res_model">cloth.brand</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_cloth_order_stat" model="ir.actions.act_window">
+            <field name="name">Orders</field>
+            <field name="res_model">cloth.order</field>
+            <field name="view_mode">list,form,pivot,graph</field>
+        </record>
+
+        <!-- 5. PRODUCT PROFILE DETAIL CARD FORM VIEW -->
+        <record id="view_cloth_product_form" model="ir.ui.view">
+            <field name="name">cloth.product.form</field>
+            <field name="model">cloth.product</field>
+            <field name="arch" type="xml">
+                <form string="Product">
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(action_cloth_order_stat)d" type="action" class="oe_stat_button" icon="fa-shopping-cart">
+                                <div class="o_stat_info"><span class="o_stat_text">Orders</span></div>
+                            </button>
+                            <button name="%(action_cloth_brand_stat)d" type="action" class="oe_stat_button" icon="fa-tag">
+                                <div class="o_stat_info"><span class="o_stat_text">Brand</span></div>
+                            </button>
+                        </div>
+
+                        <!-- ФІКС: міняємо місцями заголовок, щоб у поп-апі Create SKU введені цифри артикулу (наприклад, 897)
+                             потрапляли в поле SKU, а назву моделі користувач вносив нижче окремим рядком -->
+                        <div class="oe_title">
+                            <label for="sku" class="oe_edit_only" string="SKU Code"/>
+                            <h1><field name="sku" placeholder="e.g. TY77, 897..."/></h1>
+                        </div>
+                        <group>
+                            <group string="Core Specifications Parameters">
+                                <field name="name" placeholder="Model Name (e.g. Turbo, Air Max)..."/>
+                                <field name="brand_id" options="{'no_create': True}"/>
+                                <field name="collection_id" options="{'no_create': True}"/>
+                            </group>
+
+                            <!-- DISPLAY SIZES MATRIX GRID -->
+                            <group string="Size Matrix Stock &amp; Active Prices">
+                                <field name="stock_line_ids" nolabel="1">
+                                    <list create="0" delete="0" edit="0">
+                                        <field name="size_id"/>
+                                        <field name="qty_available"/>
+                                        <field name="retail_price" widget="monetary" string="Current Retail Price"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- 6. MASTER PRODUCT WINDOW ACTION INTERFACE GRID -->
+        <record id="action_cloth_product" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">cloth.product</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="search_view_id" ref="view_cloth_product_search"/>
+        </record>
+
+    </data>
+</odoo>

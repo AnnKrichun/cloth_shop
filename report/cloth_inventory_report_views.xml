@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- PIVOT VIEW GENERATOR -->
+        <record id="view_cloth_inventory_report_pivot" model="ir.ui.view">
+            <field name="name">cloth.inventory.report.pivot</field>
+            <field name="model">cloth.inventory.report</field>
+            <field name="arch" type="xml">
+                <pivot string="Inventory Turnover Analytics" sample="1">
+                    <!-- Default Grouping Rows Matrix -->
+                    <field name="brand_id" type="row"/>
+                    <field name="product_id" type="row"/>
+
+                    <!-- Default Target Metric Columns -->
+                    <field name="qty_incoming" type="measure"/>
+                    <field name="qty_outgoing" type="measure"/>
+                    <field name="qty_balance" type="measure"/>
+                    <field name="purchase_value" type="measure"/>
+
+                    <!-- 🛠️ ADDED MEASURE COLUMN: Displays current item retail price calculated via SQL -->
+                    <field name="retail_price" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- GRAPH VIEW GENERATOR -->
+        <record id="view_cloth_inventory_report_graph" model="ir.ui.view">
+            <field name="name">cloth.inventory.report.graph</field>
+            <field name="model">cloth.inventory.report</field>
+            <field name="arch" type="xml">
+                <graph string="Stock Turnover Analysis" type="bar" sample="1">
+                    <field name="product_id"/>
+                    <field name="qty_balance" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- REPORT ACTION SYSTEM ROUTING -->
+        <record id="action_cloth_inventory_report" model="ir.actions.act_window">
+            <field name="name">Inventory Turnover Report</field>
+            <field name="res_model">cloth.inventory.report</field>
+            <field name="view_mode">pivot,graph</field>
+        </record>
+
+    </data>
+</odoo>
