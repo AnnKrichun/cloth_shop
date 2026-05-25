@@ -3,22 +3,21 @@ from odoo import models, fields, api
 
 
 class ClothProduct(models.Model):
-    """
-    Model representing cloth shop products and their size-matrix stock levels.
-    """
+    """Model representing cloth shop products and their size-matrix stock levels."""
 
     _name = "cloth.product"
     _description = "Cloth Product Stock Card"
 
-    # Strictly bind Odoo 19 core views generation handlers onto the unique SKU column slot
-    _rec_name = "sku"
+    # Повертаємо стандартну логіку Odoo, але тепер name — це наш артикул!
+    _rec_name = "name"
+    _rec_names_search = ["name", "product_title"]
 
-    _rec_names_search = ["sku"]
     # =========================================================================
-    # CORE PRODUCT ATTRIBUTES
+    # CORE PRODUCT ATTRIBUTES (ФІКС: name тепер виконує роль SKU)
     # =========================================================================
-    sku = fields.Char(string="SKU", required=True, index=True)
-    name = fields.Char(string="Product Name", required=True)
+    name = fields.Char(string="SKU", required=True, index=True)
+    product_title = fields.Char(string="Product Name", required=True)
+
     brand_id = fields.Many2one("cloth.brand", string="Brand", required=True)
     collection_id = fields.Many2one(
         "cloth.collection", string="Collection", required=True
@@ -55,19 +54,21 @@ class ClothProduct(models.Model):
     order_line_ids = fields.One2many(
         "cloth.order.line", "product_id", string="Order Lines"
     )
-
     stock_line_ids = fields.One2many(
-        "cloth.product.stock.line",
-        "product_id",
-        string="Stock Breakdown Matrix",
-        compute="_compute_stock_lines",
+        "cloth.product.stock.line", "product_id", string="Stock Breakdown Matrix"
     )
 
     _sql_constraints = [
-        ("sku_unique", "unique(sku)", "A product with this SKU code already exists!")
+        (
+            "sku_name_unique",
+            "unique(name)",
+            "A product with this SKU code already exists!",
+        )
     ]
 
-    def _compute_stock_lines(self):
+    def action_generate_stock_lines(self):
+        """Безпечний метод для генерації та оновлення ліній матриці розмірів."""
+        StockLine = self.env["cloth.product.stock.line"]
         for product in self:
             received_sizes = product.receipt_line_ids.filtered(
                 lambda r: r.receipt_id.state == "done"
@@ -77,111 +78,61 @@ class ClothProduct(models.Model):
             ).mapped("size_id.id")
             all_size_ids = list(set(received_sizes + ordered_sizes))
 
-            existing_lines = self.env["cloth.product.stock.line"].search(
-                [("product_id", "=", product.id)]
-            )
-            existing_size_ids = existing_lines.mapped("size_id.id")
+            existing_size_ids = product.stock_line_ids.mapped("size_id.id")
 
             for size_id in all_size_ids:
                 if size_id not in existing_size_ids:
-                    self.env["cloth.product.stock.line"].create(
+                    StockLine.create(
                         {
                             "product_id": product.id,
                             "size_id": size_id,
                         }
                     )
 
-            product.stock_line_ids = self.env["cloth.product.stock.line"].search(
-                [("product_id", "=", product.id)]
-            )
-
-    @api.depends("sku")
-    def _compute_display_name(self):
-        """
-        Примушує систему на всіх етапах відображати
-        в Many2one полі тільки артикул (код).
-        """
-        for product in self:
-            product.display_name = product.sku or "New Alphanumeric Code"
-
-    def name_get(self):
-        """
-        ГОЛОВНИЙ ФІКС ДЛЯ ВЕБ-КЛІЄНТА JAVASCRIPT:
-        Цей метод викликається фронтендом Odoo в момент натискання кнопки "Save"
-        у вікні створення. Він примусово каже браузеру:
-        "Візьми для відображення в Many2one стовпчику тільки артикул (sku)!"
-        """
-        res = []
-        for product in self:
-            res.append((product.id, product.sku or "New Alphanumeric Code"))
-        return res
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        """
-        БЛОКУВАННЯ КОПІЮВАННЯ: Суворо зберігає ту назву, яку користувач
-        ввів руками (name) у поп-апі. Копіювання артикула в назву заборонено.
-        """
-        for vals in vals_list:
-            if "name" in vals and isinstance(vals["name"], str) and vals["name"]:
-                vals["name"] = vals["name"].strip()
-
-            # Фолбек тільки якщо поле name прийшло абсолютно порожнім
-            elif "sku" in vals and not vals.get("name"):
-                vals["name"] = vals["sku"]
-
-        records = super(ClothProduct, self).create(vals_list)
-        return records
-
-    @api.model
-    def name_create(self, name):
-        """
-        Забезпечує повернення чистих даних (id, sku) для фронтенду
-        при швидкому зв'язуванні на льоту.
-        """
-        cleaned_sku = name.strip().upper()
-        product = self.search([("sku", "=", cleaned_sku)], limit=1)
-        if not product:
-            product = self.create(
-                {
-                    "sku": cleaned_sku,
-                    "name": cleaned_sku,
-                }
-            )
-        return product.id, product.display_name
-
-    @api.model
-    def _name_search(self, name, domain=None, operator="ilike", limit=100, order=None):
-        """
-        Суворий пошук в базі даних ВИКЛЮЧНО за артикулом (sku).
-        Пошук за назвою моделі одягу повністю вимкнено.
-        """
-        domain = domain or []
-        if name:
-            domain = [("sku", operator, name)] + domain
-        return super()._name_search(name, domain, operator, limit, order)
-
     @api.model
     def default_get(self, fields_list):
-        """
-        Intercepts context parameters and routes the values directly into the SKU code column slot.
-        """
+        """Автоматично підставляє введене значення у поле name (яке тепер є SKU)."""
         res = super(ClothProduct, self).default_get(fields_list)
         ctx = self.env.context
 
         typed_text = (
-            ctx.get("default_sku")
-            or ctx.get("default_name")
-            or ctx.get("search_default_sku")
+            ctx.get("default_display_name")
             or ctx.get("search_default_name")
+            or ctx.get("default_name")
         )
 
         if typed_text and isinstance(typed_text, str):
             cleaned_sku = typed_text.strip().upper()
-            res["sku"] = cleaned_sku
-            res["name"] = False
+            res["name"] = cleaned_sku  # Записуємо артикул у базове поле імені
 
         return res
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Валідація та очищення строк при збереженні."""
+        for vals in vals_list:
+            if "name" in vals and isinstance(vals["name"], str):
+                vals["name"] = vals["name"].strip().upper()
+            if "product_title" in vals and isinstance(vals["product_title"], str):
+                vals["product_title"] = vals["product_title"].strip()
+
+        records = super(ClothProduct, self).create(vals_list)
+        records.action_generate_stock_lines()
+        return records
+
+    @api.model
+    def name_create(self, name):
+        """Швидке створення в один клік."""
+        cleaned_sku = name.strip().upper()
+        product = self.search([("name", "=", cleaned_sku)], limit=1)
+        if not product:
+            product = self.create(
+                {
+                    "name": cleaned_sku,
+                    "product_title": cleaned_sku,
+                }
+            )
+        return product.id, product.name
 
 
 class ClothProductStockLine(models.Model):
@@ -192,7 +143,6 @@ class ClothProductStockLine(models.Model):
         "cloth.product", string="Product Link", ondelete="cascade", index=True
     )
     size_id = fields.Many2one("cloth.size", string="Size Rows index", readonly=True)
-
     qty_available = fields.Integer(
         string="Quantity On Hand", compute="_compute_metrics"
     )

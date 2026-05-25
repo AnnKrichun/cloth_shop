@@ -24,8 +24,12 @@ class ClothOrder(models.Model):
 
     line_ids = fields.One2many("cloth.order.line", "order_id", string="Order Lines")
     discount = fields.Float(string="Personal Discount (%)")
+
     amount_total = fields.Float(
-        string="Total Amount", compute="_compute_amount_total", store=True
+        string="Total Amount",
+        compute="_compute_amount_total",
+        store=True,
+        digits=(12, 2),
     )
 
     state = fields.Selection(
@@ -50,26 +54,27 @@ class ClothOrder(models.Model):
                 )
         return super().create(vals_list)
 
-    @api.depends("line_ids", "discount")
+    @api.depends("line_ids.price_subtotal", "discount")
     def _compute_amount_total(self):
         """Простий і надійний підрахунок загальної суми замовлення"""
         for order in self:
             subtotal = sum(
                 line.price_subtotal for line in order.line_ids if line.price_subtotal
             )
-            order.amount_total = subtotal * (1.0 - (order.discount / 100.0))
+            discount_val = order.discount or 0.00
+            order.amount_total = subtotal * (1.0 - (discount_val / 100.0))
 
     def write(self, vals):
         """Контроль залишків при зміні статусів відвантаження"""
-        for order in self:
-            old_state = order.state
-            new_state = vals.get("state", old_state)
+        # Спочатку зберігаємо дані в базу, щоб перевірка залишків
+        # бачила актуальну кількість товару (qty), яку ввів користувач
+        res = super().write(vals)
 
-            if old_state != new_state:
-                if new_state == "shipped" and old_state == "draft":
+        if "state" in vals:
+            for order in self:
+                if vals["state"] == "shipped":
                     order._update_stock()
-
-        return super().write(vals)
+        return res
 
     def action_state_shipped(self):
         self.write({"state": "shipped"})
@@ -85,12 +90,12 @@ class ClothOrder(models.Model):
 
     def _update_stock(self):
         """
-        🛠️ NEW MATRIX VALIDATION: Performs strict inventory verification
+        🛠️ STRICT MATRIX VALIDATION: Performs inventory verification
         individually for each specific size layer via transient matrix metrics.
         """
         for line in self.line_ids:
             if line.product_id and line.size_id:
-                # Initialize virtual stock line structure logic to extract size balance
+                # Ініціалізуємо віртуальну лінію для розрахунку залишку на льоту
                 transient_stock_line = self.env["cloth.product.stock.line"].new(
                     {"product_id": line.product_id.id, "size_id": line.size_id.id}
                 )
@@ -99,10 +104,11 @@ class ClothOrder(models.Model):
                 if transient_stock_line.qty_available < line.qty:
                     raise ValidationError(
                         _(
-                            "Insufficient stock balance for product %s in Size %s! Available on hand: %s"
+                            "Insufficient stock balance for product [%s] %s in Size %s! Available on hand: %s"
                         )
                         % (
                             line.product_id.name,
+                            line.product_id.product_title,
                             line.size_id.name,
                             transient_stock_line.qty_available,
                         )
@@ -115,44 +121,42 @@ class ClothOrderLine(models.Model):
 
     order_id = fields.Many2one("cloth.order", ondelete="cascade", string="Parent Order")
     product_id = fields.Many2one("cloth.product", string="Product", required=True)
-
-    # 🛠️ NEW ARCHITECTURE SLOT: Manual size parameter row indicator link
     size_id = fields.Many2one("cloth.size", string="Size", required=True)
-
     qty = fields.Integer(string="Quantity", default=1, required=True)
-    price_unit = fields.Float(string="Unit Price")
-    price_subtotal = fields.Float(
-        string="Subtotal", compute="_compute_price_subtotal", store=True
+
+    #  ФІКС: Переведено на compute + store=True для підтримки демо-даних
+    price_unit = fields.Float(
+        string="Unit Price",
+        compute="_compute_price_unit",
+        store=True,
+        readonly=False,
+        digits=(12, 2),
     )
 
-    # 🛠️ UPDATED MATRIX PRICE TRIGGER: Evaluates rules anytime product OR target size updates
-    @api.onchange("product_id", "size_id")
-    def _onchange_product_id(self):
-        """
-        Dynamically scans verified goods receipt notes history to extract
-        the latest calculated retail pricing tag for BOTH selected SKU and specific size.
-        """
-        if self.product_id and self.size_id:
-            latest_receipt_line = self.env["cloth.receipt.line"].search(
-                [
-                    ("sku_id", "=", self.product_id.id),
-                    (
-                        "size_id",
-                        "=",
-                        self.size_id.id,
-                    ),  # Strict sizing matching parameter
-                    ("receipt_id.state", "=", "done"),
-                ],
-                order="id desc",
-                limit=1,
-            )
+    price_subtotal = fields.Float(
+        string="Subtotal", compute="_compute_price_subtotal", store=True, digits=(12, 2)
+    )
 
-            if latest_receipt_line:
-                self.price_unit = latest_receipt_line.retail_price
+    # 🛠️ НОВИЙ КОМП'ЮТ-МЕТОД: Автоматично підтягує роздрібну ціну з останнього надходження
+    @api.depends("product_id", "size_id")
+    def _compute_price_unit(self):
+        for line in self:
+            if line.product_id and line.size_id:
+                latest_receipt_line = self.env["cloth.receipt.line"].search(
+                    [
+                        ("sku_id", "=", line.product_id.id),
+                        ("size_id", "=", line.size_id.id),
+                        ("receipt_id.state", "=", "done"),
+                    ],
+                    order="id desc",
+                    limit=1,
+                )
+                if latest_receipt_line:
+                    line.price_unit = latest_receipt_line.retail_price
+                else:
+                    line.price_unit = 0.00
             else:
-                self.price_unit = 0.00
-        else:
-            self.price_unit = 0.00
+                line.price_unit = 0.00
 
     @api.depends("qty", "price_unit")
     def _compute_price_subtotal(self):

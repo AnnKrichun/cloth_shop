@@ -2,7 +2,6 @@
 <odoo>
     <data>
 
-        <!-- 1. GOODS RECEIPTS LIST VIEW -->
         <record id="view_cloth_receipt_list" model="ir.ui.view">
             <field name="name">cloth.receipt.list</field>
             <field name="model">cloth.receipt</field>
@@ -15,7 +14,6 @@
             </field>
         </record>
 
-        <!-- 2. GOODS RECEIPT FORM VIEW -->
         <record id="view_cloth_receipt_form" model="ir.ui.view">
             <field name="name">cloth.receipt.form</field>
             <field name="model">cloth.receipt</field>
@@ -55,34 +53,32 @@
                         <notebook>
                             <page string="Products" name="receipt_lines">
                                 <field name="line_ids" readonly="state == 'done'">
-                                                                        <list editable="bottom">
-                                        <!-- СТОВПЧИК SKU: ФІКС! Замість зламаного 'text' ми передаємо чисте очищення
-                                             контексту 'default_name': False. Це повністю безпечно і запустить сервер -->
-                                        <field name="sku_id"
-                                               string="SKU"
-                                               placeholder="Select or Type SKU..."
-                                               always_reload="1"
-                                               context="{'default_name': False}"
-                                               options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': False, 'always_reload': True}"/>
+                                    <list editable="bottom">
 
-                                        <!-- СТОВПЧИК PRODUCT NAME: Захищений від редагування автономний рядок -->
+           <field name="sku_id"
+       string="SKU"
+       placeholder="Select or Type SKU..."
+       always_reload="1"
+       context="{'default_product_title': False}"
+       options="{
+           'no_open': False,
+           'no_quick_create': True,
+           'no_create_edit': False,
+           'always_reload': True
+       }"/>
                                         <field name="name" string="Product Name" readonly="1" force_save="1"/>
                                         <field name="brand_id" readonly="1" force_save="1"/>
                                         <field name="collection_id" readonly="1" force_save="1"/>
-
-                                        <!-- 🛠️ ACTIVATED FOR MATRIX MATRIX MATRIX: Manual editable size selector dropdown -->
                                         <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
 
                                         <field name="purchase_price" string="Purchase Price"/>
                                         <field name="purchase_currency_id" string="Currency" options="{'no_create': True, 'no_open': True}"/>
                                         <field name="qty"/>
 
-                                        <!-- 🛠️ FIXED MULTI-CURRENCY CONFLICT: Додано readonly для автоматичних розрахункових полів -->
                                         <field name="purchase_subtotal" string="Purchase Subtotal" readonly="1"/>
                                         <field name="retail_price" string="Retail Price"/>
                                         <field name="retail_subtotal" string="Retail Subtotal" readonly="1"/>
                                     </list>
-
                                 </field>
                             </page>
                         </notebook>
@@ -92,22 +88,23 @@
             </field>
         </record>
 
-        <!-- 3. GOODS RECEIPT SEARCH PANEL -->
         <record id="view_cloth_receipt_search" model="ir.ui.view">
-            <field name="name">cloth.receipt.search</field>
-            <field name="model">cloth.receipt</field>
-            <field name="arch" type="xml">
-                <search string="Search Receipts">
-                    <field name="name" string="Document Number"/>
-                    <field name="date"/>
-                    <filter string="Drafts" name="draft" domain="[('state', '=', 'draft')]"/>
-                    <filter string="Validated" name="done" domain="[('state', '=', 'done')]"/>
-                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
-                </search>
-            </field>
-        </record>
+    <field name="name">cloth.receipt.search</field>
+    <field name="model">cloth.receipt</field>
+    <field name="arch" type="xml">
+        <search string="Search Receipts">
+            <field name="name" string="Document Number"/>
+            <field name="date"/>
 
-        <!-- 4. ACTION WINDOW ROUTE -->
+            <filter string="Drafts" name="filter_drafts" domain="[('state', '=', 'draft')]"/>
+            <filter string="Validated" name="filter_validated" domain="[('state', '=', 'done')]"/>
+
+            <separator/>
+            <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+        </search>
+    </field>
+</record>
+
         <record id="action_cloth_receipt" model="ir.actions.act_window">
             <field name="name">Goods Receipts</field>
             <field name="res_model">cloth.receipt</field>

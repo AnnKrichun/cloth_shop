@@ -13,7 +13,9 @@ class ClothMarkupCoefficient(models.Model):
 
     _name = "cloth.markup.coefficient"
     _description = "Pricing Markup Coefficients"
-    _rec_name = "coefficient"
+
+    # В Odoo 19 замість _rec_name краще перевизначати _compute_display_name для красивого вигляду в інтерфейсі
+    _rec_names_search = ["brand_id", "collection_id"]
 
     # Relational foreign key mapping to the manufacturer brand catalog
     brand_id = fields.Many2one(
@@ -30,11 +32,23 @@ class ClothMarkupCoefficient(models.Model):
         string="Markup Multiplier", required=True, default=1.0, digits=(12, 2)
     )
 
-    # Database SQL constraint preventing duplicate pricing parameters for the same matrix intersection
-    _brand_collection_unique = models.Constraint(
-        "unique(brand_id, collection_id)",
-        "A pricing multiplier rule has already been registered for this specific brand and collection combination!",
-    )
+    # ФІКС: Правильний синтаксис для унікальних обмежень на рівні PostgreSQL
+    _sql_constraints = [
+        (
+            "brand_collection_unique",
+            "unique(brand_id, collection_id)",
+            "A pricing multiplier rule has already been registered for this specific brand and collection combination!",
+        )
+    ]
+
+    @api.depends("brand_id", "collection_id", "coefficient")
+    def _compute_display_name(self):
+        """Формує красиву та зрозумілу назву для пошуку та хлібних крихт (UX фікс)."""
+        for rec in self:
+            if rec.brand_id and rec.collection_id:
+                rec.display_name = f"{rec.brand_id.name} - {rec.collection_id.name} (x{rec.coefficient})"
+            else:
+                rec.display_name = f"Markup Rule #{rec.id or 'New'}"
 
     @api.constrains("coefficient")
     def _check_coefficient(self):

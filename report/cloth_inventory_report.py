@@ -10,7 +10,7 @@ class ClothInventoryReport(models.Model):
     _name = "cloth.inventory.report"
     _description = "Inventory Turnover and Stock Report"
     _auto = False
-    _order = "sku asc"
+    _order = "product_id asc"  # Змінено на залізобетонне сортування за ID продукту
 
     # =========================================================================
     # CORE DIMENSIONS
@@ -41,7 +41,7 @@ class ClothInventoryReport(models.Model):
         string="Total Retail Sales Value", readonly=True, currency_field="currency_id"
     )
 
-    # 🛠️ FIXED FOR ODOO 19: Displays current size-specific retail price calculated from the latest receipt
+    # Displays current size-specific retail price calculated from the latest receipt
     retail_price = fields.Monetary(
         string="Current Retail Price",
         readonly=True,
@@ -57,7 +57,7 @@ class ClothInventoryReport(models.Model):
         self.env.cr.execute(f"""
             CREATE OR REPLACE VIEW {self._table} AS (
                 SELECT 
-                    -- 🛠️ Surrogate Unique Row ID for complex multi-dimension grouping views
+                    -- Surrogate Unique Row ID for complex multi-dimension grouping views
                     ROW_NUMBER() OVER () AS id,
                     p_data.product_id AS product_id,
                     p_data.sku AS sku,
@@ -71,7 +71,7 @@ class ClothInventoryReport(models.Model):
                     p_data.qty_balance AS qty_balance,
                     p_data.currency_id AS currency_id,
 
-                    -- 🛠️ MATRIX PRICING SQL SUBQUERY: Extracts price matching BOTH product ID and strict size ID layer
+                    -- MATRIX PRICING SQL SUBQUERY: Extracts price matching BOTH product ID and strict size ID layer
                     COALESCE((
                         SELECT sub_rl.retail_price 
                         FROM cloth_receipt_line sub_rl
@@ -84,7 +84,7 @@ class ClothInventoryReport(models.Model):
                 FROM (
                     SELECT 
                         p.id AS product_id,
-                        p.sku AS sku,
+                        p.name AS sku, -- ФІКС: міняємо неіснуюче p.sku на реальне p.name з бази даних
                         p.brand_id AS brand_id,
                         p.collection_id AS collection_id,
                         -- Size field source target now switched tightly to active lines references index mapping
@@ -98,7 +98,7 @@ class ClothInventoryReport(models.Model):
                         (SELECT id FROM res_currency WHERE name = 'UAH' LIMIT 1) AS currency_id
                     FROM cloth_product p
 
-                    -- 🛠️ MATRIX LEFT JOIN OPERATIONS: Link and evaluate transactions records by matching sizes paths
+                    -- MATRIX LEFT JOIN OPERATIONS: Link and evaluate transactions records by matching sizes paths
                     LEFT JOIN cloth_receipt_line rl ON rl.sku_id = p.id AND rl.id IN (
                         SELECT id FROM cloth_receipt_line WHERE receipt_id IN (
                             SELECT id FROM cloth_receipt WHERE state = 'done'
@@ -113,7 +113,7 @@ class ClothInventoryReport(models.Model):
                     -- Filter out ghost skeleton matrix rows that do not possess any transactional movement history
                     WHERE rl.size_id IS NOT NULL OR ol.size_id IS NOT NULL
 
-                    GROUP BY p.id, p.sku, p.brand_id, p.collection_id, COALESCE(rl.size_id, ol.size_id)
+                    GROUP BY p.id, p.name, p.brand_id, p.collection_id, COALESCE(rl.size_id, ol.size_id) -- ФІКС: p.sku -> p.name
                 ) AS p_data
             )
         """)

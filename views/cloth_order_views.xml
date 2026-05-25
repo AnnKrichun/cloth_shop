@@ -2,40 +2,20 @@
 <odoo>
     <data>
 
-        <!-- 1. CUSTOMER SALES ORDERS MASTER LIST GRID VIEW -->
         <record id="view_cloth_order_list" model="ir.ui.view">
             <field name="name">cloth.order.list</field>
             <field name="model">cloth.order</field>
             <field name="arch" type="xml">
-                <list>
+                <list string="Customer Orders">
                     <field name="name"/>
                     <field name="date_order"/>
                     <field name="partner_id"/>
-                    <field name="amount_total"/>
-                    <field name="state" widget="badge"/>
+                    <field name="amount_total" sum="Total Sales"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'received'" decoration-warning="state == 'shipped'"/>
                 </list>
             </field>
         </record>
 
-        <!-- 2. ОКРЕМИЙ ВИД ДЛЯ РЯДКІВ ЗАМОВЛЕННЯ (ВИПРАВЛЕНО ДЛЯ ODOO 19) -->
-        <record id="view_cloth_order_line_tree" model="ir.ui.view">
-            <field name="name">cloth.order.line.tree</field>
-            <field name="model">cloth.order.line</field>
-            <field name="arch" type="xml">
-                <list editable="bottom">
-                    <field name="product_id" options="{'no_create': True, 'no_quick_create': True}"/>
-
-                    <!-- 🛠️ ADDED FOR SIZE-MATRIX BREAKDOWN: Manual size descriptor selection row -->
-                    <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
-
-                    <field name="qty"/>
-                    <field name="price_unit"/>
-                    <field name="price_subtotal"/>
-                </list>
-            </field>
-        </record>
-
-        <!-- 3. CUSTOMER SALES ORDER DETAILED PROFILE FORM VIEW -->
         <record id="view_cloth_order_form" model="ir.ui.view">
             <field name="name">cloth.order.form</field>
             <field name="model">cloth.order</field>
@@ -43,11 +23,11 @@
                 <form string="Customer Sales Order">
                     <header>
                         <button name="action_state_shipped" string="Ship to Customer" type="object"
-                                invisible="state != 'draft'" class="btn-primary"/>
+                                invisible="state != 'draft'" class="btn-primary" icon="fa-truck"/>
                         <button name="action_state_received" string="Mark as Received" type="object"
-                                invisible="state != 'shipped'" class="btn-success"/>
+                                invisible="state != 'shipped'" class="btn-success" icon="fa-check-circle"/>
                         <button name="action_state_cancelled" string="Cancel Order" type="object"
-                                invisible="state != 'draft'" class="btn-secondary"/>
+                                invisible="state != 'draft'" class="btn-secondary" icon="fa-times"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,shipped,received"/>
                     </header>
 
@@ -60,22 +40,31 @@
 
                         <group>
                             <group string="Customer Details">
-                                <field name="partner_id"/>
-                                <field name="phone"/>
-                                <field name="email"/>
+                                <field name="partner_id" options="{'no_quick_create': True}" readonly="state != 'draft'"/>
+                                <field name="phone" widget="phone" readonly="state != 'draft'"/>
+                                <field name="email" widget="email" readonly="state != 'draft'"/>
                             </group>
                             <group string="Logistics">
-                                <field name="date_order"/>
-                                <field name="delivery_address"/>
+                                <field name="date_order" readonly="state != 'draft'"/>
+                                <field name="delivery_address" placeholder="Country, City, Street, ZIP..." readonly="state != 'draft'"/>
                             </group>
                         </group>
 
                         <notebook>
                             <page string="Order Lines" name="order_lines">
-                                <field name="line_ids" readonly="state != 'draft'"/>
+                                <field name="line_ids" readonly="state != 'draft'">
+                                    <list editable="bottom">
+                                        <field name="product_id" options="{'no_create': True, 'no_quick_create': True}"/>
+                                        <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="qty"/>
+                                        <field name="price_unit" force_save="1"/>
+                                        <field name="price_subtotal" readonly="1"/>
+                                    </list>
+                                </field>
+
                                 <group class="oe_subtotal_footer oe_right">
-                                    <field name="discount"/>
-                                    <field name="amount_total"/>
+                                    <field name="discount" readonly="state != 'draft'"/>
+                                    <field name="amount_total" class="oe_subtotal_footer_separator"/>
                                 </group>
                                 <div class="oe_clear"/>
                             </page>
@@ -85,20 +74,15 @@
             </field>
         </record>
 
-        <!-- 4. CUSTOMER SALES ORDERS ADVANCED FILTER CONTROL PANEL -->
         <record id="view_cloth_order_search" model="ir.ui.view">
             <field name="name">cloth.order.search</field>
             <field name="model">cloth.order</field>
             <field name="arch" type="xml">
                 <search string="Search Customer Orders">
-                    <field name="name"/>
-                    <field name="partner_id"/>
-                    <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
-                </search>
+                    </search>
             </field>
         </record>
 
-        <!-- 5. CORE ACTION WINDOW ACCESS POINT -->
         <record id="action_cloth_order" model="ir.actions.act_window">
             <field name="name">Customer Orders</field>
             <field name="res_model">cloth.order</field>
