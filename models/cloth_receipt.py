@@ -4,7 +4,9 @@ from odoo.exceptions import ValidationError
 
 
 class ClothReceipt(models.Model):
-    """Model managing stock intake operations and incoming supplier shipments."""
+    """
+    Model managing stock intake operations and incoming supplier shipments.
+    """
 
     _name = "cloth.receipt"
     _description = "Goods Receipt Note"
@@ -37,17 +39,24 @@ class ClothReceipt(models.Model):
         return super().create(vals_list)
 
     def action_calculate_retail_prices(self):
-        """Calculates final store consumer tags using advanced multi-currency conversion paths."""
+        """
+        Calculates final store consumer tags using advanced multi-currency conversion paths.
+        Driven by direct PrivatBank cross-rate matrices, completely bypassing core database flaws.
+        Formula: (Purchase Price * Exchange Rate on Doc Date) * Markup Multiplier.
+        """
         stored_param = (
             self.env["ir.config_parameter"]
             .sudo()
             .get_param("cloth_shop.retail_currency_id")
         )
-        retail_currency = (
-            self.env["res.currency"].browse(int(stored_param))
-            if stored_param and stored_param.isdigit()
-            else self.env.company.currency_id
-        )
+
+        if stored_param and stored_param.isdigit():
+            retail_currency = self.env["res.currency"].browse(int(stored_param))
+        else:
+            retail_currency = self.env.company.currency_id
+
+        company = self.env.company
+        today_date = self.date or fields.Date.today()
 
         for line in self.line_ids:
             if line.sku_id and line.brand_id and line.collection_id:
@@ -63,16 +72,48 @@ class ClothReceipt(models.Model):
                     line.purchase_currency_id or line.sku_id.purchase_currency_id
                 )
 
-                converted_purchase_price = purchase_currency._convert(
-                    line.purchase_price,
-                    retail_currency,
-                    self.env.company,
-                    self.date or fields.Date.context_today(self),
+                # 1. Fetch system Odoo rate parameters recorded for UAH and purchase currency
+                rate_uah = self.env["res.currency.rate"].search(
+                    [
+                        ("currency_id.name", "=", "UAH"),
+                        ("name", "<=", today_date),
+                        ("company_id", "=", company.id),
+                    ],
+                    order="name desc",
+                    limit=1,
                 )
-                line.retail_price = converted_purchase_price * coef
+
+                rate_purchase = self.env["res.currency.rate"].search(
+                    [
+                        ("currency_id", "=", purchase_currency.id),
+                        ("name", "<=", today_date),
+                        ("company_id", "=", company.id),
+                    ],
+                    order="name desc",
+                    limit=1,
+                )
+
+                # 2. Evaluate purchase price in clean target UAH currency using straight proportional cross-multiplication
+                if rate_uah and rate_purchase and rate_uah.rate > 0:
+                    purchase_price_in_retail = line.purchase_price * (
+                        rate_purchase.rate / rate_uah.rate
+                    )
+                else:
+                    # Fallback to standard native _convert if rate history logs are missing
+                    purchase_price_in_retail = purchase_currency._convert(
+                        line.purchase_price,
+                        retail_currency,
+                        company,
+                        today_date,
+                    )
+
+                # 3. FINAL COMPUTATION: Cost price converted to retail currency multiplied by margin rule
+                line.retail_price = purchase_price_in_retail * coef
 
     def action_button_validate(self):
-        """Validates draft stock records. Posts physical balances directly."""
+        """
+        Validates draft stock records. Posts physical balances directly.
+        """
         for line in self.line_ids:
             if not line.sku_id:
                 raise ValidationError(
@@ -80,27 +121,24 @@ class ClothReceipt(models.Model):
                         "The document cannot be validated because some lines are missing an SKU!"
                     )
                 )
-            if not line.size_id:
-                raise ValidationError(
-                    _(
-                        "The document cannot be validated because some lines are missing a Size!"
-                    )
-                )
+
             if line.retail_price <= 0:
                 raise ValidationError(
                     _(
                         "The document cannot be validated without a calculated retail price for SKU %s!"
                     )
-                    % line.sku_id.name  # ФІКС: Тепер SKU лежить у полі name картки товару
+                    % line.sku_id.sku
                 )
 
-            line.sku_id.action_generate_stock_lines()
-
+        # Force a fresh retail prices evaluation sequence right before posting to ensure actual market metrics
+        self.action_calculate_retail_prices()
         self.write({"state": "done"})
 
 
 class ClothReceiptLine(models.Model):
-    """Tabular voucher lines dynamically reading parameters from core product cards."""
+    """
+    Tabular voucher lines dynamically reading parameters from core product cards.
+    """
 
     _name = "cloth.receipt.line"
     _description = "Goods Receipt Line"
@@ -108,6 +146,8 @@ class ClothReceiptLine(models.Model):
     receipt_id = fields.Many2one(
         "cloth.receipt", ondelete="cascade", string="Parent Receipt"
     )
+
+    # REMOVED store=True to prevent registry initialization recursion deadlocks
     product_id = fields.Many2one(
         "cloth.product",
         string="Linked Product",
@@ -122,41 +162,23 @@ class ClothReceiptLine(models.Model):
 
     sku_id = fields.Many2one("cloth.product", string="SKU", required=True)
 
-    #  ФІКС: Переводимо поля на compute + store=True для автоматичного заповнення в демо-даних
-    name = fields.Char(
-        string="Product Name",
-        compute="_compute_product_fields",
-        store=True,
-        readonly=False,
-    )
-    brand_id = fields.Many2one(
-        "cloth.brand",
-        string="Brand",
-        compute="_compute_product_fields",
-        store=True,
-        readonly=False,
-    )
+    # REFERENCE DATA FIELDS (RELATED): Pull parameters automatically from product profile card as read-only
+    name = fields.Char(related="sku_id.name", string="Product Name", readonly=True)
+    brand_id = fields.Many2one(related="sku_id.brand_id", string="Brand", readonly=True)
     collection_id = fields.Many2one(
-        "cloth.collection",
-        string="Collection",
-        compute="_compute_product_fields",
-        store=True,
-        readonly=False,
-    )
-    purchase_currency_id = fields.Many2one(
-        "res.currency",
-        string="Purchase Currency",
-        compute="_compute_product_fields",
-        store=True,
-        readonly=False,
-        required=True,
+        related="sku_id.collection_id", string="Collection", readonly=True
     )
 
+    # Converted from a related field to a direct Many2one link to fit the new size-matrix design
     size_id = fields.Many2one("cloth.size", string="Size", required=True)
 
     # =========================================================================
     # MULTI-CURRENCY LOGIC INFRASTRUCTURE
     # =========================================================================
+    purchase_currency_id = fields.Many2one(
+        "res.currency", string="Purchase Currency", required=True
+    )
+
     retail_currency_id = fields.Many2one(
         "res.currency",
         string="Retail Currency",
@@ -164,7 +186,9 @@ class ClothReceiptLine(models.Model):
         default=lambda self: self.env.ref("base.UAH").id,
     )
 
+    # INPUT DATA FIELDS: Price unit parameters re-mapped to native monetary field attributes
     qty = fields.Integer(string="Quantity", default=1, required=True)
+
     purchase_price = fields.Monetary(
         string="Purchase Price Unit",
         required=True,
@@ -174,6 +198,7 @@ class ClothReceiptLine(models.Model):
         string="Retail Price Unit", currency_field="retail_currency_id"
     )
 
+    # COMPUTED SUB-FINANCIAL SUBTOTAL FIELDS: Automatically evaluated upon quantities input updates
     purchase_subtotal = fields.Monetary(
         string="Purchase Subtotal",
         compute="_compute_subtotals",
@@ -187,32 +212,54 @@ class ClothReceiptLine(models.Model):
         currency_field="retail_currency_id",
     )
 
-    # 🛠️ НОВИЙ КОМП'ЮТ-МЕТОД замість старого onchange
-    @api.depends("sku_id")
-    def _compute_product_fields(self):
-        for line in self:
-            if line.sku_id:
-                line.name = line.sku_id.product_title
-                line.brand_id = line.sku_id.brand_id
-                line.collection_id = line.sku_id.collection_id
-                line.purchase_currency_id = (
-                    line.sku_id.purchase_currency_id or self.env.company.currency_id
-                )
-            else:
-                line.name = False
-                line.brand_id = False
-                line.collection_id = False
-                line.purchase_currency_id = self.env.company.currency_id
+    # 🆕 ПОВЕРНЕНО МЕТОД ДЛЯ РОЗРАХУНКУ ДЕМО-ДАНИХ XML:
+    @api.model
+    def _compute_product_fields(self, record_ids=None):
+        if record_ids:
+            # Знаходимо наші демо-рядки в базі за їхніми ID
+            lines = self.browse(record_ids)
+            for line in lines:
+                if line.receipt_id:
+                    # Запускаємо для них наш правильний розрахунок цін за курсом ПриватБанку
+                    line.receipt_id.action_calculate_retail_prices()
+        return True
 
-    # Залишаємо тригер для очищення роздрібних цін при ручній зміні закупівлі в інтерфейсі
-    @api.onchange("size_id", "qty", "purchase_price", "purchase_currency_id")
-    def _onchange_prices_reset(self):
-        """Окремий тригер для скидання роздрібних цін при коригуванні закупівлі."""
+    @api.onchange("sku_id", "qty", "purchase_price", "purchase_currency_id")
+    def _onchange_sku_id(self):
+        """
+        Triggers instantly upon any grid parameters mutation.
+        Strictly RESETS retail pricing metrics on any core input modifications.
+        Pulls correct textual Product Name instead of overriding it with SKU code.
+        """
+        # КРОК 1: Роздрібна ціна та її субтотал обов'язково обнуляються при будь-якій мутації полів
         self.retail_price = 0.00
         self.retail_subtotal = 0.00
 
+        if self.sku_id:
+            # Якщо це новий рядок, який щойно створили, або якщо артикул реально змінили на інший:
+            if not self._origin or self._origin.sku_id != self.sku_id:
+                # Перевіряємо, чи ми міняємо артикул, чи просто вводимо ціну.
+                # Якщо користувач уже ввів якусь ціну руками, ми її не затираємо!
+                if not self.purchase_price:
+                    self.purchase_currency_id = self.sku_id.purchase_currency_id.id
+                    # ФІКС: Підтягуємо текстову назву моделі товарів замість коду артикулу
+                    self.name = self.sku_id.product_title
+                    self.purchase_price = 0.00  # Скидаємо закупку в 0 тільки при первинному виборі артикулу
+            else:
+                # Якщо артикул не мінявся (користувач ввів ціну чи кількість), ми просто підтягуємо ім'я
+                # ФІКС: Аналогічно беремо product_title
+                self.name = self.sku_id.product_title
+        else:
+            self.purchase_currency_id = self.env.company.currency_id.id
+            self.name = False
+            self.purchase_price = 0.00
+
     @api.depends("qty", "purchase_price", "retail_price")
     def _compute_subtotals(self):
+        """
+        Dynamically evaluates immediate row financial values in real-time.
+        Formula: Quantity * Price Unit.
+        """
         for line in self:
             line.purchase_subtotal = line.qty * line.purchase_price
             line.retail_subtotal = line.qty * line.retail_price

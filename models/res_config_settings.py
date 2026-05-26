@@ -50,3 +50,18 @@ class ResConfigSettings(models.TransientModel):
             self.env["ir.config_parameter"].sudo().set_param(
                 "cloth_shop.retail_currency_id", self.retail_currency_id.id
             )
+
+    def action_cloth_shop_update_rates_now(self):
+        """
+        Triggered manually by the supervisor inside Settings layout panel.
+        Forces backend to fire the core PrivatBank API sync pipeline immediately
+        in the context of current company and explicitly commits the changes.
+        """
+        # Execute synchronization using the current active company context environment
+        self.env["res.currency"].with_company(
+            self.env.company
+        )._update_privatbank_currency_rates()
+
+        # Force flush and commit the transaction to ensure live entries are saved immediately
+        self.env.cr.commit()
+        return True

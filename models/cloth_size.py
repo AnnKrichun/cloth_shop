@@ -21,11 +21,11 @@ class ClothSize(models.Model):
         """
         Prevents the deletion of a size record if it is actively assigned to any product.
 
-        Queries the cloth.product registry to enforce strict data integrity rules.
+        Queries the cloth.product.stock.line registry to enforce strict data integrity rules.
         """
         for size in self:
-            # Check if there are any products referencing this specific size ID
-            product_count = self.env["cloth.product"].search_count(
+            # FIXED: Queries the new active size-matrix stock lines registry instead of deleted field in core product card
+            product_count = self.env["cloth.product.stock.line"].search_count(
                 [("size_id", "=", size.id)]
             )
 

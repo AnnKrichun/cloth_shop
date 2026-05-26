@@ -51,7 +51,7 @@
         <record id="demo_markup_accessories" model="cloth.markup.coefficient">
             <field name="brand_id" ref="demo_brand_green"/>
             <field name="collection_id" ref="demo_collection_essentials"/>
-            <field name="coefficient">1.20</field>
+            <field name="coefficient">2.50</field>
         </record>
 
         <record id="demo_product_tshirt" model="cloth.product">
@@ -75,17 +75,17 @@
 
         <record id="demo_receipt_001" model="cloth.receipt">
             <field name="name">WH/IN/2026/0001</field>
-            <field name="date">2026-05-01</field>
+            <field name="date" eval="datetime.now().strftime('%Y-%m-%d 09:00:00')"/>
             <field name="state">done</field>
         </record>
         <record id="demo_receipt_002" model="cloth.receipt">
             <field name="name">WH/IN/2026/0002</field>
-            <field name="date">2026-05-15</field>
+            <field name="date" eval="datetime.now().strftime('%Y-%m-%d 09:00:00')"/>
             <field name="state">done</field>
         </record>
         <record id="demo_receipt_003" model="cloth.receipt">
             <field name="name">WH/IN/2026/0003</field>
-            <field name="date">2026-06-01</field>
+            <field name="date" eval="datetime.now().strftime('%Y-%m-%d 09:00:00')"/>
             <field name="state">draft</field>
         </record>
 
@@ -123,19 +123,19 @@
         </record>
 
         <record id="demo_order_001" model="cloth.order">
-            <field name="date_order">2026-05-20 12:00:00</field>
+            <field name="date_order" eval="datetime.now().strftime('%Y-%m-%d 14:00:00')"/>
             <field name="partner_id" ref="base.partner_admin"/>
             <field name="delivery_address">123 Kyivska Str, Apt 4, Kyiv, Ukraine</field>
             <field name="state">shipped</field>
         </record>
         <record id="demo_order_002" model="cloth.order">
-            <field name="date_order">2026-05-23 15:30:00</field>
+            <field name="date_order" eval="datetime.now().strftime('%Y-%m-%d 14:00:00')"/>
             <field name="partner_id" ref="base.partner_admin"/>
             <field name="delivery_address">45 Lvivska Str, Lviv, Ukraine</field>
             <field name="state">received</field>
         </record>
         <record id="demo_order_003" model="cloth.order">
-            <field name="date_order">2026-05-24 10:15:00</field>
+            <field name="date_order" eval="datetime.now().strftime('%Y-%m-%d 14:00:00')"/>
             <field name="partner_id" ref="base.partner_admin"/>
             <field name="delivery_address">78 Odeska Str, Odesa, Ukraine</field>
             <field name="state">draft</field>
@@ -159,7 +159,8 @@
             <field name="size_id" ref="demo_size_m"/>
             <field name="qty">1</field>
         </record>
-<function model="cloth.product" name="action_generate_stock_lines">
+
+        <function model="cloth.product" name="action_generate_stock_lines">
             <value eval="[ref('demo_product_tshirt'), ref('demo_product_hoodie'), ref('demo_product_jeans')]"/>
         </function>
         <function model="cloth.receipt.line" name="_compute_product_fields">
@@ -168,5 +169,6 @@
         <function model="cloth.order.line" name="_compute_price_unit">
             <value eval="[ref('demo_order_line_001'), ref('demo_order_line_002'), ref('demo_order_line_003')]"/>
         </function>
+
     </data>
 </odoo>

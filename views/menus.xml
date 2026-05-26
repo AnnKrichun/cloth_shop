@@ -31,16 +31,18 @@
               parent="menu_cloth_shop_documents"
               action="action_cloth_order"
               sequence="20"/>
-<menuitem id="menu_cloth_shop_reporting"
-              name="Reporting"
-              parent="menu_cloth_shop_root"
-              sequence="15"/>
+
+    <menuitem id="menu_cloth_shop_reporting"
+                  name="Reporting"
+                  parent="menu_cloth_shop_root"
+                  sequence="15"/>
 
     <menuitem id="menu_cloth_inventory_report"
               name="Inventory Turnover &amp; Valuation"
               parent="menu_cloth_shop_reporting"
               action="action_cloth_inventory_report"
               sequence="10"/>
+
     <!-- Configuration registries setup drop-down matrix nodes panels mappings -->
     <menuitem id="menu_cloth_shop_config"
               name="Configuration"
@@ -87,4 +89,14 @@
               action="action_cloth_markup"
               sequence="40"/>
 
+<!-- ========================================================================= -->
+    <!-- CUSTOM CURRENCY RATES HISTORY MANAGEMENT MENU ITEM                        -->
+    <!-- ========================================================================= -->
+
+    <!-- Final configuration drop-down menu item link referencing external window action -->
+    <menuitem id="menu_cloth_shop_currency_rates"
+              name="Currency Rates Monitoring"
+              parent="menu_cloth_shop_config"
+              action="action_cloth_shop_currency_rates"
+              sequence="50"/>
 </odoo>

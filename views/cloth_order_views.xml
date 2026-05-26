@@ -57,7 +57,7 @@
                                         <field name="product_id" options="{'no_create': True, 'no_quick_create': True}"/>
                                         <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
                                         <field name="qty"/>
-                                        <field name="price_unit" force_save="1"/>
+                                        <field name="price_unit" string="Unit Price" readonly="1" force_save="1"/>
                                         <field name="price_subtotal" readonly="1"/>
                                     </list>
                                 </field>

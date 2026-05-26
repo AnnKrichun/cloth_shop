@@ -124,12 +124,12 @@ class ClothOrderLine(models.Model):
     size_id = fields.Many2one("cloth.size", string="Size", required=True)
     qty = fields.Integer(string="Quantity", default=1, required=True)
 
-    #  ФІКС: Переведено на compute + store=True для підтримки демо-даних
+    # 🔒 ФІКС: Поле суворо readonly=True. Менеджер не зможе його змінити вручну.
     price_unit = fields.Float(
         string="Unit Price",
         compute="_compute_price_unit",
         store=True,
-        readonly=False,
+        readonly=True,  # Перекриваємо доступ на рівні ORM
         digits=(12, 2),
     )
 
@@ -137,11 +137,12 @@ class ClothOrderLine(models.Model):
         string="Subtotal", compute="_compute_price_subtotal", store=True, digits=(12, 2)
     )
 
-    # 🛠️ НОВИЙ КОМП'ЮТ-МЕТОД: Автоматично підтягує роздрібну ціну з останнього надходження
+    # 🛠️ Обчислювальний метод, який працює і для бази, і для інтерфейсу
     @api.depends("product_id", "size_id")
     def _compute_price_unit(self):
         for line in self:
             if line.product_id and line.size_id:
+                # Шукаємо останню ціну в проведених надходженнях
                 latest_receipt_line = self.env["cloth.receipt.line"].search(
                     [
                         ("sku_id", "=", line.product_id.id),
@@ -157,6 +158,24 @@ class ClothOrderLine(models.Model):
                     line.price_unit = 0.00
             else:
                 line.price_unit = 0.00
+
+    # ⚡ ДОДАТКОВИЙ ТРИГЕР: Для моментального відгуку інтерфейсу в браузері
+    @api.onchange("product_id", "size_id")
+    def _onchange_product_size(self):
+        """Змушує вебинтерфейс моментально показати ціну при виборі товару/розміру"""
+        if self.product_id and self.size_id:
+            latest_receipt_line = self.env["cloth.receipt.line"].search(
+                [
+                    ("sku_id", "=", self.product_id.id),
+                    ("size_id", "=", self.size_id.id),
+                    ("receipt_id.state", "=", "done"),
+                ],
+                order="id desc",
+                limit=1,
+            )
+            self.price_unit = (
+                latest_receipt_line.retail_price if latest_receipt_line else 0.00
+            )
 
     @api.depends("qty", "price_unit")
     def _compute_price_subtotal(self):

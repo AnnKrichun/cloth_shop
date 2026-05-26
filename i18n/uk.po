@@ -494,3 +494,51 @@ msgstr "Клієнт"
 #. module: cloth_shop
 msgid "Lifecycle Status"
 msgstr "Статус"
+
+#. module: cloth_shop
+msgid "Currency Exchange Parameters"
+msgstr "Параметри обміну валют"
+
+#. module: cloth_shop
+msgid "Active Validation Status"
+msgstr "Активний статус валідації"
+
+#. module: cloth_shop
+msgid "System Conversion Metrics"
+msgstr "Системні метрики конвертації"
+
+#. module: cloth_shop
+msgid "Current Core Exchange Factor"
+msgstr "Поточний системний коефіцієнт (Рейт)"
+
+#. module: cloth_shop
+msgid "Historical Exchange Rates Data Log"
+msgstr "Історія курсів валют на дати за останній період"
+
+#. module: cloth_shop
+msgid "Effective Rate Date"
+msgstr "Дата курсу"
+
+#. module: cloth_shop
+msgid "Unit Value Rate (Company Currency Target)"
+msgstr "Курс одиниці валюти (грн за 1 од.)"
+
+#. module: cloth_shop
+msgid "Inverse System Metric (Raw Odoo Factor)"
+msgstr "Внутрішній рейт Odoo (зворотний)"
+
+#. module: cloth_shop
+msgid "Currency Exchange Rates"
+msgstr "Курси валют"
+
+#. module: cloth_shop
+msgid "Currency Rates Monitoring"
+msgstr "Перегляд курсів валют"
+
+#. module: cloth_shop
+msgid "Cloth Shop: Auto Update Rates from PrivatBank"
+msgstr "Магазин одягу: Автоматичне оновлення курсів з ПриватБанку"
+
+#. module: cloth_shop
+msgid "Update Rates from PrivatBank"
+msgstr "Оновити курси з ПриватБанку"

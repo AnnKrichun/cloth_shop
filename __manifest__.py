@@ -14,9 +14,10 @@ This module provides a comprehensive solution for clothing retail:
 * Handle **Customer Orders** with automated calculations.
 * Custom **Reports** and **Wizards** for price management.
     """,
-    "depends": ["base", "product", "mail"],
+    "depends": ["base", "account", "product", "mail"],
     "data": [
         "security/ir.model.access.csv",
+        "data/currency_automation_data.xml",
         "data/ir_sequence_data.xml",
         "views/res_config_settings_views.xml",
         "views/cloth_brand_views.xml",
@@ -26,6 +27,7 @@ This module provides a comprehensive solution for clothing retail:
         "views/cloth_product_views.xml",
         "views/cloth_receipt_views.xml",
         "views/cloth_order_views.xml",
+        "views/res_currency_views.xml",
         "wizard/recalculate_markup_wizard_view.xml",
         "report/cloth_inventory_report_views.xml",
         "views/menus.xml",
@@ -37,4 +39,5 @@ This module provides a comprehensive solution for clothing retail:
     "installable": True,
     "application": True,
     "auto_install": False,
+    "post_init_hook": "_init_cloth_shop_currencies",
 }
