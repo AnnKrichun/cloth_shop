@@ -20,7 +20,7 @@ class ResCurrency(models.Model):
         Supports UAH, USD, EUR, or any other base currency configured in the system.
         """
         # Active and verified service URL for live commercial rates exchange metadata
-        url = "https://https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5"
+        url = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5"
 
         _logger.info("PRIVATBANK SYNC STARTED: Sending request to URL %s", url)
         try:

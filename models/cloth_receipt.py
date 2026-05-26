@@ -42,7 +42,7 @@ class ClothReceipt(models.Model):
         """
         Calculates final store consumer tags using advanced multi-currency conversion paths.
         Driven by direct PrivatBank cross-rate matrices, completely bypassing core database flaws.
-        Formula: (Purchase Price * Exchange Rate on Doc Date) * Markup Multiplier.
+        Formula: (Purchase Price / Purchase Rate * Retail Rate) * Markup Multiplier.
         """
         stored_param = (
             self.env["ir.config_parameter"]
@@ -72,10 +72,10 @@ class ClothReceipt(models.Model):
                     line.purchase_currency_id or line.sku_id.purchase_currency_id
                 )
 
-                # 1. Fetch system Odoo rate parameters recorded for UAH and purchase currency
-                rate_uah = self.env["res.currency.rate"].search(
+                # 1. Fetch system Odoo rate parameters recorded for RETAIL currency and PURCHASE currency
+                rate_retail = self.env["res.currency.rate"].search(
                     [
-                        ("currency_id.name", "=", "UAH"),
+                        ("currency_id", "=", retail_currency.id),
                         ("name", "<=", today_date),
                         ("company_id", "=", company.id),
                     ],
@@ -93,11 +93,13 @@ class ClothReceipt(models.Model):
                     limit=1,
                 )
 
-                # 2. Evaluate purchase price in clean target UAH currency using straight proportional cross-multiplication
-                if rate_uah and rate_purchase and rate_uah.rate > 0:
-                    purchase_price_in_retail = line.purchase_price * (
-                        rate_purchase.rate / rate_uah.rate
-                    )
+                # 2. FIXED EVALUATION: Safe cross-rate transition based on Odoo standard base-currency inversion
+                if rate_retail and rate_purchase and rate_purchase.rate > 0:
+                    # Математично: (Ціна закупівлі / Курс закупівлі) отримуємо чистий USD.
+                    # Потім отриманий USD * Курс роздрібу = ціна у валюті роздрібу (UAH).
+                    purchase_price_in_retail = (
+                        line.purchase_price / rate_purchase.rate
+                    ) * rate_retail.rate
                 else:
                     # Fallback to standard native _convert if rate history logs are missing
                     purchase_price_in_retail = purchase_currency._convert(
