@@ -12,3 +12,4 @@ access_cloth_recalculate_markup_wizard,cloth.recalculate.markup.wizard,model_clo
 access_cloth_inventory_report,cloth.inventory.report,model_cloth_inventory_report,base.group_user,1,0,0,0
 access_cloth_product_stock_line,cloth.product.stock.line,model_cloth_product_stock_line,base.group_user,1,1,1,1
 access_cloth_profitability_report,access_cloth_profitability_report,model_cloth_profitability_report,base.group_user,1,0,0,0
+access_cloth_product_price,access_cloth_product_price,model_cloth_product_price,base.group_user,1,1,1,1

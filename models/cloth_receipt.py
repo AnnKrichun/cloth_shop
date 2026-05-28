@@ -115,6 +115,7 @@ class ClothReceipt(models.Model):
     def action_button_validate(self):
         """
         Validates draft stock records. Posts physical balances directly.
+        Synchronizes newly calculated prices into the global matrix (cloth.product.price).
         """
         for line in self.line_ids:
             if not line.sku_id:
@@ -129,11 +130,36 @@ class ClothReceipt(models.Model):
                     _(
                         "The document cannot be validated without a calculated retail price for SKU %s!"
                     )
-                    % line.sku_id.sku
+                    % line.sku_id.name
                 )
 
         # Force a fresh retail prices evaluation sequence right before posting to ensure actual market metrics
         self.action_calculate_retail_prices()
+
+        # 🔒 COMPLEX LOGIC INTEGRATION: Synchronize retail prices to cloth.product.price matrix
+        for line in self.line_ids:
+            # Look for an existing price configuration entry for this specific SKU + Size combo
+            price_record = self.env["cloth.product.price"].search(
+                [
+                    ("product_id", "=", line.sku_id.id),
+                    ("size_id", "=", line.size_id.id),
+                ],
+                limit=1,
+            )
+
+            if price_record:
+                # Update the active price entry in the database matrix
+                price_record.write({"retail_price": line.retail_price})
+            else:
+                # Instantiate a clean core database entry row
+                self.env["cloth.product.price"].create(
+                    {
+                        "product_id": line.sku_id.id,
+                        "size_id": line.size_id.id,
+                        "retail_price": line.retail_price,
+                    }
+                )
+
         self.write({"state": "done"})
 
 

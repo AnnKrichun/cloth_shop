@@ -1,17 +1,95 @@
-from odoo import models, fields
+# -*- coding: utf-8 -*-
+from odoo import models, fields, _
+from odoo.exceptions import UserError
 
 
-class ClothRecalculateMarkupWizard(models.TransientModel):
+class RecalculateMarkupWizard(models.TransientModel):
+    """
+    Transient model wizard designed for mass retail price recalculation
+    utilizing weighted average cost (AVCO) matrix metrics.
+    """
+
     _name = "cloth.recalculate.markup.wizard"
-    _description = "Тимчасова модель масової націнки"
+    _description = "Mass AVCO Price Recalculation Wizard"
 
-    new_coefficient = fields.Float(
-        string="Груповий коефіцієнт націнки", required=True, default=1.5
+    brand_id = fields.Many2one(
+        "cloth.brand",
+        string="Brand",
+        required=True,
+        help="Select a brand to trigger inventory valuation and price update",
     )
 
-    def action_apply_markup(self):
-        active_id = self.env.context.get("active_id")
-        if active_id:
-            receipt = self.env["cloth.receipt"].browse(active_id)
-            for line in receipt.line_ids:
-                line.retail_price = line.purchase_price * self.new_coefficient
+    def action_recalculate(self):
+        """
+        Calculates the weighted average cost price for each variant layer
+        and populates the cloth.product.price relational database matrix.
+        """
+        # Find all operational product templates linked to the targeted brand layer
+        products = self.env["cloth.product"].search(
+            [("brand_id", "=", self.brand_id.id)]
+        )
+        if not products:
+            raise UserError(_("No products found for the selected brand!"))
+
+        updated_count = 0
+        markup_coefficient = getattr(self.brand_id, "markup_value", 1.5)
+
+        for product in products:
+            # Aggregate receipt line statistics for specific item configuration profiles
+            receipt_lines = self.env["cloth.receipt.line"].search(
+                [("sku_id", "=", product.id), ("receipt_id.state", "=", "done")]
+            )
+
+            if not receipt_lines:
+                continue
+
+            # Group cost analytics directly by sizes to secure granular AVCO calculation
+            sizes_in_receipts = receipt_lines.mapped("size_id")
+
+            for size in sizes_in_receipts:
+                variant_lines = receipt_lines.filtered(
+                    lambda l: l.size_id.id == size.id
+                )
+
+                # Complex business logic execution: Weighted average computation layer
+                total_qty = sum(line.qty for line in variant_lines)
+                total_amount = sum(
+                    (line.purchase_price * line.qty) for line in variant_lines
+                )
+
+                if total_qty > 0:
+                    weighted_average_cost = total_amount / total_qty
+                    new_retail_price = weighted_average_cost * markup_coefficient
+
+                    # Check for an existing price log matrix row or instantiate a clean record
+                    price_record = self.env["cloth.product.price"].search(
+                        [("product_id", "=", product.id), ("size_id", "=", size.id)],
+                        limit=1,
+                    )
+
+                    if price_record:
+                        price_record.write({"retail_price": new_retail_price})
+                    else:
+                        self.env["cloth.product.price"].create(
+                            {
+                                "product_id": product.id,
+                                "size_id": size.id,
+                                "retail_price": new_retail_price,
+                            }
+                        )
+                    updated_count += 1
+
+        # Return a standardized notification popup layout execution token
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("AVCO Recalculation Complete"),
+                "message": _(
+                    "Successfully synchronized and updated %s price configurations."
+                )
+                % updated_count,
+                "type": "success",
+                "sticky": False,
+            },
+        }

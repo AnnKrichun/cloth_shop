@@ -136,6 +136,11 @@ class ClothProduct(models.Model):
 
 
 class ClothProductStockLine(models.Model):
+    """
+    Sub-resource model tracking unified inventory aggregates
+    and reading direct actual tags from the new price matrix.
+    """
+
     _name = "cloth.product.stock.line"
     _description = "Product Size Stock Balance Log"
 
@@ -150,6 +155,7 @@ class ClothProductStockLine(models.Model):
         string="Actual Retail Price", compute="_compute_metrics"
     )
 
+    # ⚡ ОНОВЛЕНИЙ ТРИГЕР: Додано відстеження змін у моделі cloth.product.price
     @api.depends(
         "product_id.receipt_line_ids.qty",
         "product_id.receipt_line_ids.receipt_id.state",
@@ -157,8 +163,13 @@ class ClothProductStockLine(models.Model):
         "product_id.order_line_ids.order_id.state",
     )
     def _compute_metrics(self):
+        """
+        Evaluates physical store stock levels and pulls fresh verified
+        price vectors directly from the cloth.product.price matrix.
+        """
         for line in self:
             if line.product_id and line.size_id:
+                # 1. Складна логіка розрахунку фізичних залишків на складі
                 incoming = sum(
                     line.product_id.receipt_line_ids.filtered(
                         lambda r: (
@@ -176,18 +187,16 @@ class ClothProductStockLine(models.Model):
                 )
                 line.qty_available = incoming - outgoing
 
-                latest_receipt = self.env["cloth.receipt.line"].search(
+                # 🔒 ФІКС: Пряме вичитування чинної ціни з нової моделі-матриці cloth.product.price
+                price_record = self.env["cloth.product.price"].search(
                     [
-                        ("sku_id", "=", line.product_id.id),
+                        ("product_id", "=", line.product_id.id),
                         ("size_id", "=", line.size_id.id),
-                        ("receipt_id.state", "=", "done"),
                     ],
-                    order="id desc",
                     limit=1,
                 )
-                line.retail_price = (
-                    latest_receipt.retail_price if latest_receipt else 0.00
-                )
+
+                line.retail_price = price_record.retail_price if price_record else 0.00
             else:
                 line.qty_available = 0
                 line.retail_price = 0.00

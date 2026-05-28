@@ -49,60 +49,106 @@
               action="action_cloth_profitability_report"
               sequence="20"/>
 
-    <!-- Configuration registries setup drop-down matrix nodes panels mappings -->
+    <!-- ========================================================================= -->
+    <!-- CONFIGURATION REGISTRY (ГОЛОВНОЙ ТАБ КОНФИГУРАЦИИ)                       -->
+    <!-- ========================================================================= -->
     <menuitem id="menu_cloth_shop_config"
               name="Configuration"
               parent="menu_cloth_shop_root"
               sequence="20"/>
 
-    <!-- CLEAN ACTION REGISTRY FOR SEPARATE APP SETTINGS EXECUTION -->
+    <!-- 📂 ПОДМЕНЮ 1: ДОВИДНИКИ (Directories) -->
+    <menuitem id="menu_cloth_config_directories_group"
+              name="Directories"
+              parent="menu_cloth_shop_config"
+              sequence="10"/>
+
+    <!-- 💰 ПОДМЕНЮ 2: ЦЕНООБРАЗОВАНИЕ (Pricing) -->
+    <menuitem id="menu_cloth_config_pricing_group"
+              name="Pricing"
+              parent="menu_cloth_shop_config"
+              sequence="20"/>
+
+    <!-- ========================================================================= -->
+    <!-- ПУНКТЫ ДЛЯ РАЗДЕЛА "Directories"                                         -->
+    <!-- ========================================================================= -->
     <record id="action_cloth_shop_settings_final_clean_route" model="ir.actions.act_window">
         <field name="name">Settings</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <!-- FIXED FOR ODOO 19: Replaced invalid 'inline' value with canonical platform standard 'current' -->
         <field name="target">current</field>
         <field name="view_id" ref="view_cloth_shop_config_settings_form"/>
     </record>
 
     <menuitem id="menu_cloth_config_settings"
               name="Settings"
-              parent="menu_cloth_shop_config"
+              parent="menu_cloth_config_directories_group"
               action="action_cloth_shop_settings_final_clean_route"
               sequence="5"/>
 
     <menuitem id="menu_cloth_brand"
               name="Brands"
-              parent="menu_cloth_shop_config"
+              parent="menu_cloth_config_directories_group"
               action="action_cloth_brand"
               sequence="10"/>
 
     <menuitem id="menu_cloth_size"
               name="Sizes"
-              parent="menu_cloth_shop_config"
+              parent="menu_cloth_config_directories_group"
               action="action_cloth_size"
               sequence="20"/>
 
     <menuitem id="menu_cloth_collection"
               name="Collections"
-              parent="menu_cloth_shop_config"
+              parent="menu_cloth_config_directories_group"
               action="action_cloth_collection"
               sequence="30"/>
 
+    <!-- ========================================================================= -->
+    <!-- ПУНКТЫ ДЛЯ РАЗДЕЛА "Pricing"                                             -->
+    <!-- ========================================================================= -->
     <menuitem id="menu_cloth_markup"
               name="Markup Coefficients"
-              parent="menu_cloth_shop_config"
+              parent="menu_cloth_config_pricing_group"
               action="action_cloth_markup"
-              sequence="40"/>
+              sequence="10"/>
 
-    <!-- ========================================================================= -->
-    <!-- CUSTOM CURRENCY RATES HISTORY MANAGEMENT MENU ITEM                        -->
-    <!-- ========================================================================= -->
-
-    <!-- Final configuration drop-down menu item link referencing external window action -->
     <menuitem id="menu_cloth_shop_currency_rates"
               name="Currency Rates Monitoring"
-              parent="menu_cloth_shop_config"
+              parent="menu_cloth_config_pricing_group"
               action="action_cloth_shop_currency_rates"
-              sequence="50"/>
+              sequence="20"/>
+
+    <!-- ========================================================================= -->
+    <!-- 🆕 НАШ НОВЫЙ ПУНКТ: МАТРИЦЯ РОЗДРІБНИХ ЦІН (Клієнтський інтерфейс)        -->
+    <!-- ========================================================================= -->
+
+    <!-- Описание отображения таблицы для Odoo 19 -->
+    <record id="view_cloth_product_price_list" model="ir.ui.view">
+        <field name="name">cloth.product.price.list</field>
+        <field name="model">cloth.product.price</field>
+        <field name="arch" type="xml">
+            <list string="Product Retail Prices" editable="bottom">
+                <field name="product_id"/>
+                <field name="size_id"/>
+                <field name="retail_price"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Экшн для открытия матрицы цен -->
+    <record id="action_cloth_product_price_matrix" model="ir.actions.act_window">
+        <field name="name">Product Retail Prices Matrix</field>
+        <field name="res_model">cloth.product.price</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_cloth_product_price_list"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Пункт меню матрицы цен -->
+    <menuitem id="menu_cloth_product_price_matrix"
+              name="Product Retail Prices"
+              parent="menu_cloth_config_pricing_group"
+              action="action_cloth_product_price_matrix"
+              sequence="30"/>
 </odoo>
