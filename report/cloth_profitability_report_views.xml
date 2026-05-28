@@ -2,7 +2,7 @@
 <odoo>
     <data>
 
-        <!-- ТАБЛИЦЯ ЗВІТУ -->
+        <!-- 1. ПРЕДСТАВЛЕННЯ TREE / LIST (Обов'язкове базове) -->
         <record id="view_cloth_profitability_report_list" model="ir.ui.view">
             <field name="name">cloth.profitability.report.list</field>
             <field name="model">cloth.profitability.report</field>
@@ -25,7 +25,34 @@
             </field>
         </record>
 
-        <!-- БЛОК ФІЛЬТРІВ ТА ПОШУКУ -->
+        <!-- 2. ПРЕДСТАВЛЕННЯ PIVOT (Зведена таблиця для аналітики) -->
+        <record id="view_cloth_profitability_report_pivot" model="ir.ui.view">
+            <field name="name">cloth.profitability.report.pivot</field>
+            <field name="model">cloth.profitability.report</field>
+            <field name="arch" type="xml">
+                <pivot string="Profitability Multi-Matrix Analysis" sample="1">
+                    <field name="product_id" type="row"/>
+                    <field name="partner_id" type="col"/>
+                    <field name="qty" type="measure"/>
+                    <field name="turnover" type="measure"/>
+                    <field name="profit" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- 3. ПРЕДСТАВЛЕННЯ GRAPH (Діаграма доходності) -->
+        <record id="view_cloth_profitability_report_graph" model="ir.ui.view">
+            <field name="name">cloth.profitability.report.graph</field>
+            <field name="model">cloth.profitability.report</field>
+            <field name="arch" type="xml">
+                <graph string="Margin Profit Breakdown Diagram" type="bar" sample="1">
+                    <field name="product_id"/>
+                    <field name="profit" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- 4. ПРЕДСТАВЛЕННЯ SEARCH (Пошук та фільтри) -->
         <record id="view_cloth_profitability_report_search" model="ir.ui.view">
             <field name="name">cloth.profitability.report.search</field>
             <field name="model">cloth.profitability.report</field>
@@ -38,8 +65,6 @@
                     <filter string="This Month" name="this_month" domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
 
                     <separator/>
-
-                    <!-- 🔒 ФІКС ODOO 19: Чистий group без атрибутів string та expand -->
                     <group>
                         <filter string="Customer" name="group_customer" context="{'group_by':'partner_id'}"/>
                         <filter string="Product" name="group_product" context="{'group_by':'product_id'}"/>
@@ -49,11 +74,11 @@
             </field>
         </record>
 
-        <!-- ДІЯ -->
+        <!-- 5. ОНОВЛЕНА ДІЯ (Форма повністю виключена з view_mode) -->
         <record id="action_cloth_profitability_report" model="ir.actions.act_window">
             <field name="name">Profitability Report</field>
             <field name="res_model">cloth.profitability.report</field>
-            <field name="view_mode">list</field>
+            <field name="view_mode">list,pivot,graph</field> <!-- 🔒 Тільки список, куб та графік -->
             <field name="search_view_id" ref="view_cloth_profitability_report_search"/>
             <field name="context">{'search_default_group_product': 1}</field>
         </record>
