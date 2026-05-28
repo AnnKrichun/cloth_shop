@@ -75,7 +75,7 @@ class RecalculateMarkupWizard(models.TransientModel):
 
             for size in sizes_in_receipts:
                 variant_lines = receipt_lines.filtered(
-                    lambda l: l.size_id.id == size.id,
+                    lambda line: line.size_id.id == size.id,
                 )
 
                 # Complex business logic execution: Weighted average computation layer

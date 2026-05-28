@@ -1,3 +1,4 @@
+import contextlib
 
 # 1. SYSTEM MODEL INTEGRATION ROUTING
 from odoo import SUPERUSER_ID, api, fields
@@ -23,11 +24,10 @@ def _init_cloth_shop_currencies(env):
     if uah_currency:
         # Dynamically inject the currency ID parameter before Odoo starts reading XML demo files
         env["ir.config_parameter"].sudo().set_param(
-            "cloth_shop.retail_currency_id", uah_currency.id,
+            "cloth_shop.retail_currency_id",
+            uah_currency.id,
         )
 
     # Step C: Pre-load fresh currency exchange rate factors directly from PrivatBank API
-    try:
+    with contextlib.suppress(Exception):
         env["res.currency"]._update_privatbank_currency_rates()
-    except Exception:
-        pass

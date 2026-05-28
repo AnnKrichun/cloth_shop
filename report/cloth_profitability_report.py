@@ -46,7 +46,7 @@ class ClothProfitabilityReport(models.Model):
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute(f"""
             CREATE OR REPLACE VIEW {self._table} AS (
-                SELECT 
+                SELECT
                     l.id AS id,
                     o.name AS name,
                     o.date_order AS date_order,
@@ -57,7 +57,7 @@ class ClothProfitabilityReport(models.Model):
 
                     -- COMMENT: Subquery fetches the latest confirmed purchase cost for accurate margins calculations
                     COALESCE((
-                        SELECT rl.purchase_price 
+                        SELECT rl.purchase_price
                         FROM cloth_receipt_line rl
                         JOIN cloth_receipt r ON r.id = rl.receipt_id
                         WHERE rl.sku_id = l.product_id AND rl.size_id = l.size_id AND r.state = 'done'
@@ -66,7 +66,7 @@ class ClothProfitabilityReport(models.Model):
 
                     -- Calculating total cost based on purchase cost multiplied by sales quantity metrics
                     COALESCE((
-                        SELECT rl.purchase_price 
+                        SELECT rl.purchase_price
                         FROM cloth_receipt_line rl
                         JOIN cloth_receipt r ON r.id = rl.receipt_id
                         WHERE rl.sku_id = l.product_id AND rl.size_id = l.size_id AND r.state = 'done'
@@ -81,9 +81,9 @@ class ClothProfitabilityReport(models.Model):
                     (l.price_subtotal * (1.00 - (COALESCE(o.discount, 0.00) / 100.00))) AS turnover,
 
                     -- Core formula calculating true net profit margins after subtracting cost values from turnover metrics
-                    (l.price_subtotal * (1.00 - (COALESCE(o.discount, 0.00) / 100.00))) - 
+                    (l.price_subtotal * (1.00 - (COALESCE(o.discount, 0.00) / 100.00))) -
                     (COALESCE((
-                        SELECT rl.purchase_price 
+                        SELECT rl.purchase_price
                         FROM cloth_receipt_line rl
                         JOIN cloth_receipt r ON r.id = rl.receipt_id
                         WHERE rl.sku_id = l.product_id AND rl.size_id = l.size_id AND r.state = 'done'

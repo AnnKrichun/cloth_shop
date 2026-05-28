@@ -1,5 +1,7 @@
 import logging
 
+import requests
+
 from odoo import api, fields, models
 
 # Logger initialization for banking background tasks
@@ -185,13 +187,19 @@ class ClothProduct(models.Model):
                         "AUTOMATED LIVE SYNC INITIATED: Missing exchange logs for %s. Reaching out to bank API...",
                         today_date,
                     )
-                    try:
-                        self.env["res.currency"]._update_privatbank_currency_rates()
-                    except Exception as e:
-                        _logger.error(
-                            "Automated check failed to overwrite session parameters: %s",
-                            str(e),
+                    if not today_rate_exists:
+                        _logger.info(
+                            "AUTOMATED LIVE SYNC INITIATED: Missing exchange logs for %s. Reaching out to bank API...",
+                            today_date,
                         )
+
+                        try:
+                            self.env["res.currency"]._update_privatbank_currency_rates()
+                        except requests.exceptions.RequestException as e:
+                            _logger.error(
+                                "Automated check failed to overwrite session parameters: %s",
+                                e,
+                            )
 
         return super().search(
             args,

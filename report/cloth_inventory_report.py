@@ -88,7 +88,7 @@ class ClothInventoryReport(models.Model):
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute(f"""
             CREATE OR REPLACE VIEW {self._table} AS (
-                SELECT 
+                SELECT
                     ROW_NUMBER() OVER () AS id,
                     p.id AS product_id,
                     p.name AS sku,
@@ -97,7 +97,7 @@ class ClothInventoryReport(models.Model):
                     move_data.size_id AS size_id,
                     move_data.date AS date,
 
-                    CASE 
+                    CASE
                         WHEN move_data.date >= CURRENT_DATE - INTERVAL '30 days' THEN 'last_month'
                         ELSE 'older'
                     END AS report_period,
@@ -114,18 +114,18 @@ class ClothInventoryReport(models.Model):
                     (SELECT id FROM res_currency WHERE name = 'UAH' LIMIT 1) AS currency_id,
 
                     COALESCE((
-                        SELECT sub_rl.retail_price 
+                        SELECT sub_rl.retail_price
                         FROM cloth_receipt_line sub_rl
                         JOIN cloth_receipt sub_r ON sub_r.id = sub_rl.receipt_id
                         WHERE sub_rl.sku_id = p.id AND sub_rl.size_id = move_data.size_id AND sub_r.state = 'done'
-                        ORDER BY sub_rl.id DESC 
+                        ORDER BY sub_rl.id DESC
                         LIMIT 1
                     ), 0.00) AS retail_price
 
                 FROM cloth_product p
                 JOIN (
                     -- PART 1: Goods Receipts Documents
-                    SELECT 
+                    SELECT
                         rl.sku_id AS product_id,
                         rl.size_id AS size_id,
                         r.date::date AS date,
@@ -144,7 +144,7 @@ class ClothInventoryReport(models.Model):
                     UNION ALL
 
                     -- PART 2: Customer Orders Documents
-                    SELECT 
+                    SELECT
                         ol.product_id AS product_id,
                         ol.size_id AS size_id,
                         o.date_order::date AS date,

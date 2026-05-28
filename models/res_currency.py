@@ -100,10 +100,14 @@ class ResCurrency(models.Model):
                     "PrivatBank cross-rate matrices successfully generated for the active session.",
                 )
 
-        except Exception as e:
+                _logger.info(
+                    "PrivatBank cross-rate matrices successfully generated for the active session.",
+                )
+
+        except requests.exceptions.RequestException as e:
             _logger.error(
                 "Failed to automatically synchronize currency exchange rates from PrivatBank API: %s",
-                str(e),
+                e,
             )
 
     def _create_or_update_rate(self, currency_id, date, rate_value, company_id):
