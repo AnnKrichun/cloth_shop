@@ -23,7 +23,7 @@
             </field>
         </record>
 
-        <!-- 2. НОВЕ: ПРЕДСТАВЛЕННЯ СПИСКУ ДЛЯ ДЕТАЛІЗАЦІЇ (ФІКС ПОРОЖНЬОГО ВІКНА) -->
+        <!-- 2. ПРЕДСТАВЛЕННЯ СПИСКУ ДЛЯ ДЕТАЛІЗАЦІЇ -->
         <record id="view_cloth_inventory_report_tree" model="ir.ui.view">
             <field name="name">cloth.inventory.report.list</field>
             <field name="model">cloth.inventory.report</field>
@@ -37,7 +37,6 @@
                     <field name="qty_incoming"/>
                     <field name="qty_outgoing"/>
                     <field name="qty_balance"/>
-                    <!-- КНОПКА ДЛЯ ВХОДУ В ДОКУМЕНТ -->
                     <button name="action_open_source_document" string="Open Original Document" type="object" icon="fa-external-link" class="btn-primary"/>
                 </list>
             </field>
@@ -55,7 +54,7 @@
             </field>
         </record>
 
-        <!-- 4. ПАНЕЛЬ ПОШУКУ -->
+        <!-- 4. ОНОВЛЕНА ПАНЕЛЬ ПОШУКУ: ДОДАНО ДИНАМІЧНИЙ ВИБІР ПЕРІОДІВ ДАТ -->
         <record id="view_cloth_inventory_report_search" model="ir.ui.view">
             <field name="name">cloth.inventory.report.search</field>
             <field name="model">cloth.inventory.report</field>
@@ -66,16 +65,21 @@
                     <field name="collection_id"/>
                     <field name="size_id"/>
                     <field name="doc_name"/>
+
+                    <!-- ЗМІНЕНО: цей рядок активує календарний вибір періодів в один клік -->
+                    <field name="date" string="Period" filter_domain="[('date', '=', self)]"/>
+
+                    <!-- Наш швидкий дефолтний фільтр на останні 30 днів -->
                     <filter string="Last 30 Days" name="filter_last_month" domain="[('report_period', '=', 'last_month')]"/>
                 </search>
             </field>
         </record>
 
-        <!-- 5. ВІКОННА ДІЯ (ДОДАНО РЕЖИМ LIST ДЛЯ ПРАВИЛЬНОГО ПРОВАЛЮВАННЯ) -->
+        <!-- 5. ВІКОННА ДІЯ -->
         <record id="action_cloth_inventory_report" model="ir.actions.act_window">
             <field name="name">Inventory Turnover Report</field>
             <field name="res_model">cloth.inventory.report</field>
-            <field name="view_mode">pivot,graph,list</field> <!-- Додано list сюди -->
+            <field name="view_mode">pivot,graph,list</field>
             <field name="search_view_id" ref="view_cloth_inventory_report_search"/>
             <field name="context">{
                 'search_default_filter_last_month': 1

@@ -27,6 +27,7 @@ This module provides a comprehensive solution for clothing retail:
         "views/cloth_product_views.xml",
         "views/cloth_receipt_views.xml",
         "views/cloth_order_views.xml",
+        "views/res_partner_views.xml",
         "views/res_currency_views.xml",
         "wizard/recalculate_markup_wizard_view.xml",
         "report/cloth_inventory_report_views.xml",

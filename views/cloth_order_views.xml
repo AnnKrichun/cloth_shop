@@ -16,7 +16,7 @@
             </field>
         </record>
 
-        <record id="view_cloth_order_form" model="ir.ui.view">
+<record id="view_cloth_order_form" model="ir.ui.view">
             <field name="name">cloth.order.form</field>
             <field name="model">cloth.order</field>
             <field name="arch" type="xml">
@@ -41,8 +41,6 @@
                         <group>
                             <group string="Customer Details">
                                 <field name="partner_id" options="{'no_quick_create': True}" readonly="state != 'draft'"/>
-                                <field name="phone" widget="phone" readonly="state != 'draft'"/>
-                                <field name="email" widget="email" readonly="state != 'draft'"/>
                             </group>
                             <group string="Logistics">
                                 <field name="date_order" readonly="state != 'draft'"/>
@@ -50,7 +48,7 @@
                             </group>
                         </group>
 
-                        <notebook>
+                      <notebook>
                             <page string="Order Lines" name="order_lines">
                                 <field name="line_ids" readonly="state != 'draft'">
                                     <list editable="bottom">
@@ -71,6 +69,15 @@
                         </notebook>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+          <record id="view_cloth_order_search" model="ir.ui.view">
+            <field name="name">cloth.order.search</field>
+            <field name="model">cloth.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer Orders">
+                    </search>
             </field>
         </record>
 

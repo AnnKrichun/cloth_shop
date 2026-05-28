@@ -15,8 +15,6 @@ class ClothOrder(models.Model):
         default=lambda self: _("New"),
     )
     partner_id = fields.Many2one("res.partner", string="Customer", required=True)
-    phone = fields.Char(string="Phone")
-    email = fields.Char(string="Email")
     date_order = fields.Datetime(
         string="Order Date", default=fields.Datetime.now, required=True
     )
@@ -113,6 +111,15 @@ class ClothOrder(models.Model):
                             transient_stock_line.qty_available,
                         )
                     )
+
+    @api.onchange("partner_id")
+    def _onchange_partner_id(self):
+        """Автоматично копіює персональну знижку клієнта в замовлення"""
+        for order in self:
+            if order.partner_id:
+                order.discount = order.partner_id.personal_discount
+            else:
+                order.discount = 0.0
 
 
 class ClothOrderLine(models.Model):

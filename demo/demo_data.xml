@@ -156,8 +156,8 @@
         <record id="demo_order_line_003" model="cloth.order.line">
             <field name="order_id" ref="demo_order_003"/>
             <field name="product_id" ref="demo_product_jeans"/>
-            <field name="size_id" ref="demo_size_m"/>
-            <field name="qty">1</field>
+            <field name="size_id" ref="demo_size_l"/>
+            <field name="qty">2</field>
         </record>
 
         <function model="cloth.product" name="action_generate_stock_lines">
