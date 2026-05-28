@@ -16,6 +16,7 @@ This module provides a comprehensive solution for clothing retail:
     """,
     "depends": ["base", "account", "product", "mail"],
     "data": [
+        "security/security.xml",
         "security/ir.model.access.csv",
         "data/currency_automation_data.xml",
         "data/ir_sequence_data.xml",

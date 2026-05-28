@@ -2,88 +2,65 @@
 <odoo>
     <data>
 
-        <!-- 1. АНАЛІТИЧНА PIVOT ТАБЛИЦЯ -->
-        <record id="view_cloth_inventory_report_pivot" model="ir.ui.view">
-            <field name="name">cloth.inventory.report.pivot</field>
+        <!-- ========================================================================= -->
+        <!-- 1. ПОВНИЙ ЗВІТ ДЛЯ ТОВАРОЗНАВЦЯ ТА АДМІНІСТРАТОРА (ІЗ СОБІВАРТІСТЮ)         -->
+        <!-- ========================================================================= -->
+        <record id="view_cloth_inventory_report_pivot_full" model="ir.ui.view">
+            <field name="name">cloth.inventory.report.pivot.full</field>
             <field name="model">cloth.inventory.report</field>
             <field name="arch" type="xml">
-                <pivot string="Inventory Turnover Analytics" sample="1">
+                <pivot string="Inventory Turnover &amp; Valuation (Full Assessment)">
+                    <!-- Рядки за замовчуванням групуються по брендах, товарах, розмірах та документах -->
                     <field name="brand_id" type="row"/>
                     <field name="product_id" type="row"/>
                     <field name="size_id" type="row"/>
                     <field name="doc_name" type="row"/>
 
+                    <!-- Колонки (Показники) фінансової аналітики та залишків -->
                     <field name="qty_incoming" type="measure"/>
                     <field name="qty_outgoing" type="measure"/>
                     <field name="qty_balance" type="measure"/>
                     <field name="purchase_value" type="measure"/>
                     <field name="retail_value" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Екшен для Товарознавця (Відкриває ПОВНИЙ звіт) -->
+        <record id="action_cloth_inventory_report_full" model="ir.actions.act_window">
+            <field name="name">Inventory Turnover &amp; Valuation</field>
+            <field name="res_model">cloth.inventory.report</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_cloth_inventory_report_pivot_full"/>
+        </record>
+
+
+        <!-- ========================================================================= -->
+        <!-- 2. СПРОЩЕНИЙ ЗВІТ ДЛЯ МЕНЕДЖЕРА (БЕЗ СОБІВАРТОСТІ ТА БЕЗ ДОКУМЕНТІВ)      -->
+        <!-- ========================================================================= -->
+        <record id="view_cloth_inventory_report_pivot_manager" model="ir.ui.view">
+            <field name="name">cloth.inventory.report.pivot.manager</field>
+            <field name="model">cloth.inventory.report</field>
+            <field name="arch" type="xml">
+                <!-- disable_linking="True" повністю блокує менеджеру можливість клікати на цифри -->
+                <pivot string="Current Stock Balances &amp; Retail Prices" disable_linking="True">
+                    <!-- Строге групування: тільки Товар та Розмір. Документи та бренди виключені -->
+                    <field name="product_id" type="row"/>
+                    <field name="size_id" type="row"/>
+
+                    <!-- Дозволені показники: тільки чистий залишок штуках та поточна роздрібна ціна -->
+                    <field name="qty_balance" type="measure"/>
                     <field name="retail_price" type="measure"/>
                 </pivot>
             </field>
         </record>
 
-        <!-- 2. ПРЕДСТАВЛЕННЯ СПИСКУ ДЛЯ ДЕТАЛІЗАЦІЇ -->
-        <record id="view_cloth_inventory_report_tree" model="ir.ui.view">
-            <field name="name">cloth.inventory.report.list</field>
-            <field name="model">cloth.inventory.report</field>
-            <field name="arch" type="xml">
-                <list string="Detailed Movement Lines" create="0" edit="0" delete="0">
-                    <field name="date"/>
-                    <field name="brand_id"/>
-                    <field name="product_id"/>
-                    <field name="size_id"/>
-                    <field name="doc_name" string="Document Number"/>
-                    <field name="qty_incoming"/>
-                    <field name="qty_outgoing"/>
-                    <field name="qty_balance"/>
-                    <button name="action_open_source_document" string="Open Original Document" type="object" icon="fa-external-link" class="btn-primary"/>
-                </list>
-            </field>
-        </record>
-
-        <!-- 3. ГРАФІК АНАЛІЗУ ЗАЛИШКІВ -->
-        <record id="view_cloth_inventory_report_graph" model="ir.ui.view">
-            <field name="name">cloth.inventory.report.graph</field>
-            <field name="model">cloth.inventory.report</field>
-            <field name="arch" type="xml">
-                <graph string="Stock Turnover Analysis" type="bar" sample="1">
-                    <field name="product_id" type="row"/>
-                    <field name="qty_balance" type="measure"/>
-                </graph>
-            </field>
-        </record>
-
-        <!-- 4. ОНОВЛЕНА ПАНЕЛЬ ПОШУКУ: ДОДАНО ДИНАМІЧНИЙ ВИБІР ПЕРІОДІВ ДАТ -->
-        <record id="view_cloth_inventory_report_search" model="ir.ui.view">
-            <field name="name">cloth.inventory.report.search</field>
-            <field name="model">cloth.inventory.report</field>
-            <field name="arch" type="xml">
-                <search string="Inventory Report Filters">
-                    <field name="product_id"/>
-                    <field name="brand_id"/>
-                    <field name="collection_id"/>
-                    <field name="size_id"/>
-                    <field name="doc_name"/>
-
-                    <!-- ЗМІНЕНО: цей рядок активує календарний вибір періодів в один клік -->
-                    <field name="date" string="Period" filter_domain="[('date', '=', self)]"/>
-
-                    <!-- Наш швидкий дефолтний фільтр на останні 30 днів -->
-                    <filter string="Last 30 Days" name="filter_last_month" domain="[('report_period', '=', 'last_month')]"/>
-                </search>
-            </field>
-        </record>
-
-        <!-- 5. ВІКОННА ДІЯ -->
-        <record id="action_cloth_inventory_report" model="ir.actions.act_window">
-            <field name="name">Inventory Turnover Report</field>
+        <!-- Екшен для Менеджера (Відкриває СПРОЩЕНИЙ звіт) -->
+        <record id="action_cloth_inventory_report_manager" model="ir.actions.act_window">
+            <field name="name">Product Stock Balances</field>
             <field name="res_model">cloth.inventory.report</field>
-            <field name="view_mode">pivot,graph,list</field>
-            <field name="search_view_id" ref="view_cloth_inventory_report_search"/>
-            <field name="context">{
-                'search_default_filter_last_month': 1
-            }</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_cloth_inventory_report_pivot_manager"/>
         </record>
 
     </data>

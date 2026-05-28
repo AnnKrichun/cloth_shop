@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
+import logging  # ⚡ ОБОВ'ЯЗКОВИЙ ІМПОРТ
+
 from odoo import models, fields, api
+
+# ⚡ ОГОЛОШЕННЯ ОБ'ЄКТА ЛОГУВАННЯ ДЛЯ ЦЬОГО ФАЙЛУ
+_logger = logging.getLogger(__name__)
 
 
 class ClothProduct(models.Model):
@@ -133,6 +138,52 @@ class ClothProduct(models.Model):
                 }
             )
         return product.id, product.name
+
+    @api.model
+    def search(
+        self, args, offset: int = 0, limit: int | None = None, order: str | None = None
+    ):
+        """
+        ⚡ AUTOMATED DAILY EXCHANGE RATES TRIGGER:
+        Intercepts record search upon interface loading to check and sync currency rates.
+        Strictly secures and isolates database transactions from deadlocks during installation.
+        """
+        # 🔒 СУРОВАЯ ЗАЩИТА ODOO 19 ОТ ДЕДЛОКОВ ПРИ УСТАНОВКЕ:
+        # Проверяем, готов ли реестр моделей, и не выполняется ли запрос от суперпользователя #1
+        if (
+            self.env.registry.ready
+            and not self.env.context.get("install_demo")
+            and self.env.user.id != 1
+        ):
+            # Блокируем запуск синхронизации во время инсталляции или обновления модулей ядра
+            if not self.env.context.get(
+                "plugin_install_mode"
+            ) and not self.env.context.get("install_mode"):
+                today_date = fields.Date.today()
+
+                # Проверяем, сохранен ли в базе комерческий курс ПриватБанка на текущую дату
+                today_rate_exists = self.env["res.currency.rate"].search_count(
+                    [("name", "=", today_date), ("is_privatbank_rate", "=", True)]
+                )
+
+                # Если курса на сегодня еще нет — запускаем разовый автоматический запрос к API банка
+                if not today_rate_exists:
+                    _logger.info(
+                        "AUTOMATED LIVE SYNC INITIATED: Missing exchange logs for %s. Reaching out to bank API...",
+                        today_date,
+                    )
+                    try:
+                        self.env["res.currency"]._update_privatbank_currency_rates()
+                    except Exception as e:
+                        _logger.error(
+                            "Automated check failed to overwrite session parameters: %s",
+                            str(e),
+                        )
+
+        # Базовый возврат стандартной логики поиска Odoo (выравнен по левому краю метода)
+        return super(ClothProduct, self).search(
+            args, offset=offset, limit=limit, order=order
+        )
 
 
 class ClothProductStockLine(models.Model):

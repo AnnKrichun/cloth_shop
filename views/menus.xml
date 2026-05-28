@@ -20,34 +20,59 @@
               parent="menu_cloth_shop_root"
               sequence="10"/>
 
+        <!-- 📦 ПУНКТ МЕНЮ: НАДХОДЖЕННЯ (Доступно ТІЛЬКИ Товарознавцю та Адміну) -->
+    <!-- ⚡ ФІКС: Додано groups="cloth_shop.group_cloth_shop_product_manager" -->
     <menuitem id="menu_cloth_receipt"
               name="Goods Receipts"
               parent="menu_cloth_shop_documents"
+              groups="cloth_shop.group_cloth_shop_product_manager"
               action="action_cloth_receipt"
               sequence="10"/>
 
+    <!-- Замовлення залишаються доступними для всіх (і для Менеджера теж) -->
     <menuitem id="menu_cloth_order"
               name="Customer Orders"
               parent="menu_cloth_shop_documents"
               action="action_cloth_order"
               sequence="20"/>
 
+        <!-- ========================================================================= -->
+    <!-- REPORTING SECTION: РАЗДЕЛЕНИЕ ЭКРАНОВ АНАЛИТИКИ                           -->
+    <!-- ========================================================================= -->
+        <!-- ========================================================================= -->
+    <!-- REPORTING STRUCTURE (РОЗВЕДЕННЯ ЗВІТІВ ДЛЯ ODOO 19)                       -->
+    <!-- ========================================================================= -->
     <menuitem id="menu_cloth_shop_reporting"
               name="Reporting"
               parent="menu_cloth_shop_root"
               sequence="15"/>
 
-    <menuitem id="menu_cloth_inventory_report"
-              name="Inventory Turnover &amp; Valuation"
+    <!-- 1. Пункт меню для Менеджера (Спрощений звіт без закупівлі) -->
+    <!-- Щоб Товарознавець його не бачив, ми явно обмежуємо його групою Менеджера. -->
+    <!-- Для того, щоб у Товарознавця не дублювався цей звіт, Odoo перевірить Крок 2 -->
+    <menuitem id="menu_cloth_inventory_report_manager"
+              name="Stock Balances"
               parent="menu_cloth_shop_reporting"
-              action="action_cloth_inventory_report"
+              groups="cloth_shop.group_cloth_shop_user"
+              action="action_cloth_inventory_report_manager"
               sequence="10"/>
 
+    <!-- 2. Пункт меню для Товарознавця (Повна собівартість + AVCO) -->
+    <!-- Перекриваємо видимість старшою групою: Менеджер цей пункт гарантовано НЕ побачить -->
+    <menuitem id="menu_cloth_inventory_report_full"
+              name="Inventory Valuation &amp; AVCO"
+              parent="menu_cloth_shop_reporting"
+              groups="cloth_shop.group_cloth_shop_product_manager"
+              action="action_cloth_inventory_report_full"
+              sequence="20"/>
+
+    <!-- 3. Звіт з прибутковості (Залишається строго для Адміна) -->
     <menuitem id="menu_cloth_profitability_report"
               name="Profitability Report"
               parent="menu_cloth_shop_reporting"
+              groups="cloth_shop.group_cloth_shop_admin"
               action="action_cloth_profitability_report"
-              sequence="20"/>
+              sequence="30"/>
 
     <!-- ========================================================================= -->
     <!-- CONFIGURATION REGISTRY (ГОЛОВНОЙ ТАБ КОНФИГУРАЦИИ)                       -->
@@ -63,11 +88,14 @@
               parent="menu_cloth_shop_config"
               sequence="10"/>
 
-    <!-- 💰 ПОДМЕНЮ 2: ЦЕНООБРАЗОВАНИЕ (Pricing) -->
+    <!-- 💰 ПОДМЕНЮ 2: ЦІНОУТВОРЕННЯ (Доступно ТІЛЬКИ Товарознавцю та Адміну) -->
+    <!-- ⚡ ФІКС: Додано groups="cloth_shop.group_cloth_shop_product_manager" -->
     <menuitem id="menu_cloth_config_pricing_group"
               name="Pricing"
               parent="menu_cloth_shop_config"
+              groups="cloth_shop.group_cloth_shop_product_manager"
               sequence="20"/>
+
 
     <!-- ========================================================================= -->
     <!-- ПУНКТЫ ДЛЯ РАЗДЕЛА "Directories"                                         -->
@@ -104,20 +132,21 @@
               action="action_cloth_collection"
               sequence="30"/>
 
-    <!-- ========================================================================= -->
-    <!-- ПУНКТЫ ДЛЯ РАЗДЕЛА "Pricing"                                             -->
-    <!-- ========================================================================= -->
+    <!-- Самі пункти всередині автоматично приховаються, але пропишемо для надійності -->
     <menuitem id="menu_cloth_markup"
               name="Markup Coefficients"
               parent="menu_cloth_config_pricing_group"
+              groups="cloth_shop.group_cloth_shop_product_manager"
               action="action_cloth_markup"
               sequence="10"/>
 
     <menuitem id="menu_cloth_shop_currency_rates"
               name="Currency Rates Monitoring"
               parent="menu_cloth_config_pricing_group"
+              groups="cloth_shop.group_cloth_shop_product_manager"
               action="action_cloth_shop_currency_rates"
               sequence="20"/>
+
 
     <!-- ========================================================================= -->
     <!-- 🆕 НАШ НОВЫЙ ПУНКТ: МАТРИЦЯ РОЗДРІБНИХ ЦІН (Клієнтський інтерфейс)        -->
@@ -145,10 +174,10 @@
         <field name="target">current</field>
     </record>
 
-    <!-- Пункт меню матрицы цен -->
     <menuitem id="menu_cloth_product_price_matrix"
               name="Product Retail Prices"
               parent="menu_cloth_config_pricing_group"
+              groups="cloth_shop.group_cloth_shop_product_manager"
               action="action_cloth_product_price_matrix"
               sequence="30"/>
 </odoo>
