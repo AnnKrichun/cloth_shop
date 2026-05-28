@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <record id="view_cloth_receipt_line_list_drilldown" model="ir.ui.view">
+            <field name="name">cloth.receipt.line.list.drilldown</field>
+            <field name="model">cloth.receipt.line</field>
+            <field name="arch" type="xml">
+                <list string="Goods Receipt Lines Breakdown" create="false" edit="false">
+                    <field name="receipt_id" string="Receipt No"/>
+                    <field name="sku_id" string="SKU"/>
+                    <field name="name" string="Product Name"/>
+                    <field name="brand_id" string="Brand"/>
+                    <field name="size_id" string="Size"/>
+                    <field name="qty" string="Quantity"/>
+                    <field name="purchase_price" string="Purchase Price Unit"/>
+                    <field name="purchase_subtotal" string="Purchase Subtotal"/>
+                    <field name="retail_price" string="Retail Price Unit"/>
+                    <field name="retail_subtotal" string="Retail Subtotal"/>
+                </list>
+            </field>
+        </record>
 
         <record id="view_cloth_receipt_list" model="ir.ui.view">
             <field name="name">cloth.receipt.list</field>
@@ -55,12 +73,12 @@
                                 <field name="line_ids" readonly="state == 'done'">
                                     <list editable="bottom">
 
-           <field name="sku_id"
-       string="SKU"
-       placeholder="Select or Type SKU..."
-       always_reload="1"
-       context="{'default_product_title': False}"
-       options="{
+                                        <field name="sku_id"
+                                               string="SKU"
+                                               placeholder="Select or Type SKU..."
+                                               always_reload="1"
+                                               context="{'default_product_title': False}"
+                                               options="{
            'no_open': False,
            'no_quick_create': True,
            'no_create_edit': False,
@@ -72,7 +90,8 @@
                                         <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
 
                                         <field name="purchase_price" string="Purchase Price"/>
-                                        <field name="purchase_currency_id" string="Currency" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="purchase_currency_id" string="Currency"
+                                               options="{'no_create': True, 'no_open': True}"/>
                                         <field name="qty"/>
 
                                         <field name="purchase_subtotal" string="Purchase Subtotal" readonly="1"/>
@@ -89,21 +108,21 @@
         </record>
 
         <record id="view_cloth_receipt_search" model="ir.ui.view">
-    <field name="name">cloth.receipt.search</field>
-    <field name="model">cloth.receipt</field>
-    <field name="arch" type="xml">
-        <search string="Search Receipts">
-            <field name="name" string="Document Number"/>
-            <field name="date"/>
+            <field name="name">cloth.receipt.search</field>
+            <field name="model">cloth.receipt</field>
+            <field name="arch" type="xml">
+                <search string="Search Receipts">
+                    <field name="name" string="Document Number"/>
+                    <field name="date"/>
 
-            <filter string="Drafts" name="filter_drafts" domain="[('state', '=', 'draft')]"/>
-            <filter string="Validated" name="filter_validated" domain="[('state', '=', 'done')]"/>
+                    <filter string="Drafts" name="filter_drafts" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Validated" name="filter_validated" domain="[('state', '=', 'done')]"/>
 
-            <separator/>
-            <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
-        </search>
-    </field>
-</record>
+                    <separator/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </search>
+            </field>
+        </record>
 
         <record id="action_cloth_receipt" model="ir.actions.act_window">
             <field name="name">Goods Receipts</field>

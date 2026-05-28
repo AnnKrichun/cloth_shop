@@ -29,7 +29,9 @@ class TestClothShopCore(TransactionCase):
     def test_01_cloth_brand_creation(self):
         """Verifies successful database instantiation of independent brand master data records."""
         self.assertEqual(
-            self.brand.name, "Test Apex Athlete", "Brand master card name mismatch!",
+            self.brand.name,
+            "Test Apex Athlete",
+            "Brand master card name mismatch!",
         )
 
     def test_02_cloth_size_creation(self):
@@ -54,7 +56,9 @@ class TestClothShopCore(TransactionCase):
             },
         )
         self.assertAlmostEqual(
-            markup.coefficient, 2.25, msg="Financial multiplier matrix precision fault!",
+            markup.coefficient,
+            2.25,
+            msg="Financial multiplier matrix precision fault!",
         )
 
     def test_05_cloth_product_sku_formatting_trigger(self):
@@ -78,7 +82,6 @@ class TestClothShopCore(TransactionCase):
 
     def test_06_cloth_product_matrix_generation_logic(self):
         """Validates that product stock breakdown matrix lines generate correctly based on data."""
-        # 1. Створюємо новий чистий товар
         product = self.env["cloth.product"].create(
             {
                 "name": "TSH-MATRIX-CHECK",
@@ -88,7 +91,6 @@ class TestClothShopCore(TransactionCase):
             },
         )
 
-        # 2. Емулюємо надходження товару на склад: створюємо проведену накладну
         receipt = self.env["cloth.receipt"].create(
             {
                 "name": "WH/IN/TEST/999",
@@ -97,7 +99,6 @@ class TestClothShopCore(TransactionCase):
             },
         )
 
-        # Додаємо лінію надходження з нашим розміром (XL)
         self.env["cloth.receipt.line"].create(
             {
                 "receipt_id": receipt.id,
@@ -110,10 +111,8 @@ class TestClothShopCore(TransactionCase):
             },
         )
 
-        # 3. Викликаємо метод генерації ліній матриці (код з вашого файлу cloth_product.py)
         product.action_generate_stock_lines()
 
-        # 4. Перевіряємо, що в картці товару автоматично з'явився РІВНО ОДИН рядок матриці для цього розміру
         self.assertEqual(
             len(product.stock_line_ids),
             1,
@@ -129,22 +128,20 @@ class TestClothShopCore(TransactionCase):
         """Ensures that personal discount fields strictly reject values outside the 0-100% boundary."""
         partner = self.env["res.partner"].create({"name": "Test Customer"})
 
-        # Negative Testing: Перевіряємо від'ємне значення (-5%) — система має викинути ValidationError
         with self.assertRaises(
             ValidationError,
             msg="System allowed a dangerous negative discount percentage!",
         ):
             partner.write({"personal_discount": -5.0})
 
-        # Negative Testing: Перевіряємо занадто велике значення (120%) — система також має викинути ValidationError
         with self.assertRaises(
-            ValidationError, msg="System allowed an invalid discount exceeding 100%!",
+            ValidationError,
+            msg="System allowed an invalid discount exceeding 100%!",
         ):
             partner.write({"personal_discount": 120.0})
 
     def test_08_cloth_receipt_zero_retail_price_validation(self):
         """Validates that warehouse receipts cannot be validated if any lines hold zero or negative prices."""
-        # Створюємо чернетку накладної
         receipt = self.env["cloth.receipt"].create(
             {
                 "name": "WH/IN/TEST/001",
@@ -152,7 +149,6 @@ class TestClothShopCore(TransactionCase):
             },
         )
 
-        # Додаємо лінію з примусово нульовою роздрібною ціною (retail_price = 0.00)
         self.env["cloth.receipt.line"].create(
             {
                 "receipt_id": receipt.id,
@@ -174,7 +170,6 @@ class TestClothShopCore(TransactionCase):
             },
         )
 
-        # Спроба провести таку накладну має миттєво викликати ValidationError
         with self.assertRaises(
             ValidationError,
             msg="Warehouse allowed a zero retail price validation log event!",

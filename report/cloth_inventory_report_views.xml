@@ -3,20 +3,48 @@
     <data>
 
         <!-- ========================================================================= -->
-        <!-- 1. ПОВНИЙ ЗВІТ ДЛЯ ТОВАРОЗНАВЦЯ ТА АДМІНІСТРАТОРА (ІЗ СОБІВАРТІСТЮ)         -->
+        <!-- ⚡ DRILL-DOWN TRANSIT LIST VIEW: DIRECT DOCUMENT REDIRECT ENGINE          -->
+        <!-- ========================================================================= -->
+        <record id="view_cloth_inventory_report_list_drilldown" model="ir.ui.view">
+            <field name="name">cloth.inventory.report.list.drilldown</field>
+            <field name="model">cloth.inventory.report</field>
+            <field name="arch" type="xml">
+                <!-- COMMENT: Standard drill-down table replacing the empty ID window -->
+                <list string="Inventory Operation Logs" create="false" edit="false" delete="false">
+                    <field name="date"/>
+                    <field name="sku"/>
+                    <field name="brand_id"/>
+                    <field name="size_id"/>
+                    <field name="doc_name"/>
+                    <field name="qty_incoming"/>
+                    <field name="qty_outgoing"/>
+                    <field name="qty_balance"/>
+
+                    <!-- 🏃 AUTOMATED NAVIGATION BUTTON: Triggers python action method -->
+                    <button name="action_open_source_document"
+                            string="Open Document"
+                            type="object"
+                            icon="fa-external-link"
+                            class="btn-primary"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ========================================================================= -->
+        <!-- 1. FULL ANALYTICAL VIEW FOR PRODUCT MANAGERS AND ADMINS                   -->
         <!-- ========================================================================= -->
         <record id="view_cloth_inventory_report_pivot_full" model="ir.ui.view">
             <field name="name">cloth.inventory.report.pivot.full</field>
             <field name="model">cloth.inventory.report</field>
             <field name="arch" type="xml">
                 <pivot string="Inventory Turnover &amp; Valuation (Full Assessment)">
-                    <!-- Рядки за замовчуванням групуються по брендах, товарах, розмірах та документах -->
+                    <!-- Rows default grouping setup -->
                     <field name="brand_id" type="row"/>
                     <field name="product_id" type="row"/>
                     <field name="size_id" type="row"/>
                     <field name="doc_name" type="row"/>
 
-                    <!-- Колонки (Показники) фінансової аналітики та залишків -->
+                    <!-- Financial and turnover core metrics -->
                     <field name="qty_incoming" type="measure"/>
                     <field name="qty_outgoing" type="measure"/>
                     <field name="qty_balance" type="measure"/>
@@ -26,7 +54,7 @@
             </field>
         </record>
 
-        <!-- Екшен для Товарознавця (Відкриває ПОВНИЙ звіт) -->
+        <!-- Window Action opening full pivot view matrix -->
         <record id="action_cloth_inventory_report_full" model="ir.actions.act_window">
             <field name="name">Inventory Turnover &amp; Valuation</field>
             <field name="res_model">cloth.inventory.report</field>
@@ -36,26 +64,26 @@
 
 
         <!-- ========================================================================= -->
-        <!-- 2. СПРОЩЕНИЙ ЗВІТ ДЛЯ МЕНЕДЖЕРА (БЕЗ СОБІВАРТОСТІ ТА БЕЗ ДОКУМЕНТІВ)      -->
+        <!-- 2. SIMPLIFIED VIEW FOR SALES MANAGERS (HIDES PRICES AND PURCHASE COSTS)  -->
         <!-- ========================================================================= -->
         <record id="view_cloth_inventory_report_pivot_manager" model="ir.ui.view">
             <field name="name">cloth.inventory.report.pivot.manager</field>
             <field name="model">cloth.inventory.report</field>
             <field name="arch" type="xml">
-                <!-- disable_linking="True" повністю блокує менеджеру можливість клікати на цифри -->
+                <!-- COMMENT: disable_linking="True" locks lines from user clicks drills -->
                 <pivot string="Current Stock Balances &amp; Retail Prices" disable_linking="True">
-                    <!-- Строге групування: тільки Товар та Розмір. Документи та бренди виключені -->
+                    <!-- Strict items grouping logs -->
                     <field name="product_id" type="row"/>
                     <field name="size_id" type="row"/>
 
-                    <!-- Дозволені показники: тільки чистий залишок штуках та поточна роздрібна ціна -->
+                    <!-- Allowed sales metrics configuration -->
                     <field name="qty_balance" type="measure"/>
                     <field name="retail_price" type="measure"/>
                 </pivot>
             </field>
         </record>
 
-        <!-- Екшен для Менеджера (Відкриває СПРОЩЕНИЙ звіт) -->
+        <!-- Window Action opening basic shop balances layout -->
         <record id="action_cloth_inventory_report_manager" model="ir.actions.act_window">
             <field name="name">Product Stock Balances</field>
             <field name="res_model">cloth.inventory.report</field>

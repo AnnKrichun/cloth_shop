@@ -2,34 +2,32 @@
 <odoo>
     <data>
 
-                <!-- 1. Custom currency rates historical log list view independent of core addons -->
+        <!-- Custom Currency Rates History Grid View -->
         <record id="view_cloth_shop_currency_rate_tree" model="ir.ui.view">
             <field name="name">res.currency.rate.list.cloth_shop</field>
             <field name="model">res.currency.rate</field>
             <field name="arch" type="xml">
+                <!-- create="0" edit="0" delete="0" protects financial bank history logs from manual user changes -->
                 <list string="Currency Exchange Rates History" create="0" edit="0" delete="0" default_order="name desc">
                     <field name="currency_id" string="Currency"/>
                     <field name="name" string="Effective Date"/>
                     <field name="inverse_company_rate" string="Exchange Rate (UAH per 1 Unit)"/>
-
-                    <!-- 🆕 НАШ ФІКС: Виводимо маркер нашого API новою колонкою для Odoo 19 -->
                     <field name="is_privatbank_rate" string="PrivatBank Rate" widget="boolean"/>
                 </list>
             </field>
         </record>
 
-        <!-- 2. Master window action directly opening our custom history logging tree view -->
+        <!-- Master Window Action directly opening our custom history logging tree view -->
         <record id="action_cloth_shop_currency_rates" model="ir.actions.act_window">
             <field name="name">Currency Exchange Rates</field>
             <field name="res_model">res.currency.rate</field>
             <field name="view_mode">list</field>
             <field name="view_id" ref="view_cloth_shop_currency_rate_tree"/>
             <field name="domain">[('currency_id.name', 'in', ['USD', 'EUR', 'UAH'])]</field>
-            <!-- ЗМІНЕНО: групування по місяцях та примусове сортування за датою по спаданню -->
             <field name="context">{'group_by': 'name:month', 'order': 'name desc'}</field>
         </record>
 
-        <!-- 3. STRICT INTERFACE FIX: Force the system to use the List View as the absolute primary layout -->
+        <!-- STRICT INTERFACE FIX: Force the system to use the List View as the absolute primary layout -->
         <record id="action_cloth_shop_currency_rates_view_list" model="ir.actions.act_window.view">
             <field name="sequence" eval="1"/>
             <field name="view_mode">list</field>

@@ -2,11 +2,12 @@
 <odoo>
     <data>
 
-        <!-- 1. ПРЕДСТАВЛЕННЯ TREE / LIST (Обов'язкове базове) -->
+        <!-- 1. Analytical List View Layout -->
         <record id="view_cloth_profitability_report_list" model="ir.ui.view">
             <field name="name">cloth.profitability.report.list</field>
             <field name="model">cloth.profitability.report</field>
             <field name="arch" type="xml">
+                <!-- COMMENT: create="false" edit="false" delete="false" blocks data alterations inside analytical reports -->
                 <list string="Profitability Analysis" create="false" edit="false" delete="false">
                     <field name="date_order"/>
                     <field name="name"/>
@@ -20,12 +21,13 @@
                     <field name="discount_percent"/>
                     <field name="discount_amount" sum="Total Discounts"/>
                     <field name="turnover" sum="Total Net Turnover"/>
+                    <!-- Conditional CSS decorations handling profit and loss margins highlighting rules -->
                     <field name="profit" sum="Total Margin Profit" decoration-bf="1" decoration-success="profit &gt; 0" decoration-danger="profit &lt; 0"/>
                 </list>
             </field>
         </record>
 
-        <!-- 2. ПРЕДСТАВЛЕННЯ PIVOT (Зведена таблиця для аналітики) -->
+        <!-- 2. Analytical Pivot View Layout Matrix -->
         <record id="view_cloth_profitability_report_pivot" model="ir.ui.view">
             <field name="name">cloth.profitability.report.pivot</field>
             <field name="model">cloth.profitability.report</field>
@@ -40,7 +42,7 @@
             </field>
         </record>
 
-        <!-- 3. ПРЕДСТАВЛЕННЯ GRAPH (Діаграма доходності) -->
+        <!-- 3. Analytical Bar Graph View Diagram Layout -->
         <record id="view_cloth_profitability_report_graph" model="ir.ui.view">
             <field name="name">cloth.profitability.report.graph</field>
             <field name="model">cloth.profitability.report</field>
@@ -52,7 +54,7 @@
             </field>
         </record>
 
-        <!-- 4. ПРЕДСТАВЛЕННЯ SEARCH (Пошук та фільтри) -->
+        <!-- 4. Preconfigured Advanced Dashboard Filtering Logs Panel -->
         <record id="view_cloth_profitability_report_search" model="ir.ui.view">
             <field name="name">cloth.profitability.report.search</field>
             <field name="model">cloth.profitability.report</field>
@@ -61,10 +63,12 @@
                     <field name="product_id"/>
                     <field name="partner_id"/>
 
+                    <!-- Time filters constraints variables -->
                     <filter string="Today" name="today" domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')), ('date_order', '&lt;=', context_today().strftime('%Y-%m-%d 23:59:59'))]"/>
                     <filter string="This Month" name="this_month" domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
 
                     <separator/>
+                    <!-- Interface group by context operators mapping layouts -->
                     <group>
                         <filter string="Customer" name="group_customer" context="{'group_by':'partner_id'}"/>
                         <filter string="Product" name="group_product" context="{'group_by':'product_id'}"/>
@@ -74,11 +78,12 @@
             </field>
         </record>
 
-        <!-- 5. ОНОВЛЕНА ДІЯ (Форма повністю виключена з view_mode) -->
+        <!-- 5. Primary Application Action Routing Workspace Trigger -->
         <record id="action_cloth_profitability_report" model="ir.actions.act_window">
             <field name="name">Profitability Report</field>
             <field name="res_model">cloth.profitability.report</field>
-            <field name="view_mode">list,pivot,graph</field> <!-- 🔒 Тільки список, куб та графік -->
+            <!-- COMMENT: View modes are limited strictly to immutable reports panels structures layouts -->
+            <field name="view_mode">list,pivot,graph</field>
             <field name="search_view_id" ref="view_cloth_profitability_report_search"/>
             <field name="context">{'search_default_group_product': 1}</field>
         </record>

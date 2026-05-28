@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from odoo import fields, models, tools
 
 
@@ -25,11 +26,13 @@ class ClothInventoryReport(models.Model):
     sku = fields.Char(string="SKU Code", readonly=True)
     brand_id = fields.Many2one("cloth.brand", string="Brand", readonly=True)
     collection_id = fields.Many2one(
-        "cloth.collection", string="Collection", readonly=True,
+        "cloth.collection",
+        string="Collection",
+        readonly=True,
     )
     size_id = fields.Many2one("cloth.size", string="Size", readonly=True)
 
-    # ОБ'ЄДНАНЕ ПОЛЕ ДОКУМЕНТА (ЗАМІСТЬ NONE)
+    # Combined system source document tracking parameters
     doc_name = fields.Char(string="Document", readonly=True)
     res_model = fields.Char(string="Resource Model", readonly=True)
     res_id = fields.Integer(string="Resource ID", readonly=True)
@@ -46,10 +49,14 @@ class ClothInventoryReport(models.Model):
     # =========================================================================
     currency_id = fields.Many2one("res.currency", string="Currency", readonly=True)
     purchase_value = fields.Monetary(
-        string="Total Purchase Value", readonly=True, currency_field="currency_id",
+        string="Total Purchase Value",
+        readonly=True,
+        currency_field="currency_id",
     )
     retail_value = fields.Monetary(
-        string="Total Retail Sales Value", readonly=True, currency_field="currency_id",
+        string="Total Retail Sales Value",
+        readonly=True,
+        currency_field="currency_id",
     )
     retail_price = fields.Monetary(
         string="Current Retail Price",
@@ -60,7 +67,7 @@ class ClothInventoryReport(models.Model):
 
     def action_open_source_document(self):
         """
-        ФІКС КЛІКАБЕЛЬНОСТІ: Динамічно відкриває форму документа залежно від типу операції
+        Dynamically opens the original form view of the linked source record.
         """
         self.ensure_one()
         if not self.res_model or not self.res_id:
@@ -96,7 +103,6 @@ class ClothInventoryReport(models.Model):
                         ELSE 'older'
                     END AS report_period,
 
-                    -- Зв'язуємо назви документів, моделі та ID в універсальні змінні
                     move_data.doc_name AS doc_name,
                     move_data.res_model AS res_model,
                     move_data.res_id AS res_id,
@@ -119,7 +125,7 @@ class ClothInventoryReport(models.Model):
 
                 FROM cloth_product p
                 JOIN (
-                    -- ЧАСТИНА 1: Надходження
+                    -- PART 1: Goods Receipts Documents
                     SELECT 
                         rl.sku_id AS product_id,
                         rl.size_id AS size_id,
@@ -138,7 +144,7 @@ class ClothInventoryReport(models.Model):
 
                     UNION ALL
 
-                    -- ЧАСТИНА 2: Замовлення
+                    -- PART 2: Customer Orders Documents
                     SELECT 
                         ol.product_id AS product_id,
                         ol.size_id AS size_id,

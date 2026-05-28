@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -20,14 +21,16 @@ class RecalculateMarkupWizard(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        """⚡ АВТОПОДСТАНОВКА ДЛЯ ODOO 19: Вычитывает бренд из активной строки матрицы наценок"""
+        """
+        Context interceptor method fetching active brand parameters.
+        """
         res = super().default_get(fields_list)
 
         active_model = self.env.context.get("active_model")
         active_id = self.env.context.get("active_id")
 
+        # COMMENT: Read the selected row data to auto-fill the wizard field values
         if active_model == "cloth.markup.coefficient" and active_id:
-            # Находим строку матрицы наценок, на которой кликнули
             markup_line = self.env["cloth.markup.coefficient"].browse(active_id)
             if markup_line.exists() and markup_line.brand_id:
                 res["brand_id"] = markup_line.brand_id.id
@@ -49,7 +52,7 @@ class RecalculateMarkupWizard(models.TransientModel):
         updated_count = 0
 
         for product in products:
-            # ⚡ ФИКС НАЦЕНКИ: Ищем живое правило коэффициента для связки конкретного Бренда и Коллекции товара
+            # COMMENT: Search for the specific active brand and collection markup rule
             rule = self.env["cloth.markup.coefficient"].search(
                 [
                     ("brand_id", "=", product.brand_id.id),
@@ -57,7 +60,7 @@ class RecalculateMarkupWizard(models.TransientModel):
                 ],
                 limit=1,
             )
-            # Если специфическое правило не найдено, берем дефолт 1.5
+            # Default fallback factor if markup configuration row is missing
             markup_coefficient = rule.coefficient if rule else 1.5
 
             # Aggregate receipt line statistics for specific item configuration profiles
@@ -111,7 +114,7 @@ class RecalculateMarkupWizard(models.TransientModel):
             "params": {
                 "title": _("AVCO Recalculation Complete"),
                 "message": _(
-                    "Successfully synchronized and updated %s price configurations for brand %s.",
+                    "Successfully synchronized and updated %s price configurations for brand %s."
                 )
                 % (updated_count, self.brand_id.name),
                 "type": "success",

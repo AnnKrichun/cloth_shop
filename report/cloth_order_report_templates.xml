@@ -6,11 +6,15 @@
                 <t t-foreach="docs" t-as="doc">
                     <t t-call="web.external_layout">
                         <div class="page">
+
+                            <!-- Document Main Header Title Section -->
                             <div class="row mt-4">
                                 <div class="col-12">
                                     <h2 class="text-primary">Customer Order: <span t-field="doc.name"/></h2>
                                 </div>
                             </div>
+
+                            <!-- Customer Details and Metadata Address Grid Section -->
                             <div class="row mt-3 mb-4">
                                 <div class="col-6">
                                     <strong>Customer:</strong> <span t-field="doc.partner_id.name"/><br/>
@@ -21,6 +25,8 @@
                                     <strong>Status:</strong> <span t-field="doc.state"/>
                                 </div>
                             </div>
+
+                            <!-- Main Products Items Data Table Section -->
                             <table class="table table-sm table-striped mt-4">
                                 <thead class="table-dark">
                                     <tr>
@@ -32,6 +38,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- Loop through individual customer sales lines items records vector -->
                                     <t t-foreach="doc.line_ids" t-as="line">
                                         <tr>
                                             <td>[<span t-field="line.product_id.name"/>] <span t-field="line.product_id.product_title"/></td>
@@ -43,6 +50,8 @@
                                     </t>
                                 </tbody>
                             </table>
+
+                            <!-- Final Order Value and Discounts Totals Section -->
                             <div class="row justify-content-end mt-4">
                                 <div class="col-4">
                                     <table class="table table-sm table-borderless text-end">
@@ -57,6 +66,7 @@
                                     </table>
                                 </div>
                             </div>
+
                         </div>
                     </t>
                 </t>

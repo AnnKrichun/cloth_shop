@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_partner_form_inherit_cloth" model="ir.ui.view">
-        <field name="name">res.partner.form.inherit.cloth</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//sheet" position="inside">
-                <group string="Налаштування магазину одягу">
-                    <field name="personal_discount" string="Персональна знижка (%)"/>
-                </group>
-            </xpath>
-        </field>
-    </record>
+    <data>
+
+        <!-- Extension View inherited from core base partners view model -->
+        <record id="view_partner_form_inherit_cloth" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.cloth</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Clothing Shop Parameters">
+                        <field name="personal_discount" string="Personal Discount (%)"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
 </odoo>

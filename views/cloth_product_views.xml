@@ -2,7 +2,6 @@
 <odoo>
     <data>
 
-        <!-- ПОШУК ТОВАРІВ -->
         <record id="view_cloth_product_search" model="ir.ui.view">
             <field name="name">cloth.product.search</field>
             <field name="model">cloth.product</field>
@@ -16,7 +15,6 @@
             </field>
         </record>
 
-        <!-- СПИСОК ТОВАРІВ -->
         <record id="view_cloth_product_list" model="ir.ui.view">
             <field name="name">cloth.product.list</field>
             <field name="model">cloth.product</field>
@@ -30,14 +28,12 @@
             </field>
         </record>
 
-        <!-- КАНБАН ТОВАРІВ (🔒 Фікс для Odoo 19 / Owl Engine) -->
         <record id="view_cloth_product_kanban" model="ir.ui.view">
             <field name="name">cloth.product.kanban</field>
             <field name="model">cloth.product</field>
             <field name="arch" type="xml">
                 <kanban>
                     <templates>
-                        <!-- Змінено t-name на card для сумісності з сучасним JS-валідатором -->
                         <t t-name="card">
                             <div class="oe_kanban_global_click p-3">
                                 <div class="oe_kanban_details">
@@ -45,7 +41,8 @@
                                         <field name="name"/>
                                     </strong>
                                     <div class="mt-2 text-muted">
-                                        <span>Name: </span><field name="product_title"/>
+                                        <span>Name:</span>
+                                        <field name="product_title"/>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +52,6 @@
             </field>
         </record>
 
-        <!-- СТАТИСТИЧНІ ДІЇ ДЛЯ КНОПОК -->
         <record id="action_cloth_brand_stat" model="ir.actions.act_window">
             <field name="name">Brands</field>
             <field name="res_model">cloth.brand</field>
@@ -68,21 +64,21 @@
             <field name="view_mode">list,form,pivot,graph</field>
         </record>
 
-        <!-- ФОРМА КАРТКИ ТОВАРУ -->
         <record id="view_cloth_product_form" model="ir.ui.view">
             <field name="name">cloth.product.form</field>
             <field name="model">cloth.product</field>
             <field name="arch" type="xml">
                 <form string="Product">
                     <sheet>
-                        <!-- Стат-кнопки із чистим виведенням для Odoo 19 -->
                         <div class="oe_button_box" name="button_box">
-                            <button name="%(action_cloth_order_stat)d" type="action" class="oe_stat_button" icon="fa-shopping-cart">
+                            <button name="%(action_cloth_order_stat)d" type="action" class="oe_stat_button"
+                                    icon="fa-shopping-cart">
                                 <div class="o_form_field o_stat_info">
                                     <span class="o_stat_text">Orders</span>
                                 </div>
                             </button>
-                            <button name="%(action_cloth_brand_stat)d" type="action" class="oe_stat_button" icon="fa-tag">
+                            <button name="%(action_cloth_brand_stat)d" type="action" class="oe_stat_button"
+                                    icon="fa-tag">
                                 <div class="o_form_field o_stat_info">
                                     <span class="o_stat_text">Brand</span>
                                 </div>
@@ -108,7 +104,6 @@
                                     <list create="0" delete="0" edit="0">
                                         <field name="size_id"/>
                                         <field name="qty_available"/>
-                                        <!-- Поле ціни тепер автоматично читає дані з нашої нової моделі-матриці -->
                                         <field name="retail_price" string="Current Retail Price"/>
                                     </list>
                                 </field>
@@ -119,7 +114,6 @@
             </field>
         </record>
 
-        <!-- ГОЛОВНА ДІЯ ТОВАРІВ -->
         <record id="action_cloth_product" model="ir.actions.act_window">
             <field name="name">Products</field>
             <field name="res_model">cloth.product</field>

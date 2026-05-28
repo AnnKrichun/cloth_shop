@@ -34,3 +34,7 @@ access_admin_cloth_receipt_line,cloth.receipt.line.admin,model_cloth_receipt_lin
 access_admin_cloth_order,cloth.order.admin,model_cloth_order,group_cloth_shop_admin,1,1,1,1
 access_admin_cloth_order_line,cloth.order.line.admin,model_cloth_order_line,group_cloth_shop_admin,1,1,1,1
 access_cloth_order_partner_manager,res.partner.cloth,base.model_res_partner,group_cloth_shop_user,1,1,1,1
+access_sys_admin_cloth_receipt,cloth.receipt.sysadmin,model_cloth_receipt,base.group_system,1,1,1,1
+access_sys_admin_cloth_receipt_line,cloth.receipt.line.sysadmin,model_cloth_receipt_line,base.group_system,1,1,1,1
+access_sys_admin_cloth_order,cloth.order.sysadmin,model_cloth_order,base.group_system,1,1,1,1
+access_sys_admin_cloth_order_line,cloth.order.line.sysadmin,model_cloth_order_line,base.group_system,1,1,1,1

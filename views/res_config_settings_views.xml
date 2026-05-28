@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_cloth_shop_config_settings_form" model="ir.ui.view">
-        <field name="name">res.config.settings.form.cloth_shop</field>
-        <field name="model">res.config.settings</field>
-        <field name="priority" eval="20"/>
-        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//form" position="inside">
-                <app string="Clothing Shop" index="10" name="cloth_shop">
-                    <block string="Multi-Currency Exchange Settings" name="currency_settings">
+    <data>
 
-                        <!-- ПОВЕРНЕНО: Ваше оригінальне поле вибору валюти продажу -->
-                        <setting string="Store Retail Currency" help="Global pricing currency used across all customer retail checkout sales operations.">
-                            <field name="retail_currency_id" options="{'no_create': True, 'no_open': True}"/>
-                        </setting>
+        <!-- Inherited System Settings Form View Extension -->
+        <record id="view_cloth_shop_config_settings_form" model="ir.ui.view">
+            <field name="name">res.config.settings.form.cloth_shop</field>
+            <field name="model">res.config.settings</field>
+            <!-- priority=20 ensures clean loading sequence inside core layouts panel -->
+            <field name="priority" eval="20"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <!-- Injects an isolated application settings tab into core form view layout -->
+                <xpath expr="//form" position="inside">
+                    <app string="Clothing Shop" index="10" name="cloth_shop">
+                        <block string="Multi-Currency Exchange Settings" name="currency_settings">
 
-                        <!-- ДОДАНО: Кнопка миттєвого оновлення курсів поруч -->
-                        <setting string="Live Currency Synchronization" help="Instantly update USD and EUR exchange rates directly from PrivatBank API.">
-                            <div class="mt16">
-                                <button name="action_cloth_shop_update_rates_now"
-                                        string="Update Rates from PrivatBank Now"
-                                        type="object"
-                                        class="btn-primary"
-                                        icon="fa-refresh"/>
-                            </div>
-                        </setting>
+                            <!-- Core Store Retail Currency parameters mapping -->
+                            <setting string="Store Retail Currency" help="Global pricing currency used across all customer retail checkout sales operations.">
+                                <field name="retail_currency_id" options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
 
-                    </block>
-                </app>
-            </xpath>
-        </field>
-    </record>
+                            <!-- Live PrivatBank Banking API endpoint execution button action trigger wrapper -->
+                            <setting string="Live Currency Synchronization" help="Instantly update USD and EUR exchange rates directly from PrivatBank API.">
+                                <div class="mt16">
+                                    <!-- type="object" instructs button layout to fire corresponding python backend method -->
+                                    <button name="action_cloth_shop_update_rates_now"
+                                            string="Update Rates from PrivatBank Now"
+                                            type="object"
+                                            class="btn-primary"
+                                            icon="fa-refresh"/>
+                                </div>
+                            </setting>
+
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
 </odoo>

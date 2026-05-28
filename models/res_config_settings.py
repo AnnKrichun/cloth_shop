@@ -1,15 +1,15 @@
+# -*- coding: utf-8 -*-
 from odoo import api, fields, models
 
 
 class ResConfigSettings(models.TransientModel):
     """
-    Extends system config parameters matrix to expose store retail settings
-    using completely independent core system configuration parameters dictionary wrappers.
+    Extends system config parameters matrix to expose store retail settings.
     """
 
     _inherit = "res.config.settings"
 
-    # Fully autonomous independent Many2one pointer fallback field
+    # Main retail currency parameter linked to the store
     retail_currency_id = fields.Many2one(
         "res.currency",
         string="Store Retail Currency",
@@ -24,7 +24,7 @@ class ResConfigSettings(models.TransientModel):
         """
         res = super().get_values()
 
-        # Pull key parameter from system settings parameters table storage registry
+        # COMMENT: Read the currency field value from the core system parameters table
         stored_currency_id = (
             self.env["ir.config_parameter"]
             .sudo()
@@ -44,23 +44,22 @@ class ResConfigSettings(models.TransientModel):
         """
         super().set_values()
 
-        # Write data record directly into system configuration parameters table entries
+        # COMMENT: Write the chosen currency ID directly into ir.config_parameter database table
         if self.retail_currency_id:
             self.env["ir.config_parameter"].sudo().set_param(
-                "cloth_shop.retail_currency_id", self.retail_currency_id.id,
+                "cloth_shop.retail_currency_id",
+                self.retail_currency_id.id,
             )
 
     def action_cloth_shop_update_rates_now(self):
         """
-        Triggered manually by the supervisor inside Settings layout panel.
-        Forces backend to fire the core PrivatBank API sync pipeline immediately
-        in the context of current company and explicitly commits the changes.
+        Forces backend to fire the core PrivatBank API sync pipeline immediately.
         """
-        # Execute synchronization using the current active company context environment
+        # COMMENT: Run manual exchange rate sync using current active company context
         self.env["res.currency"].with_company(
             self.env.company,
         )._update_privatbank_currency_rates()
 
-        # Force flush and commit the transaction to ensure live entries are saved immediately
+        # COMMENT: Force immediate database commit to make updates visible right now
         self.env.cr.commit()
         return True

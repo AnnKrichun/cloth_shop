@@ -43,7 +43,8 @@
                     <field name="collection_id"/>
                     <separator/>
                     <filter string="Group by Brand" name="group_by_brand" context="{'group_by': 'brand_id'}"/>
-                    <filter string="Group by Collection" name="group_by_collection" context="{'group_by': 'collection_id'}"/>
+                    <filter string="Group by Collection" name="group_by_collection"
+                            context="{'group_by': 'collection_id'}"/>
                 </search>
             </field>
         </record>

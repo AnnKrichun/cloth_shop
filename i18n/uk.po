@@ -1,74 +1,111 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * cloth_shop
+# 	* cloth_shop
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 12:00+0000\n"
-"PO-Revision-Date: 2026-05-24 12:00+0000\n"
-"Last-Translator: AI Assistant\n"
-"Language-Team: Ukrainian\n"
+"POT-Creation-Date: 2026-05-28 22:16+0000\n"
+"PO-Revision-Date: 2026-05-28 22:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language: uk\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_root
-msgid "Clothing Shop"
-msgstr "Магазин одягу"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid ""
+"<br/>\n"
+"                                    <strong>Delivery Address:</strong>"
+msgstr ""
+"<br/>\n"
+"                                    <strong>Адреса доставки:</strong>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_product_stock_card
-msgid "Products (Stock)"
-msgstr "Товари (Залишки)"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid ""
+"<br/>\n"
+"                                    <strong>Status:</strong>"
+msgstr ""
+"<br/>\n"
+"                                    <strong>Статус:</strong>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_documents
-msgid "Operational Documents"
-msgstr "Операційні документи"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "<span class=\"o_stat_text\">Brand</span>"
+msgstr "<span class=\"o_stat_text\">Бренд</span>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_receipt
-msgid "Goods Receipts"
-msgstr "Надходження товарів"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "<span class=\"o_stat_text\">Orders</span>"
+msgstr "<span class=\"o_stat_text\">Замовлення</span>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_order
-msgid "Customer Orders"
-msgstr "Замовлення покупців"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_kanban
+msgid "<span>Name: </span>"
+msgstr "<span>Назва: </span>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_config
-msgid "Configuration"
-msgstr "Довідники"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "<strong>Customer:</strong>"
+msgstr "<strong>Покупець:</strong>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_brand
-msgid "Brands"
-msgstr "Бренди"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "<strong>Order Date:</strong>"
+msgstr "<strong>Дата замовлення:</strong>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_size
-msgid "Sizes"
-msgstr "Розміри"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "<strong>Personal Discount:</strong>"
+msgstr "<strong>Персональна знижка:</strong>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_collection
-msgid "Collections"
-msgstr "Колекції"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "<strong>Total Amount:</strong>"
+msgstr "<strong>Загальна сума:</strong>"
 
 #. module: cloth_shop
-#: model:ir.ui.menu,name:cloth_shop.menu_cloth_markup
-msgid "Markup Coefficients"
-msgstr "Коефіцієнти націнок"
+#. odoo-python
+#: code:addons/cloth_shop/wizard/recalculate_markup_wizard.py:0
+msgid "AVCO Recalculation Complete"
+msgstr "Розрахунок за середньозваженою ціною (AVCO) завершено"
 
 #. module: cloth_shop
-#: model:ir.model,name:cloth_shop.model_cloth_brand
-msgid "Clothing Brands"
-msgstr "Бренди одягу"
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__retail_price
+msgid "Actual Retail Price"
+msgstr "Чинна роздрібна ціна"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid ""
+"Are you sure you want to validate this document and post the products to "
+"inventory stock?"
+msgstr "Ви впевнені, що хочете провести цей документ та оприбуткувати товари на склад?"
+
+#. module: cloth_shop
+#: selection:cloth.collection,season:0
+msgid "Autumn / Winter"
+msgstr "Осінь / Зима"
+
+#. module: cloth_shop
+#: selection:cloth.collection,season:0
+msgid "Spring / Summer"
+msgstr "Весна / Літо"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__brand_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__brand_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__brand_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_recalculate_markup_wizard__brand_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__brand_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_brand_form
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Brand"
+msgstr "Бренд"
 
 #. module: cloth_shop
 #: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__name
@@ -76,14 +113,31 @@ msgid "Brand Name"
 msgstr "Назва бренду"
 
 #. module: cloth_shop
-#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__country_id
-msgid "Country of Origin"
-msgstr "Країна походження"
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_brand_stat
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_brand
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_brand_list
+msgid "Brands"
+msgstr "Бренди"
 
 #. module: cloth_shop
-#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__logo
-msgid "Logo"
-msgstr "Логотип"
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid "Calculate Retail Prices"
+msgstr "Розрахувати роздрібні ціни"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_recalculate_markup_wizard_form
+msgid "Cancel"
+msgstr "Скасувати"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Cancel Order"
+msgstr "Скасувати замовлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_order__state__cancelled
+msgid "Cancelled"
+msgstr "Скасовано"
 
 #. module: cloth_shop
 #: model:ir.model,name:cloth_shop.model_cloth_product
@@ -91,21 +145,1206 @@ msgid "Cloth Product Stock Card"
 msgstr "Картка товару (Залишки)"
 
 #. module: cloth_shop
-#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__name
-msgid "SKU"
-msgstr "Артикул"
+#: model:ir.actions.server,name:cloth_shop.ir_cron_update_privatbank_rates_ir_actions_server
+msgid "Cloth Shop: Auto Update Rates from PrivatBank"
+msgstr "Магазин одягу: Автоматичне оновлення курсів ПриватБанку"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_brand
+#: model:ir.model,name:cloth_shop.model_cloth_brand
+msgid "Clothing Brands"
+msgstr "Бренди одягу"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_collection
+msgid "Clothing Collections"
+msgstr "Колекції одягу"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_root
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_config_settings_form
+msgid "Clothing Shop"
+msgstr "Магазин одягу"
+
+#. module: cloth_shop
+#: model:res.groups,name:cloth_shop.group_cloth_shop_admin
+msgid "Clothing Shop: Administrator"
+msgstr "Магазин одягу: Адміністратор"
+
+#. module: cloth_shop
+#: model:res.groups,name:cloth_shop.group_cloth_shop_product_manager
+msgid "Clothing Shop: Product Manager"
+msgstr "Магазин одягу: Товарознавець"
+
+#. module: cloth_shop
+#: model:res.groups,name:cloth_shop.group_cloth_shop_user
+msgid "Clothing Shop: Sales Manager"
+msgstr "Магазин одягу: Менеджер з продажів"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_size
+msgid "Clothing Sizes"
+msgstr "Розміри одягу"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__collection_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__collection_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__collection_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__collection_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_collection_form
+msgid "Collection"
+msgstr "Колекція"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__name
+msgid "Collection Theme"
+msgstr "Тематика колекції"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_collection
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_collection_list
+msgid "Collections"
+msgstr "Колекції"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_collection
+msgid "Collections Dictionary"
+msgstr "Довідник колекцій"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_res_company
+msgid "Companies"
+msgstr "Компанії"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__company_id
+msgid "Company"
+msgstr "Компанія"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_res_config_settings
+msgid "Config Settings"
+msgstr "Налаштування конфігурації"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_config
+msgid "Configuration"
+msgstr "Довідники"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_res_partner
+msgid "Contact"
+msgstr "Контакт"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "Core Specifications Parameters"
+msgstr "Основні параметри специфікації"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__purchase_price
+msgid "Cost Price Unit"
+msgstr "Собівартість одиниці"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__country_id
+msgid "Country of Origin"
+msgstr "Країна походження"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Country, City, Street, ZIP..."
+msgstr "Країна, місто, вулиця, індекс..."
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_recalculate_markup_wizard__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__create_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__create_uid
+msgid "Created by"
+msgstr "Створив"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_recalculate_markup_wizard__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__create_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__create_date
+msgid "Created on"
+msgstr "Дата створення"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_res_currency
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__currency_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_currency_rate_tree
+msgid "Currency"
+msgstr "Валюта"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_shop_currency_rates
+msgid "Currency Exchange Rates"
+msgstr "Курси обміну валют"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_currency_rate_tree
+msgid "Currency Exchange Rates History"
+msgstr "Історія курсів обміну валют"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_res_currency_rate
+msgid "Currency Rate"
+msgstr "Курс валюти"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_currency_rates
+msgid "Currency Rates Monitoring"
+msgstr "Моніторинг курсів валют"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__retail_price
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "Current Retail Price"
+msgstr "Поточна роздрібна ціна"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__qty_balance
+msgid "Current Stock Balance"
+msgstr "Поточний залишок"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_inventory_report_pivot_manager
+msgid "Current Stock Balances & Retail Prices"
+msgstr "Поточні залишки та роздрібні ціни"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__partner_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__partner_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_search
+msgid "Customer"
+msgstr "Покупець"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Customer Details"
+msgstr "Дані покупця"
+
+#. module: cloth_shop
+#: model:ir.actions.report,name:cloth_shop.action_report_cloth_order
+msgid "Customer Order Form"
+msgstr "Друкована форма замовлення покупця"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "Customer Order:"
+msgstr "Замовлення покупця:"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_order
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_order
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_list
+msgid "Customer Orders"
+msgstr "Замовлення покупців"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_order__state__rejected
+msgid "Customer Return"
+msgstr "Повернення від покупця"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_order
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Customer Sales Order"
+msgstr "Замовлення покупця"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__date
+msgid "Date"
+msgstr "Дата"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__purchase_currency_id
+msgid "Default Purchase Currency"
+msgstr "Валюта закупівлі за замовчуванням"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__delivery_address
+msgid "Delivery Address"
+msgstr "Адреса доставки"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_config_directories_group
+msgid "Directories"
+msgstr "Реєстри"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__discount_percent
+msgid "Discount (%)"
+msgstr "Знижка (%)"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__discount_amount
+msgid "Discount Amount"
+msgstr "Сума знижки"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_recalculate_markup_wizard__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_res_company__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_res_currency__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_res_currency_rate__display_name
+#: model:ir.model.fields,field_description:cloth_shop.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Назва для відображення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__doc_name
+msgid "Document"
+msgstr "Документ"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__name
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_search
+msgid "Document Number"
+msgstr "Номер документа"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_receipt__state__draft
+msgid "Draft"
+msgstr "Чернетка"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_search
+msgid "Drafts"
+msgstr "Чернетки"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_currency_rate_tree
+msgid "Effective Date"
+msgstr "Дата набуття чинності"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_currency_rate_tree
+msgid "Exchange Rate (UAH per 1 Unit)"
+msgstr "Курс обміну (грн за 1 одиницю)"
+
+#. module: cloth_shop
+#: model:ir.model.fields,help:cloth_shop.field_res_company__default_markup_coef
+msgid ""
+"Fallback pricing multiplier used when specific Brand and Collection markup "
+"rules are missing."
+msgstr ""
+"Використовується, якщо для Бренду та Колекції не задано індивідууальну "
+"націнку."
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_res_company__default_markup_coef
+msgid "Global Markup Coefficient"
+msgstr "Глобальний коефіцієнт націнки"
+
+#. module: cloth_shop
+#: model:ir.model.fields,help:cloth_shop.field_res_config_settings__retail_currency_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_config_settings_form
+msgid ""
+"Global pricing currency used across all customer retail checkout sales "
+"operations."
+msgstr ""
+"Глобальна валюта цін, яка використовується для всіх операцій замовлень "
+"покупців."
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid "Goods Receipt"
+msgstr "Надходження товару"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_receipt_line
+msgid "Goods Receipt Line"
+msgstr "Рядок надходження товарів"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Goods Receipt Lines Breakdown"
+msgstr "Деталізація рядків надходження"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_receipt
+msgid "Goods Receipt Note"
+msgstr "Надходження товарів"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_receipt
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_receipt
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_list
+msgid "Goods Receipts"
+msgstr "Надходження товарів"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_markup_search
+msgid "Group by Brand"
+msgstr "Групувати за брендом"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_markup_search
+msgid "Group by Collection"
+msgstr "Групувати за колекцією"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_recalculate_markup_wizard__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__id
+#: model:ir.model.fields,field_description:cloth_shop.field_res_company__id
+#: model:ir.model.fields,field_description:cloth_shop.field_res_config_settings__id
+#: model:ir.model.fields,field_description:cloth_shop.field_res_currency__id
+#: model:ir.model.fields,field_description:cloth_shop.field_res_currency_rate__id
+#: model:ir.model.fields,field_description:cloth_shop.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: cloth_shop
+#: model:ir.model.fields,help:cloth_shop.field_res_currency_rate__is_privatbank_rate
+msgid ""
+"Identifies if this currency rate entry was pulled via PrivatBank commercial "
+"API."
+msgstr ""
+"Визначає, чи був цей запис курсу валюти завантажений через комерційний API "
+"ПриватБанку."
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_order__state__draft
+msgid "In Progress"
+msgstr "В процесі"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_config_settings_form
+msgid ""
+"Instantly update USD and EUR exchange rates directly from PrivatBank API."
+msgstr "Миттєво оновлюйте курси обміну USD та EUR безпосередньо з API ПриватБанку."
+
+#. module: cloth_shop
+#. odoo-python
+#: code:addons/cloth_shop/models/cloth_order.py:0
+msgid ""
+"Insufficient stock balance for product [%s] %s in Size %s! Available on "
+"hand: %s"
+msgstr "Недостатній залишок на складі для товару [%s] %s у розмірі %s! Доступно в наявності: %s"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_inventory_report_list_drilldown
+msgid "Inventory Operation Logs"
+msgstr "Журнал складських операцій"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_inventory_report_full
+msgid "Inventory Turnover & Valuation"
+msgstr "Оборотність та собівартість"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_inventory_report_pivot_full
+msgid "Inventory Turnover & Valuation (Full Assessment)"
+msgstr "Оборотність та собівартість (Повний аналіз)"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_inventory_report
+msgid "Inventory Turnover and Stock Report"
+msgstr "Звіт по залишках та оборотності"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_inventory_report_full
+msgid "Inventory Valuation & AVCO"
+msgstr "Оборотність та собівартість (AVCO)"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_inventory_report__report_period__last_month
+msgid "Last 30 Days"
+msgstr "Останні 30 днів"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_recalculate_markup_wizard__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__write_uid
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__write_uid
+msgid "Last Updated by"
+msgstr "Останнім змінив"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_recalculate_markup_wizard__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__write_date
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__write_date
+msgid "Last Updated on"
+msgstr "Останнє оновлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__product_id
+msgid "Linked Product"
+msgstr "Пов'язаний товар"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_config_settings_form
+msgid "Live Currency Synchronization"
+msgstr "Синхронізація валют в реальному часі"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Logistics"
+msgstr "Логістика"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_brand__logo
+msgid "Logo"
+msgstr "Логотип"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__profit
+msgid "Margin Profit"
+msgstr "Маржинальний прибуток"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_graph
+msgid "Margin Profit Breakdown Diagram"
+msgstr "Діаграма розподілу маржинального прибутку"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Mark as Received"
+msgstr "Позначити як отримано"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_markup
+msgid "Markup Coefficients"
+msgstr "Коефіцієнти націнок"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_markup_coefficient__coefficient
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_markup_form
+msgid "Markup Multiplier"
+msgstr "Коефіцієнт націнки"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_markup_list
+msgid "Markup Multipliers"
+msgstr "Коефіцієнти націнок"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_markup
+msgid "Markup Ratios Matrix"
+msgstr "Матриця коефіцієнтів націнок"
+
+#. module: cloth_shop
+#. odoo-python
+#: code:addons/cloth_shop/models/cloth_markup.py:0
+msgid "Markup Rule #%s"
+msgstr "Правило націнки №%s"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_recalculate_markup_wizard
+msgid "Mass AVCO Price Recalculation Wizard"
+msgstr "Помічник масового перерахунку цін за AVCO"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_recalculate_markup_wizard_form
+msgid "Mass Price Recalculation"
+msgstr "Масовий перерахунок роздрібних цін"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "Model Name (e.g. Turbo, Air Max)..."
+msgstr "Назва моделі (наприклад, Turbo, Air Max)..."
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_config_settings_form
+msgid "Multi-Currency Exchange Settings"
+msgstr "Налаштування мультивалютного обміну"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__turnover
+msgid "Net Turnover"
+msgstr "Чистий оборот"
+
+#. module: cloth_shop
+#. odoo-python
+#: code:addons/cloth_shop/models/cloth_markup.py:0
+#: code:addons/cloth_shop/models/cloth_order.py:0
+#: code:addons/cloth_shop/models/cloth_receipt.py:0
+msgid "New"
+msgstr "Нове"
+
+#. module: cloth_shop
+#. odoo-python
+#: code:addons/cloth_shop/wizard/recalculate_markup_wizard.py:0
+msgid "No products found for the selected brand!"
+msgstr "Не знайдено жодного товару для обраного бренду!"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_inventory_report__report_period__older
+msgid "Older Data"
+msgstr "Старіші дані"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_inventory_report_list_drilldown
+msgid "Open Document"
+msgstr "Відкрити документ"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__date
+msgid "Operation Date"
+msgstr "Дата операції"
+
+#. module: cloth_shop
+#. odoo-python
+#: code:addons/cloth_shop/models/cloth_order.py:0
+msgid ""
+"Operation not allowed! Order '%s' is already in a final state (%s) and "
+"cannot be moved."
+msgstr "Операція заборонена! Замовлення '%s' вже перебуває у фінальному статусі (%s) і не може бути змінене."
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_documents
+msgid "Operational Documents"
+msgstr "Операційні документи"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__date_order
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__date_order
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_search
+msgid "Order Date"
+msgstr "Дата замовлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__line_ids
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__order_line_ids
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Order Lines"
+msgstr "Рядки замовлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__name
+msgid "Order Reference"
+msgstr "Номер замовлення"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_order_stat
+msgid "Orders"
+msgstr "Замовлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__order_id
+msgid "Parent Order"
+msgstr "Пов'язане замовлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__receipt_id
+msgid "Parent Receipt"
+msgstr "Пов'язане надходження"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__discount
+#: model:ir.model.fields,field_description:cloth_shop.field_res_partner__personal_discount
+#: model:ir.model.fields,field_description:cloth_shop.field_res_users__personal_discount
+msgid "Personal Discount (%)"
+msgstr "Персональна знижка (%)"
+
+#. module: cloth_shop
+#. odoo-python
+#: code:addons/cloth_shop/models/res_partner.py:0
+msgid "Personal discount must be between 0 and 100%!"
+msgstr "Персональна знижка має бути в межах від 0 до 100%!"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_config_pricing_group
+msgid "Pricing"
+msgstr "Ціноутворення"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_markup_coefficient
+msgid "Pricing Markup Coefficients"
+msgstr "Коефіцієнти націнок"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_res_currency_rate__is_privatbank_rate
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_currency_rate_tree
+msgid "PrivatBank Rate"
+msgstr "Курс ПриватБанку"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__product_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__product_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__product_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_search
+msgid "Product"
+msgstr "Товар"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "Product / SKU"
+msgstr "Товар / Артикул"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__line_ids
+msgid "Product Lines"
+msgstr "Рядки товарів"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__product_id
+msgid "Product Link"
+msgstr "Посилання на товар"
 
 #. module: cloth_shop
 #: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__product_title
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__name
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_list
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_search
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
 msgid "Product Name"
 msgstr "Назва товару"
 
 #. module: cloth_shop
-#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__brand_id
-msgid "Brand"
-msgstr "Бренд"
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_product_price_matrix
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_price_list
+msgid "Product Retail Prices"
+msgstr "Роздрібні ціни товарів"
 
 #. module: cloth_shop
-#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__collection_id
-msgid "Collection"
-msgstr "Колекція"
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_product_price_matrix
+msgid "Product Retail Prices Matrix"
+msgstr "Роздрібні ціни товарів"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__product_id
+msgid "Product SKU"
+msgstr "Товар (Артикул)"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_search
+msgid "Product Search"
+msgstr "Пошук товарів"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_product_stock_line
+msgid "Product Size Stock Balance Log"
+msgstr "Матриця залишків за розмірами"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_inventory_report_manager
+msgid "Product Stock Balances"
+msgstr "Залишки товарів"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_product_price
+msgid "Product Variant Retail Prices"
+msgstr "Роздрібні ціни варіантів товарів"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_product
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_list
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid "Products"
+msgstr "Товари"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_product
+msgid "Products (Stock)"
+msgstr "Товари (Залишки)"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_list
+msgid "Profitability Analysis"
+msgstr "Аналіз прибутковості"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_search
+msgid "Profitability Analysis Filters"
+msgstr "Фільтри аналізу прибутковості"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_pivot
+msgid "Profitability Multi-Matrix Analysis"
+msgstr "Мультиматричний аналіз прибутковості"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_profitability_report
+#: model:ir.model,name:cloth_shop.model_cloth_profitability_report
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_profitability_report
+msgid "Profitability Report"
+msgstr "Звіт з прибутковості"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__purchase_currency_id
+msgid "Purchase Currency"
+msgstr "Валюта закупівлі"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid "Purchase Price"
+msgstr "Ціна закупівлі"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__purchase_price
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Purchase Price Unit"
+msgstr "Ціна закупівлі за одиницю"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__purchase_subtotal
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Purchase Subtotal"
+msgstr "Сума закупівлі"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__qty_incoming
+msgid "Qty Received (In)"
+msgstr "Надійшло штук (Прихід)"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__qty_outgoing
+msgid "Qty Shipped (Out)"
+msgstr "Відвантажено штук (Розхід)"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__qty
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__qty
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__qty
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Quantity"
+msgstr "Кількість"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__qty_available
+msgid "Quantity On Hand"
+msgstr "Доступна кількість"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Recalculate Discount"
+msgstr "Перерахувати знижку"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_recalculate_markup_wizard_form
+msgid "Recalculate Prices"
+msgstr "Перерахувати ціни"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_recalculate_markup_wizard
+msgid "Recalculate Retail Prices"
+msgstr "Перерахувати роздрібні ціни"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__receipt_line_ids
+msgid "Receipt Lines"
+msgstr "Рядки надходження"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Receipt No"
+msgstr "№ надходження"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_order__state__received
+msgid "Received"
+msgstr "Отримано"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__report_period
+msgid "Report Period"
+msgstr "Звітний період"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_shop_reporting
+msgid "Reporting"
+msgstr "Звіти"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__res_id
+msgid "Resource ID"
+msgstr "ID ресурсу"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__res_model
+msgid "Resource Model"
+msgstr "Модель ресурсу"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__retail_currency_id
+msgid "Retail Currency"
+msgstr "Роздрібна валюта"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__retail_price
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid "Retail Price"
+msgstr "Роздрібна ціна"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__price_unit
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__retail_price
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Retail Price Unit"
+msgstr "Роздрібна ціна за одиницю"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__retail_subtotal
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "Retail Subtotal"
+msgstr "Роздрібна сума"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__name
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__sku_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_list
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+msgid "SKU"
+msgstr "Артикул"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "SKU / Article Code"
+msgstr "Артикул / Код товару"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__sku
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_search
+msgid "SKU Code"
+msgstr "Код артикулу"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_order_line
+msgid "Sales Order Line"
+msgstr "Рядок замовлення"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_search
+msgid "Search Customer Orders"
+msgstr "Пошук замовлень покупців"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_markup_search
+msgid "Search Markup Ratios"
+msgstr "Пошук коефіцієнтів націнок"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_search
+msgid "Search Receipts"
+msgstr "Пошук надходжень"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__season
+msgid "Season"
+msgstr "Сезон"
+
+#. module: cloth_shop
+#: model:ir.model.fields,help:cloth_shop.field_cloth_recalculate_markup_wizard__brand_id
+msgid "Select a brand to trigger inventory valuation and price update"
+msgstr "Оберіть бренд для запуску оцінки залишків та оновлення роздрібних цін"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid "Select or Type SKU..."
+msgstr "Оберіть або введіть артикул..."
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__sequence
+msgid "Sequence Order"
+msgstr "Послідовність"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_shop_settings_final_clean_route
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_config_settings
+msgid "Settings"
+msgstr "Налаштування"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Ship to Customer"
+msgstr "Відвантажити покупцю"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_order__state__shipped
+msgid "Shipped"
+msgstr "Відвантажено"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__size_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__size_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_price__size_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product_stock_line__size_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__size_id
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt_line__size_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_line_list_drilldown
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_size_form
+msgid "Size"
+msgstr "Розмір"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_size__name
+msgid "Size Chart"
+msgstr "Розмірна сітка"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "Size Matrix Stock & Active Prices"
+msgstr "Матриця залишків та активних цін за розмірами"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_size
+msgid "Size Registry Dictionary"
+msgstr "Довідник розмірної сітки"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_size
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_size_list
+msgid "Sizes"
+msgstr "Розміри"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__state
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_receipt__state
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_search
+msgid "Status"
+msgstr "Status"
+
+#. module: cloth_shop
+#: model:ir.ui.menu,name:cloth_shop.menu_cloth_inventory_report_manager
+msgid "Stock Balances"
+msgstr "Залишки товарів"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__stock_line_ids
+msgid "Stock Breakdown Matrix"
+msgstr "Матриця розподілу залишків"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_product__retail_currency_id
+#: model:ir.model.fields,field_description:cloth_shop.field_res_config_settings__retail_currency_id
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_config_settings_form
+msgid "Store Retail Currency"
+msgstr "Роздрібна валюта магазину"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__price_subtotal
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "Subtotal"
+msgstr "Проміжний підсумок"
+
+#. module: cloth_shop
+#: code:addons/cloth_shop/wizard/recalculate_markup_wizard.py:0
+msgid ""
+"Successfully synchronized and updated %s price configurations for brand %s."
+msgstr "Успішно синхронізовано та оновлено %s цінових конфігурацій для бренду %s."
+
+#. module: cloth_shop
+#: code:addons/cloth_shop/models/cloth_receipt.py:0
+msgid ""
+"The document cannot be validated because some lines are missing an SKU!"
+msgstr "Документ не може бути проведений, оскільки в деяких рядках відсутній артикул (SKU)!"
+
+#. module: cloth_shop
+#: code:addons/cloth_shop/models/cloth_receipt.py:0
+msgid ""
+"The document cannot be validated without a calculated retail price for SKU "
+"%s!"
+msgstr "Документ не може бути проведений без розрахованої роздрібної ціни для артикулу %s!"
+
+#. module: cloth_shop
+#: code:addons/cloth_shop/models/cloth_markup.py:0
+msgid "The markup multiplier coefficient value must be greater than 0!"
+msgstr "Значення коефіцієнта націнки має бути строго більшим за 0!"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_search
+msgid "This Month"
+msgstr "Цього місяця"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_search
+msgid "Today"
+msgstr "Сьогодні"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order__amount_total
+msgid "Total Amount"
+msgstr "Загальна сума"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__total_cost
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_list
+msgid "Total Cost"
+msgstr "Загальна собівартість"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_list
+msgid "Total Discounts"
+msgstr "Загальна сума знижок"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_list
+msgid "Total Margin Profit"
+msgstr "Загальний маржинальний прибуток"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_list
+msgid "Total Net Turnover"
+msgstr "Загальний чистий оборот"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__purchase_value
+msgid "Total Purchase Value"
+msgstr "Загальна собівартість закупівлі"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_profitability_report_list
+msgid "Total Qty Sold"
+msgstr "Загальна кількість проданого"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_inventory_report__retail_value
+msgid "Total Retail Sales Value"
+msgstr "Загальна вартість у роздрібних цінах"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_list
+msgid "Total Sales"
+msgstr "Загальні продажі"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+msgid "UAH"
+msgstr "грн"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_order_line__price_unit
+#: model_terms:ir.ui.view,arch_db:cloth_shop.report_cloth_order_template
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_order_form
+msgid "Unit Price"
+msgstr "Ціна за одиницю"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_shop_config_settings_form
+msgid "Update Rates from PrivatBank Now"
+msgstr "Оновити курси ПриватБанку зараз"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_form
+msgid "Validate"
+msgstr "Затвердити"
+
+#. module: cloth_shop
+#: model:ir.model.fields.selection,name:cloth_shop.selection__cloth_receipt__state__done
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_receipt_search
+msgid "Validated"
+msgstr "Проведено"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_recalculate_markup_wizard_form
+msgid ""
+"Warning: This wizard will execute automated weighted average cost (AVCO) "
+"aggregation for all product size variants under the selected brand, updating"
+" the live sales matrix."
+msgstr "Попередження: Цей майстер виконає автоматичний розрахунок середньозваженої вартості (AVCO) для всіх варіантів розмірів товарів обраного бренду та оновить чинну матрицю продажів."
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_collection__year
+msgid "Year"
+msgstr "Рік"
+
+#. module: cloth_shop
+#. odoo-python
+#: code:addons/cloth_shop/models/cloth_size.py:0
+msgid ""
+"You cannot delete the size '%s' because it is currently linked to %s active "
+"product(s)!"
+msgstr "Ви не можете видалити розмір '%s', оскільки він зараз пов'язаний із %s активними товарами!"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_collection_form
+msgid "e.g. Denim, Urban"
+msgstr "напр. Денім, Урбан"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_product_form
+msgid "e.g. TY77, 897..."
+msgstr "напр. TY77, 897..."
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_size_form
+msgid "e.g. XS, S, M, L, XL"
+msgstr "напр. XS, S, M, L, XL"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_cloth_brand_form
+msgid "e.g. Zara, Nike..."
+msgstr "напр. Zara, Nike..."
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_partner_form_inherit_cloth
+msgid "Clothing Shop Parameters"
+msgstr "Налаштування магазину одягу"
+
+#. module: cloth_shop
+#: model_terms:ir.ui.view,arch_db:cloth_shop.view_partner_form_inherit_cloth
+msgid "Personal Discount (%)"
+msgstr "Персональна знижка (%)"
+

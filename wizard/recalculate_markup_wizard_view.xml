@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
 
-    <!-- Wizard Form View Configuration (Скроем поле бренда, так как оно заполняется само) -->
-    <record id="view_cloth_recalculate_markup_wizard_form" model="ir.ui.view">
-        <field name="name">cloth.recalculate.markup.wizard.form</field>
-        <field name="model">cloth.recalculate.markup.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Mass Price Recalculation">
-                <sheet>
-                    <p class="alert alert-info" role="alert">
-                        Warning: This wizard will execute automated weighted average cost (AVCO) aggregation for all product size variants under the selected brand, updating the live sales matrix.
-                    </p>
-                    <group>
-                        <!-- Делаем поле только для чтения, так как бренд передается из выделенной строки -->
-                        <field name="brand_id" readonly="1" options="{'no_open': True}"/>
-                    </group>
-                </sheet>
-                <footer>
-                    <button name="action_recalculate" string="Recalculate Prices" type="object" class="btn-primary" icon="fa-refresh"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record>
+        <!-- Wizard Form View Configuration -->
+        <record id="view_cloth_recalculate_markup_wizard_form" model="ir.ui.view">
+            <field name="name">cloth.recalculate.markup.wizard.form</field>
+            <field name="model">cloth.recalculate.markup.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Mass Price Recalculation">
+                    <sheet>
+                        <!-- Information alert panel explaining the business math routine -->
+                        <p class="alert alert-info" role="alert">
+                            Warning: This wizard will execute automated weighted average cost (AVCO) aggregation for all product size variants under the selected brand, updating the live sales matrix.
+                        </p>
+                        <group>
+                            <field name="brand_id" readonly="1" options="{'no_open': True}"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <!-- Operation action execution button -->
+                        <button name="action_recalculate" string="Recalculate Prices" type="object" class="btn-primary" icon="fa-refresh"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
 
-    <!-- Wizard Window Action -->
-    <record id="action_recalculate_markup_wizard" model="ir.actions.act_window">
-        <field name="name">Recalculate Retail Prices</field>
-        <field name="res_model">cloth.recalculate.markup.wizard</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-        <!-- ⚡ ИНТЕГРАЦИЯ С ИНТЕРФЕЙСОМ ODOO 19: Привязка экшена к меню Действия (Action Menu) списка -->
-        <field name="binding_model_id" ref="model_cloth_markup_coefficient"/>
-        <field name="binding_view_types">list</field>
-    </record>
+        <!-- Wizard Window Action Linked to Context Action Menus Layouts -->
+        <record id="action_recalculate_markup_wizard" model="ir.actions.act_window">
+            <field name="name">Recalculate Retail Prices</field>
+            <field name="res_model">cloth.recalculate.markup.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="model_cloth_markup_coefficient"/>
+            <field name="binding_view_types">list</field>
+        </record>
 
+    </data>
 </odoo>

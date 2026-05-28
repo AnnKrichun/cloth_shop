@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    <!-- Root Main Application Menu Node Link Object Element Token -->
+    <!-- Main Application Icon -->
     <menuitem id="menu_cloth_shop_root"
               name="Clothing Shop"
               web_icon="cloth_shop,static/description/icon.png"
               sequence="5"/>
 
-    <!-- Products master directories warehouse control routing nodes -->
+    <!-- Products Stock Card -->
     <menuitem id="menu_cloth_product"
               name="Products (Stock)"
               parent="menu_cloth_shop_root"
               action="action_cloth_product"
               sequence="5"/>
 
-    <!-- Documents structural operational registry navigation panels header nodes -->
+    <!-- Operational Documents Folder -->
     <menuitem id="menu_cloth_shop_documents"
               name="Operational Documents"
               parent="menu_cloth_shop_root"
               sequence="10"/>
 
-        <!-- 📦 ПУНКТ МЕНЮ: НАДХОДЖЕННЯ (Доступно ТІЛЬКИ Товарознавцю та Адміну) -->
-    <!-- ⚡ ФІКС: Додано groups="cloth_shop.group_cloth_shop_product_manager" -->
+    <!-- Goods Receipts (Hidden from Sales Manager) -->
     <menuitem id="menu_cloth_receipt"
               name="Goods Receipts"
               parent="menu_cloth_shop_documents"
@@ -29,24 +27,20 @@
               action="action_cloth_receipt"
               sequence="10"/>
 
-    <!-- Замовлення залишаються доступними для всіх (і для Менеджера теж) -->
+    <!-- Customer Orders -->
     <menuitem id="menu_cloth_order"
               name="Customer Orders"
               parent="menu_cloth_shop_documents"
               action="action_cloth_order"
               sequence="20"/>
 
-        <!-- ========================================================================= -->
-    <!-- REPORTING SECTION: РАЗДЕЛЕНИЕ ЭКРАНОВ АНАЛИТИКИ                           -->
-        <!-- ========================================================================= -->
-    <!-- REPORTING STRUCTURE: СУВОРЕ РОЗГРАНИЧЕННЯ ЗВІТІВ                          -->
-    <!-- ========================================================================= -->
+    <!-- Reporting Folder -->
     <menuitem id="menu_cloth_shop_reporting"
               name="Reporting"
               parent="menu_cloth_shop_root"
               sequence="15"/>
 
-    <!-- 1. Спрощений звіт (Доступний для МЕНЕДЖЕРА, а отже і для всіх старших ролей) -->
+    <!-- Simplified Stock for Sales Manager -->
     <menuitem id="menu_cloth_inventory_report_manager"
               name="Stock Balances"
               parent="menu_cloth_shop_reporting"
@@ -54,8 +48,7 @@
               action="action_cloth_inventory_report_manager"
               sequence="10"/>
 
-    <!-- 2. Повний фінансовий звіт (Доступний ТІЛЬКИ Товарознавцю та Адміну) -->
-    <!-- Менеджер цей пункт у меню гарантовано НЕ побачить -->
+    <!-- Valuation Report for Product Manager -->
     <menuitem id="menu_cloth_inventory_report_full"
               name="Inventory Valuation &amp; AVCO"
               parent="menu_cloth_shop_reporting"
@@ -63,8 +56,7 @@
               action="action_cloth_inventory_report_full"
               sequence="20"/>
 
-    <!-- 3. Звіт з прибутковості (ФІКС: Тепер доступний і ТОВАРОЗНАВЦЮ, і Адміну) -->
-    <!-- Менеджер цей пункт також не побачить -->
+    <!-- Profitability Report -->
     <menuitem id="menu_cloth_profitability_report"
               name="Profitability Report"
               parent="menu_cloth_shop_reporting"
@@ -72,32 +64,25 @@
               action="action_cloth_profitability_report"
               sequence="30"/>
 
-    <!-- ========================================================================= -->
-    <!-- CONFIGURATION REGISTRY (ГОЛОВНОЙ ТАБ КОНФИГУРАЦИИ)                       -->
-    <!-- ========================================================================= -->
+    <!-- Main Configuration Folder -->
     <menuitem id="menu_cloth_shop_config"
               name="Configuration"
               parent="menu_cloth_shop_root"
               sequence="20"/>
 
-    <!-- 📂 ПОДМЕНЮ 1: ДОВИДНИКИ (Directories) -->
+    <!-- Subgroups for Configuration -->
     <menuitem id="menu_cloth_config_directories_group"
               name="Directories"
               parent="menu_cloth_shop_config"
               sequence="10"/>
 
-    <!-- 💰 ПОДМЕНЮ 2: ЦІНОУТВОРЕННЯ (Доступно ТІЛЬКИ Товарознавцю та Адміну) -->
-    <!-- ⚡ ФІКС: Додано groups="cloth_shop.group_cloth_shop_product_manager" -->
     <menuitem id="menu_cloth_config_pricing_group"
               name="Pricing"
               parent="menu_cloth_shop_config"
               groups="cloth_shop.group_cloth_shop_product_manager"
               sequence="20"/>
 
-
-    <!-- ========================================================================= -->
-    <!-- ПУНКТЫ ДЛЯ РАЗДЕЛА "Directories"                                         -->
-    <!-- ========================================================================= -->
+    <!-- Module Settings Action -->
     <record id="action_cloth_shop_settings_final_clean_route" model="ir.actions.act_window">
         <field name="name">Settings</field>
         <field name="res_model">res.config.settings</field>
@@ -112,6 +97,7 @@
               action="action_cloth_shop_settings_final_clean_route"
               sequence="5"/>
 
+    <!-- Standard Directories Items -->
     <menuitem id="menu_cloth_brand"
               name="Brands"
               parent="menu_cloth_config_directories_group"
@@ -130,7 +116,7 @@
               action="action_cloth_collection"
               sequence="30"/>
 
-    <!-- Самі пункти всередині автоматично приховаються, але пропишемо для надійності -->
+    <!-- Pricing Submenu Items -->
     <menuitem id="menu_cloth_markup"
               name="Markup Coefficients"
               parent="menu_cloth_config_pricing_group"
@@ -145,12 +131,7 @@
               action="action_cloth_shop_currency_rates"
               sequence="20"/>
 
-
-    <!-- ========================================================================= -->
-    <!-- 🆕 НАШ НОВЫЙ ПУНКТ: МАТРИЦЯ РОЗДРІБНИХ ЦІН (Клієнтський інтерфейс)        -->
-    <!-- ========================================================================= -->
-
-    <!-- Описание отображения таблицы для Odoo 19 -->
+    <!-- Inline Price Table View -->
     <record id="view_cloth_product_price_list" model="ir.ui.view">
         <field name="name">cloth.product.price.list</field>
         <field name="model">cloth.product.price</field>
@@ -163,7 +144,7 @@
         </field>
     </record>
 
-    <!-- Экшн для открытия матрицы цен -->
+    <!-- Retail Prices Table Action -->
     <record id="action_cloth_product_price_matrix" model="ir.actions.act_window">
         <field name="name">Product Retail Prices Matrix</field>
         <field name="res_model">cloth.product.price</field>

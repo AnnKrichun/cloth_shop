@@ -1,35 +1,35 @@
-import logging  # ⚡ ОБОВ'ЯЗКОВИЙ ІМПОРТ
+# -*- coding: utf-8 -*-
+import logging
 
 from odoo import api, fields, models
 
-# ⚡ ОГОЛОШЕННЯ ОБ'ЄКТА ЛОГУВАННЯ ДЛЯ ЦЬОГО ФАЙЛУ
+# Logger initialization for banking background tasks
 _logger = logging.getLogger(__name__)
 
 
 class ClothProduct(models.Model):
-    """Model representing cloth shop products and their size-matrix stock levels."""
+    """
+    Model representing cloth shop products and their size-matrix stock levels.
+    """
 
     _name = "cloth.product"
     _description = "Cloth Product Stock Card"
 
-    # Повертаємо стандартну логіку Odoo, але тепер name — це наш артикул!
     _rec_name = "name"
     _rec_names_search = ["name", "product_title"]
 
-    # =========================================================================
-    # CORE PRODUCT ATTRIBUTES (ФІКС: name тепер виконує роль SKU)
-    # =========================================================================
+    # Core identification fields
     name = fields.Char(string="SKU", required=True, index=True)
     product_title = fields.Char(string="Product Name", required=True)
 
     brand_id = fields.Many2one("cloth.brand", string="Brand", required=True)
     collection_id = fields.Many2one(
-        "cloth.collection", string="Collection", required=True,
+        "cloth.collection",
+        string="Collection",
+        required=True,
     )
 
-    # =========================================================================
-    # MULTI-CURRENCY POINTER LINKS
-    # =========================================================================
+    # Multi-currency and company configuration fields
     purchase_currency_id = fields.Many2one(
         "res.currency",
         string="Default Purchase Currency",
@@ -49,19 +49,24 @@ class ClothProduct(models.Model):
         default=lambda self: self.env.company,
     )
 
-    # =========================================================================
-    # RELATIONAL SYSTEM DEPS & MATRIX STOCK LINES
-    # =========================================================================
+    # Relational lines vectors
     receipt_line_ids = fields.One2many(
-        "cloth.receipt.line", "sku_id", string="Receipt Lines",
+        "cloth.receipt.line",
+        "sku_id",
+        string="Receipt Lines",
     )
     order_line_ids = fields.One2many(
-        "cloth.order.line", "product_id", string="Order Lines",
+        "cloth.order.line",
+        "product_id",
+        string="Order Lines",
     )
     stock_line_ids = fields.One2many(
-        "cloth.product.stock.line", "product_id", string="Stock Breakdown Matrix",
+        "cloth.product.stock.line",
+        "product_id",
+        string="Stock Breakdown Matrix",
     )
 
+    # Structural constraint blocking duplicate codes in database
     _sql_constraints = [
         (
             "sku_name_unique",
@@ -71,9 +76,12 @@ class ClothProduct(models.Model):
     ]
 
     def action_generate_stock_lines(self):
-        """Безпечний метод для генерації та оновлення ліній матриці розмірів."""
+        """
+        Scans all validated documents to generate size layout rows in the matrix.
+        """
         StockLine = self.env["cloth.product.stock.line"]
         for product in self:
+            # COMMENT: Find all unique size IDs from completed receipts and orders
             received_sizes = product.receipt_line_ids.filtered(
                 lambda r: r.receipt_id.state == "done",
             ).mapped("size_id.id")
@@ -84,6 +92,7 @@ class ClothProduct(models.Model):
 
             existing_size_ids = product.stock_line_ids.mapped("size_id.id")
 
+            # COMMENT: Create missing rows if they do not exist yet
             for size_id in all_size_ids:
                 if size_id not in existing_size_ids:
                     StockLine.create(
@@ -95,7 +104,9 @@ class ClothProduct(models.Model):
 
     @api.model
     def default_get(self, fields_list):
-        """Автоматично підставляє введене значення у поле name (яке тепер є SKU)."""
+        """
+        Interceptors context text to pre-fill SKU names automatically.
+        """
         res = super().default_get(fields_list)
         ctx = self.env.context
 
@@ -107,13 +118,16 @@ class ClothProduct(models.Model):
 
         if typed_text and isinstance(typed_text, str):
             cleaned_sku = typed_text.strip().upper()
-            res["name"] = cleaned_sku  # Записуємо артикул у базове поле імені
+            # COMMENT: Saves cleaned text directly into the main SKU name field
+            res["name"] = cleaned_sku
 
         return res
 
     @api.model_create_multi
     def create(self, vals_list):
-        """Валідація та очищення строк при збереженні."""
+        """
+        Cleans data formatting inputs and runs matrix population on creation.
+        """
         for vals in vals_list:
             if "name" in vals and isinstance(vals["name"], str):
                 vals["name"] = vals["name"].strip().upper()
@@ -126,7 +140,9 @@ class ClothProduct(models.Model):
 
     @api.model
     def name_create(self, name):
-        """Швидке створення в один клік."""
+        """
+        Enables inline creation support inside selection lookups fields.
+        """
         cleaned_sku = name.strip().upper()
         product = self.search([("name", "=", cleaned_sku)], limit=1)
         if not product:
@@ -140,32 +156,31 @@ class ClothProduct(models.Model):
 
     @api.model
     def search(
-        self, args, offset: int = 0, limit: int | None = None, order: str | None = None,
+        self,
+        args,
+        offset: int = 0,
+        limit: int | None = None,
+        order: str | None = None,
     ):
         """
         ⚡ AUTOMATED DAILY EXCHANGE RATES TRIGGER:
         Intercepts record search upon interface loading to check and sync currency rates.
         Strictly secures and isolates database transactions from deadlocks during installation.
         """
-        # 🔒 СУРОВАЯ ЗАЩИТА ODOO 19 ОТ ДЕДЛОКОВ ПРИ УСТАНОВКЕ:
-        # Проверяем, готов ли реестр моделей, и не выполняется ли запрос от суперпользователя #1
         if (
             self.env.registry.ready
             and not self.env.context.get("install_demo")
             and self.env.user.id != 1
         ):
-            # Блокируем запуск синхронизации во время инсталляции или обновления модулей ядра
             if not self.env.context.get(
                 "plugin_install_mode",
             ) and not self.env.context.get("install_mode"):
                 today_date = fields.Date.today()
 
-                # Проверяем, сохранен ли в базе комерческий курс ПриватБанка на текущую дату
                 today_rate_exists = self.env["res.currency.rate"].search_count(
                     [("name", "=", today_date), ("is_privatbank_rate", "=", True)],
                 )
 
-                # Если курса на сегодня еще нет — запускаем разовый автоматический запрос к API банка
                 if not today_rate_exists:
                     _logger.info(
                         "AUTOMATED LIVE SYNC INITIATED: Missing exchange logs for %s. Reaching out to bank API...",
@@ -179,33 +194,39 @@ class ClothProduct(models.Model):
                             str(e),
                         )
 
-        # Базовый возврат стандартной логики поиска Odoo (выравнен по левому краю метода)
         return super().search(
-            args, offset=offset, limit=limit, order=order,
+            args,
+            offset=offset,
+            limit=limit,
+            order=order,
         )
 
 
 class ClothProductStockLine(models.Model):
     """
     Sub-resource model tracking unified inventory aggregates
-    and reading direct actual tags from the new price matrix.
+    and reading prices from the retail price matrix.
     """
 
     _name = "cloth.product.stock.line"
     _description = "Product Size Stock Balance Log"
 
     product_id = fields.Many2one(
-        "cloth.product", string="Product Link", ondelete="cascade", index=True,
+        "cloth.product",
+        string="Product Link",
+        ondelete="cascade",
+        index=True,
     )
-    size_id = fields.Many2one("cloth.size", string="Size Rows index", readonly=True)
+    size_id = fields.Many2one("cloth.size", string="Size", readonly=True)
     qty_available = fields.Integer(
-        string="Quantity On Hand", compute="_compute_metrics",
+        string="Quantity On Hand",
+        compute="_compute_metrics",
     )
     retail_price = fields.Float(
-        string="Actual Retail Price", compute="_compute_metrics",
+        string="Actual Retail Price",
+        compute="_compute_metrics",
     )
 
-    # ⚡ ОНОВЛЕНИЙ ТРИГЕР: Додано відстеження змін у моделі cloth.product.price
     @api.depends(
         "product_id.receipt_line_ids.qty",
         "product_id.receipt_line_ids.receipt_id.state",
@@ -214,12 +235,12 @@ class ClothProductStockLine(models.Model):
     )
     def _compute_metrics(self):
         """
-        Evaluates physical store stock levels and pulls fresh verified
-        price vectors directly from the cloth.product.price matrix.
+        Calculates physical warehouse stock levels and fetches
+        the current retail price from the configuration matrix.
         """
         for line in self:
             if line.product_id and line.size_id:
-                # 1. Складна логіка розрахунку фізичних залишків на складі
+                # COMMENT: Calculate total incoming items from completed receipts
                 incoming = sum(
                     line.product_id.receipt_line_ids.filtered(
                         lambda r: (
@@ -227,6 +248,8 @@ class ClothProductStockLine(models.Model):
                         ),
                     ).mapped("qty"),
                 )
+
+                # COMMENT: Calculate total outgoing items from shipped or received orders
                 outgoing = sum(
                     line.product_id.order_line_ids.filtered(
                         lambda o: (
@@ -235,9 +258,11 @@ class ClothProductStockLine(models.Model):
                         ),
                     ).mapped("qty"),
                 )
+
+                # Core inventory math formula
                 line.qty_available = incoming - outgoing
 
-                # 🔒 ФІКС: Пряме вичитування чинної ціни з нової моделі-матриці cloth.product.price
+                # COMMENT: Pull the active retail price record directly from the pricing matrix
                 price_record = self.env["cloth.product.price"].search(
                     [
                         ("product_id", "=", line.product_id.id),

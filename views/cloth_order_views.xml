@@ -11,25 +11,25 @@
                     <field name="date_order"/>
                     <field name="partner_id"/>
                     <field name="amount_total" sum="Total Sales"/>
-                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'received'" decoration-warning="state == 'shipped'"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'"
+                           decoration-success="state == 'received'" decoration-warning="state == 'shipped'"/>
                 </list>
             </field>
         </record>
 
-<record id="view_cloth_order_form" model="ir.ui.view">
+        <record id="view_cloth_order_form" model="ir.ui.view">
             <field name="name">cloth.order.form</field>
             <field name="model">cloth.order</field>
             <field name="arch" type="xml">
                 <form string="Customer Sales Order">
 
-      <header>
-    <!-- ➕ НАША НОВА КНОПКА ПЕРЕРАХУНКУ -->
-    <button name="action_recalculate_discount"
-            string="Recalculate Discount"
-            type="object"
-            invisible="state != 'draft'"
-            class="btn-secondary"
-            icon="fa-refresh"/>
+                    <header>
+                        <button name="action_recalculate_discount"
+                                string="Recalculate Discount"
+                                type="object"
+                                invisible="state != 'draft'"
+                                class="btn-secondary"
+                                icon="fa-refresh"/>
                         <button name="action_state_shipped" string="Ship to Customer" type="object"
                                 invisible="state != 'draft'" class="btn-primary" icon="fa-truck"/>
                         <button name="action_state_received" string="Mark as Received" type="object"
@@ -48,19 +48,22 @@
 
                         <group>
                             <group string="Customer Details">
-                                <field name="partner_id" options="{'no_quick_create': True}" readonly="state != 'draft'"/>
+                                <field name="partner_id" options="{'no_quick_create': True}"
+                                       readonly="state != 'draft'"/>
                             </group>
                             <group string="Logistics">
                                 <field name="date_order" readonly="state != 'draft'"/>
-                                <field name="delivery_address" placeholder="Country, City, Street, ZIP..." readonly="state != 'draft'"/>
+                                <field name="delivery_address" placeholder="Country, City, Street, ZIP..."
+                                       readonly="state != 'draft'"/>
                             </group>
                         </group>
 
-                      <notebook>
+                        <notebook>
                             <page string="Order Lines" name="order_lines">
                                 <field name="line_ids" readonly="state != 'draft'">
                                     <list editable="bottom">
-                                        <field name="product_id" options="{'no_create': True, 'no_quick_create': True}"/>
+                                        <field name="product_id"
+                                               options="{'no_create': True, 'no_quick_create': True}"/>
                                         <field name="size_id" options="{'no_create': True, 'no_open': True}"/>
                                         <field name="qty"/>
                                         <field name="price_unit" string="Unit Price" readonly="1" force_save="1"/>
@@ -80,12 +83,12 @@
             </field>
         </record>
 
-          <record id="view_cloth_order_search" model="ir.ui.view">
+        <record id="view_cloth_order_search" model="ir.ui.view">
             <field name="name">cloth.order.search</field>
             <field name="model">cloth.order</field>
             <field name="arch" type="xml">
                 <search string="Search Customer Orders">
-                    </search>
+                </search>
             </field>
         </record>
 
@@ -94,11 +97,10 @@
             <field name="model">cloth.order</field>
             <field name="arch" type="xml">
                 <search string="Search Customer Orders">
-                    </search>
+                </search>
             </field>
         </record>
 
-        <!-- ПРЕДСТАВЛЕННЯ КАНБАН (Суворий стандарт Odoo 19) -->
         <record id="view_cloth_order_kanban" model="ir.ui.view">
             <field name="name">cloth.order.kanban</field>
             <field name="model">cloth.order</field>
@@ -110,9 +112,9 @@
                     <field name="date_order"/>
                     <field name="state"/>
                     <templates>
-                        <!-- 🔒 ФІКС: В Odoo 19 назва шаблону ОБОВ'ЯЗКОВО має бути t-name="card" -->
                         <t t-name="card">
-                            <div class="oe_kanban_global_click d-flex flex-column justify-content-between p-3" style="min-height: 110px;">
+                            <div class="oe_kanban_global_click d-flex flex-column justify-content-between p-3"
+                                 style="min-height: 110px;">
                                 <div class="o_kanban_record_top mb-2">
                                     <div class="o_kanban_record_headings">
                                         <strong class="o_kanban_record_title text-primary fs-5">
@@ -121,8 +123,12 @@
                                     </div>
                                 </div>
                                 <div class="o_kanban_record_body text-muted mb-2">
-                                    <div class="fw-bold"><field name="partner_id"/></div>
-                                    <small><field name="date_order" widget="date"/></small>
+                                    <div class="fw-bold">
+                                        <field name="partner_id"/>
+                                    </div>
+                                    <small>
+                                        <field name="date_order" widget="date"/>
+                                    </small>
                                 </div>
                                 <div class="o_kanban_record_bottom d-flex justify-content-between align-items-center border-top pt-2">
                                     <div class="oe_kanban_bottom_left">
