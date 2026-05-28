@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -114,7 +113,7 @@ class RecalculateMarkupWizard(models.TransientModel):
             "params": {
                 "title": _("AVCO Recalculation Complete"),
                 "message": _(
-                    "Successfully synchronized and updated %s price configurations for brand %s."
+                    "Successfully synchronized and updated %s price configurations for brand %s.",
                 )
                 % (updated_count, self.brand_id.name),
                 "type": "success",

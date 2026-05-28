@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 import logging
+
 import requests
 
 from odoo import api, fields, models

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -63,7 +62,7 @@ class ClothOrder(models.Model):
             if vals.get("name", _("New")) == _("New"):
                 # COMMENT: Fetches next numeric code from ir_sequence_data.xml file
                 vals["name"] = self.env["ir.sequence"].next_by_code("cloth.order") or _(
-                    "New"
+                    "New",
                 )
         return super().create(vals_list)
 
@@ -89,7 +88,7 @@ class ClothOrder(models.Model):
                 if order.state in ["shipped", "received", "cancelled", "rejected"]:
                     raise ValidationError(
                         _(
-                            "Operation not allowed! Order '%s' is already in a final state (%s) and cannot be moved."
+                            "Operation not allowed! Order '%s' is already in a final state (%s) and cannot be moved.",
                         )
                         % (order.name, order.state.upper()),
                     )
@@ -136,7 +135,7 @@ class ClothOrder(models.Model):
                 if transient_stock_line.qty_available < line.qty:
                     raise ValidationError(
                         _(
-                            "Insufficient stock balance for product [%s] %s in Size %s! Available on hand: %s"
+                            "Insufficient stock balance for product [%s] %s in Size %s! Available on hand: %s",
                         )
                         % (
                             line.product_id.name,

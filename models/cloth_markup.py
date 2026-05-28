@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -70,6 +69,6 @@ class ClothMarkupCoefficient(models.Model):
             if rec.coefficient <= 0:
                 raise ValidationError(
                     _(
-                        "The markup multiplier coefficient value must be greater than 0!"
+                        "The markup multiplier coefficient value must be greater than 0!",
                     ),
                 )

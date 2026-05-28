@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -26,5 +25,5 @@ class ResPartner(models.Model):
             # COMMENT: Checks if input discount meets standard business rules boundaries
             if partner.personal_discount < 0 or partner.personal_discount > 100:
                 raise ValidationError(
-                    _("Personal discount must be between 0 and 100%!")
+                    _("Personal discount must be between 0 and 100%!"),
                 )
