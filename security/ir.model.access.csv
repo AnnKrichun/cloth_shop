@@ -21,7 +21,7 @@ access_cloth_order_manager,cloth.order.manager,model_cloth_order,group_cloth_sho
 access_cloth_order_line_manager,cloth.order.line.manager,model_cloth_order_line,group_cloth_shop_user,1,1,1,1
 access_cloth_wizard_manager,cloth.wizard.manager,model_cloth_recalculate_markup_wizard,group_cloth_shop_product_manager,1,1,1,1
 access_cloth_inventory_report,cloth.inventory.report,model_cloth_inventory_report,base.group_user,1,0,0,0
-access_cloth_profitability_report,cloth.profitability.report,model_cloth_profitability_report,group_cloth_shop_admin,1,0,0,0
+access_cloth_profitability_report,cloth.profitability.report,model_cloth_profitability_report,group_cloth_shop_product_manager,1,0,0,0
 access_admin_cloth_brand,cloth.brand.admin,model_cloth_brand,group_cloth_shop_admin,1,1,1,1
 access_admin_cloth_size,cloth.size.admin,model_cloth_size,group_cloth_shop_admin,1,1,1,1
 access_admin_cloth_collection,cloth.collection.admin,model_cloth_collection,group_cloth_shop_admin,1,1,1,1

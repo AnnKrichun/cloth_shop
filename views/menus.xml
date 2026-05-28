@@ -38,18 +38,15 @@
 
         <!-- ========================================================================= -->
     <!-- REPORTING SECTION: РАЗДЕЛЕНИЕ ЭКРАНОВ АНАЛИТИКИ                           -->
-    <!-- ========================================================================= -->
         <!-- ========================================================================= -->
-    <!-- REPORTING STRUCTURE (РОЗВЕДЕННЯ ЗВІТІВ ДЛЯ ODOO 19)                       -->
+    <!-- REPORTING STRUCTURE: СУВОРЕ РОЗГРАНИЧЕННЯ ЗВІТІВ                          -->
     <!-- ========================================================================= -->
     <menuitem id="menu_cloth_shop_reporting"
               name="Reporting"
               parent="menu_cloth_shop_root"
               sequence="15"/>
 
-    <!-- 1. Пункт меню для Менеджера (Спрощений звіт без закупівлі) -->
-    <!-- Щоб Товарознавець його не бачив, ми явно обмежуємо його групою Менеджера. -->
-    <!-- Для того, щоб у Товарознавця не дублювався цей звіт, Odoo перевірить Крок 2 -->
+    <!-- 1. Спрощений звіт (Доступний для МЕНЕДЖЕРА, а отже і для всіх старших ролей) -->
     <menuitem id="menu_cloth_inventory_report_manager"
               name="Stock Balances"
               parent="menu_cloth_shop_reporting"
@@ -57,8 +54,8 @@
               action="action_cloth_inventory_report_manager"
               sequence="10"/>
 
-    <!-- 2. Пункт меню для Товарознавця (Повна собівартість + AVCO) -->
-    <!-- Перекриваємо видимість старшою групою: Менеджер цей пункт гарантовано НЕ побачить -->
+    <!-- 2. Повний фінансовий звіт (Доступний ТІЛЬКИ Товарознавцю та Адміну) -->
+    <!-- Менеджер цей пункт у меню гарантовано НЕ побачить -->
     <menuitem id="menu_cloth_inventory_report_full"
               name="Inventory Valuation &amp; AVCO"
               parent="menu_cloth_shop_reporting"
@@ -66,11 +63,12 @@
               action="action_cloth_inventory_report_full"
               sequence="20"/>
 
-    <!-- 3. Звіт з прибутковості (Залишається строго для Адміна) -->
+    <!-- 3. Звіт з прибутковості (ФІКС: Тепер доступний і ТОВАРОЗНАВЦЮ, і Адміну) -->
+    <!-- Менеджер цей пункт також не побачить -->
     <menuitem id="menu_cloth_profitability_report"
               name="Profitability Report"
               parent="menu_cloth_shop_reporting"
-              groups="cloth_shop.group_cloth_shop_admin"
+              groups="cloth_shop.group_cloth_shop_product_manager"
               action="action_cloth_profitability_report"
               sequence="30"/>
 
