@@ -177,23 +177,21 @@ class ClothOrderLine(models.Model):
         string="Subtotal", compute="_compute_price_subtotal", store=True, digits=(12, 2)
     )
 
-    # 🛠️ Обчислювальний метод, який працює і для бази, і для інтерфейсу
+    # 🛠️ Обчислювальний метод, який тепер шукає ціну в актуальній матриці
     @api.depends("product_id", "size_id")
     def _compute_price_unit(self):
         for line in self:
             if line.product_id and line.size_id:
-                # Шукаємо останню ціну в проведених надходженнях
-                latest_receipt_line = self.env["cloth.receipt.line"].search(
+                # 🔒 ФІКС: Шукаємо актуальну ціну в новій матриці цін
+                price_record = self.env["cloth.product.price"].search(
                     [
-                        ("sku_id", "=", line.product_id.id),
+                        ("product_id", "=", line.product_id.id),
                         ("size_id", "=", line.size_id.id),
-                        ("receipt_id.state", "=", "done"),
                     ],
-                    order="id desc",
                     limit=1,
                 )
-                if latest_receipt_line:
-                    line.price_unit = latest_receipt_line.retail_price
+                if price_record:
+                    line.price_unit = price_record.retail_price
                 else:
                     line.price_unit = 0.00
             else:
@@ -202,20 +200,17 @@ class ClothOrderLine(models.Model):
     # ⚡ ДОДАТКОВИЙ ТРИГЕР: Для моментального відгуку інтерфейсу в браузері
     @api.onchange("product_id", "size_id")
     def _onchange_product_size(self):
-        """Змушує вебинтерфейс моментально показати ціну при виборі товару/розміру"""
+        """Змушує вебинтерфейс моментально показати ціну з матриці при виборі товару/розміру"""
         if self.product_id and self.size_id:
-            latest_receipt_line = self.env["cloth.receipt.line"].search(
+            # 🔒 ФІКС: Аналогічно беремо ціну прямо з матриці цін
+            price_record = self.env["cloth.product.price"].search(
                 [
-                    ("sku_id", "=", self.product_id.id),
+                    ("product_id", "=", self.product_id.id),
                     ("size_id", "=", self.size_id.id),
-                    ("receipt_id.state", "=", "done"),
                 ],
-                order="id desc",
                 limit=1,
             )
-            self.price_unit = (
-                latest_receipt_line.retail_price if latest_receipt_line else 0.00
-            )
+            self.price_unit = price_record.retail_price if price_record else 0.00
 
     @api.depends("qty", "price_unit")
     def _compute_price_subtotal(self):

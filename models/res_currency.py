@@ -101,38 +101,50 @@ class ResCurrency(models.Model):
                 str(e),
             )
 
-    def _create_or_update_rate(self, currency_id, date, rate_value, company_id):
-        """Helper method to manage record mutation constraints safely with direct overwrite"""
-        existing = self.env["res.currency.rate"].search(
-            [
-                ("currency_id", "=", currency_id),
-                ("name", "=", date),
-                ("company_id", "=", company_id),
-            ],
-            limit=1,
+        def _create_or_update_rate(self, currency_id, date, rate_value, company_id):
+            """Helper method to manage record mutation constraints safely with direct overwrite"""
+            existing = self.env["res.currency.rate"].search(
+                [
+                    ("currency_id", "=", currency_id),
+                    ("name", "=", date),
+                    ("company_id", "=", company_id),
+                ],
+                limit=1,
+            )
+
+            if not existing:
+                self.env["res.currency.rate"].create(
+                    {
+                        "currency_id": currency_id,
+                        "name": date,
+                        "rate": rate_value,
+                        "company_id": company_id,
+                        "is_privatbank_rate": True,  # ⚡ Set marker for new entries
+                    }
+                )
+            else:
+                existing.write(
+                    {
+                        "rate": rate_value,
+                        "is_privatbank_rate": True,  # ⚡ Force update marker on overwrite
+                    }
+                )
+                _logger.info(
+                    "Direct database log overwrite executed for currency ID %s on date %s",
+                    currency_id,
+                    date,
+                )
+
+    class ResCurrencyRate(models.Model):
+        """
+        Extends core exchange lines ledger model to handle interface actions mapping.
+        """
+
+        _inherit = "res.currency.rate"
+
+        # 🆕 Added custom field to fulfill inheritance requirements with international naming
+        is_privatbank_rate = fields.Boolean(
+            string="PrivatBank Rate",
+            default=False,
+            help="Identifies if this currency rate entry was pulled via PrivatBank commercial API.",
         )
-
-        if not existing:
-            self.env["res.currency.rate"].create(
-                {
-                    "currency_id": currency_id,
-                    "name": date,
-                    "rate": rate_value,
-                    "company_id": company_id,
-                }
-            )
-        else:
-            existing.write({"rate": rate_value})
-            _logger.info(
-                "Direct database log overwrite executed for currency ID %s on date %s",
-                currency_id,
-                date,
-            )
-
-
-class ResCurrencyRate(models.Model):
-    """
-    Extends core exchange lines ledger model to handle interface actions mapping.
-    """
-
-    _inherit = "res.currency.rate"

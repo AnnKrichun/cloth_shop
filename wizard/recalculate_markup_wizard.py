@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, _
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
@@ -19,6 +19,22 @@ class RecalculateMarkupWizard(models.TransientModel):
         help="Select a brand to trigger inventory valuation and price update",
     )
 
+    @api.model
+    def default_get(self, fields_list):
+        """⚡ АВТОПОДСТАНОВКА ДЛЯ ODOO 19: Вычитывает бренд из активной строки матрицы наценок"""
+        res = super(RecalculateMarkupWizard, self).default_get(fields_list)
+
+        active_model = self.env.context.get("active_model")
+        active_id = self.env.context.get("active_id")
+
+        if active_model == "cloth.markup.coefficient" and active_id:
+            # Находим строку матрицы наценок, на которой кликнули
+            markup_line = self.env["cloth.markup.coefficient"].browse(active_id)
+            if markup_line.exists() and markup_line.brand_id:
+                res["brand_id"] = markup_line.brand_id.id
+
+        return res
+
     def action_recalculate(self):
         """
         Calculates the weighted average cost price for each variant layer
@@ -32,9 +48,19 @@ class RecalculateMarkupWizard(models.TransientModel):
             raise UserError(_("No products found for the selected brand!"))
 
         updated_count = 0
-        markup_coefficient = getattr(self.brand_id, "markup_value", 1.5)
 
         for product in products:
+            # ⚡ ФИКС НАЦЕНКИ: Ищем живое правило коэффициента для связки конкретного Бренда и Коллекции товара
+            rule = self.env["cloth.markup.coefficient"].search(
+                [
+                    ("brand_id", "=", product.brand_id.id),
+                    ("collection_id", "=", product.collection_id.id),
+                ],
+                limit=1,
+            )
+            # Если специфическое правило не найдено, берем дефолт 1.5
+            markup_coefficient = rule.coefficient if rule else 1.5
+
             # Aggregate receipt line statistics for specific item configuration profiles
             receipt_lines = self.env["cloth.receipt.line"].search(
                 [("sku_id", "=", product.id), ("receipt_id.state", "=", "done")]
@@ -86,9 +112,9 @@ class RecalculateMarkupWizard(models.TransientModel):
             "params": {
                 "title": _("AVCO Recalculation Complete"),
                 "message": _(
-                    "Successfully synchronized and updated %s price configurations."
+                    "Successfully synchronized and updated %s price configurations for brand %s."
                 )
-                % updated_count,
+                % (updated_count, self.brand_id.name),
                 "type": "success",
                 "sticky": False,
             },

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Wizard Form View Configuration -->
+    <!-- Wizard Form View Configuration (Скроем поле бренда, так как оно заполняется само) -->
     <record id="view_cloth_recalculate_markup_wizard_form" model="ir.ui.view">
         <field name="name">cloth.recalculate.markup.wizard.form</field>
         <field name="model">cloth.recalculate.markup.wizard</field>
@@ -12,7 +12,8 @@
                         Warning: This wizard will execute automated weighted average cost (AVCO) aggregation for all product size variants under the selected brand, updating the live sales matrix.
                     </p>
                     <group>
-                        <field name="brand_id" options="{'no_create': True, 'no_open': True}"/>
+                        <!-- Делаем поле только для чтения, так как бренд передается из выделенной строки -->
+                        <field name="brand_id" readonly="1" options="{'no_open': True}"/>
                     </group>
                 </sheet>
                 <footer>
@@ -29,6 +30,9 @@
         <field name="res_model">cloth.recalculate.markup.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <!-- ⚡ ИНТЕГРАЦИЯ С ИНТЕРФЕЙСОМ ODOO 19: Привязка экшена к меню Действия (Action Menu) списка -->
+        <field name="binding_model_id" ref="model_cloth_markup_coefficient"/>
+        <field name="binding_view_types">list</field>
     </record>
 
 </odoo>
