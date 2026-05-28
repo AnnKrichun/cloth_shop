@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_cloth_order_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h2 class="text-primary">Customer Order: <span t-field="doc.name"/></h2>
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-4">
+                                <div class="col-6">
+                                    <strong>Customer:</strong> <span t-field="doc.partner_id.name"/><br/>
+                                    <strong>Delivery Address:</strong> <span t-field="doc.delivery_address"/>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>Order Date:</strong> <span t-field="doc.date_order" t-options='{"widget": "datetime"}'/><br/>
+                                    <strong>Status:</strong> <span t-field="doc.state"/>
+                                </div>
+                            </div>
+                            <table class="table table-sm table-striped mt-4">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Product / SKU</th>
+                                        <th class="text-center">Size</th>
+                                        <th class="text-end">Quantity</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.line_ids" t-as="line">
+                                        <tr>
+                                            <td>[<span t-field="line.product_id.name"/>] <span t-field="line.product_id.product_title"/></td>
+                                            <td class="text-center"><span t-field="line.size_id.name"/></td>
+                                            <td class="text-end"><span t-field="line.qty"/></td>
+                                            <td class="text-end"><span t-field="line.price_unit" t-options='{"widget": "float", "precision": 2}'/> UAH</td>
+                                            <td class="text-end"><span t-field="line.price_subtotal" t-options='{"widget": "float", "precision": 2}'/> UAH</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div class="row justify-content-end mt-4">
+                                <div class="col-4">
+                                    <table class="table table-sm table-borderless text-end">
+                                        <tr>
+                                            <td><strong>Personal Discount:</strong></td>
+                                            <td><span t-field="doc.discount"/> %</td>
+                                        </tr>
+                                        <tr class="border-top table-light" style="font-size: 1.2em;">
+                                            <td><strong>Total Amount:</strong></td>
+                                            <td><strong class="text-primary"><span t-field="doc.amount_total" t-options='{"widget": "float", "precision": 2}'/> UAH</strong></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

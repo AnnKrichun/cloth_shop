@@ -33,6 +33,8 @@ This module provides a comprehensive solution for clothing retail:
         "wizard/recalculate_markup_wizard_view.xml",
         "report/cloth_inventory_report_views.xml",
         "report/cloth_profitability_report_views.xml",
+        "report/cloth_order_report_views.xml",
+        "report/cloth_order_report_templates.xml",
         "views/menus.xml",
     ],
     "demo": [

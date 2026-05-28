@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_cloth_order" model="ir.actions.report">
+            <field name="name">Customer Order Form</field>
+            <field name="model">cloth.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cloth_shop.report_cloth_order_template</field>
+            <field name="report_file">cloth_shop.report_cloth_order_template</field>
+            <field name="binding_model_id" ref="cloth_shop.model_cloth_order"/>
+            <field name="binding_view_types">form</field>
+        </record>
+    </data>
+</odoo>
