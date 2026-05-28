@@ -40,7 +40,7 @@ class ClothOrder(models.Model):
         ],
         string="Status",
         default="draft",
-        readonly=True,
+        readonly=False,
     )
 
     @api.model_create_multi
@@ -63,11 +63,22 @@ class ClothOrder(models.Model):
             order.amount_total = subtotal * (1.0 - (discount_val / 100.0))
 
     def write(self, vals):
-        """Контроль залишків при зміні статусів відвантаження"""
-        # Спочатку зберігаємо дані в базу, щоб перевірка залишків
-        # бачила актуальну кількість товару (qty), яку ввів користувач
+        """Контроль залишків та блокування перетягування карток для закритих замовлень"""
+        # 🔒 БЛОКУВАННЯ ПЕРЕТЯГУВАННЯ (Тільки для користувачів в UI, ігноруємо при завантаженні демо)
+        if "state" in vals and not self.env.context.get("install_demo"):
+            for order in self:
+                if order.state in ["shipped", "received", "cancelled", "rejected"]:
+                    raise ValidationError(
+                        _(
+                            "Operation not allowed! Order '%s' is already in a final state (%s) and cannot be moved."
+                        )
+                        % (order.name, order.state.upper())
+                    )
+
+        # Зберігаємо дані в базу
         res = super().write(vals)
 
+        # Після збереження виконуємо контроль залишків для нових відвантажень
         if "state" in vals:
             for order in self:
                 if vals["state"] == "shipped":
@@ -118,12 +129,11 @@ class ClothOrder(models.Model):
         for order in self:
             if order.partner_id:
                 # 🔒 Прямий запит до БД: читаємо значення поля personal_discount прямо з таблиці res_partner
-                partner_data = self.env['res.partner'].search_read(
-                    [('id', '=', order.partner_id.id)],
-                    ['personal_discount']
+                partner_data = self.env["res.partner"].search_read(
+                    [("id", "=", order.partner_id.id)], ["personal_discount"]
                 )
-                if partner_data and partner_data[0].get('personal_discount'):
-                    order.discount = partner_data[0]['personal_discount']
+                if partner_data and partner_data[0].get("personal_discount"):
+                    order.discount = partner_data[0]["personal_discount"]
                 else:
                     order.discount = 0.0
             else:
