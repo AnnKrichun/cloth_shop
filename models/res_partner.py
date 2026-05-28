@@ -1,12 +1,13 @@
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     personal_discount = fields.Float(
         string='Персональна знижка (%)',
-        default=0.0
+        default=0.0,
     )
 
     @api.constrains('personal_discount')

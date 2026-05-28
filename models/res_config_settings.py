@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class ResConfigSettings(models.TransientModel):
@@ -23,7 +22,7 @@ class ResConfigSettings(models.TransientModel):
         Natively pulls the stored operational currency parameter directly
         from the system database settings parameters register registry.
         """
-        res = super(ResConfigSettings, self).get_values()
+        res = super().get_values()
 
         # Pull key parameter from system settings parameters table storage registry
         stored_currency_id = (
@@ -43,12 +42,12 @@ class ResConfigSettings(models.TransientModel):
         """
         Natively flushes the settings currency directly into ir.config_parameter tables.
         """
-        super(ResConfigSettings, self).set_values()
+        super().set_values()
 
         # Write data record directly into system configuration parameters table entries
         if self.retail_currency_id:
             self.env["ir.config_parameter"].sudo().set_param(
-                "cloth_shop.retail_currency_id", self.retail_currency_id.id
+                "cloth_shop.retail_currency_id", self.retail_currency_id.id,
             )
 
     def action_cloth_shop_update_rates_now(self):
@@ -59,7 +58,7 @@ class ResConfigSettings(models.TransientModel):
         """
         # Execute synchronization using the current active company context environment
         self.env["res.currency"].with_company(
-            self.env.company
+            self.env.company,
         )._update_privatbank_currency_rates()
 
         # Force flush and commit the transaction to ensure live entries are saved immediately

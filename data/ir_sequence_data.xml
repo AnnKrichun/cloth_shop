@@ -2,9 +2,12 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- Послідовність для "Надходження товару" -->
+        <!-- ========================================================================= -->
+        <!-- AUTOMATED SEQUENCES FOR UNIQUE TRANSACTION REFERENCE GENERATION           -->
+        <!-- ========================================================================= -->
+
         <record id="seq_cloth_receipt" model="ir.sequence">
-            <field name="name">Надходження товару</field>
+            <field name="name">Clothing Shop: Goods Receipt Sequence</field>
             <field name="code">cloth.receipt</field>
             <field name="prefix">НТ/%(year)s/</field>
             <field name="padding">4</field>
@@ -13,9 +16,8 @@
             <field name="company_id" eval="False"/>
         </record>
 
-        <!-- Послідовність для "Замовлення товару" -->
         <record id="seq_cloth_order" model="ir.sequence">
-            <field name="name">Замовлення товару</field>
+            <field name="name">Clothing Shop: Sales Order Sequence</field>
             <field name="code">cloth.order</field>
             <field name="prefix">ЗМ/%(year)s/</field>
             <field name="padding">4</field>

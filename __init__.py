@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 
 # 1. SYSTEM MODEL INTEGRATION ROUTING
-from . import models
-from . import wizard
-from . import report
+from odoo import SUPERUSER_ID, api, fields
 
-from odoo import api, SUPERUSER_ID, fields
+from . import models, report, wizard
 
 
 # 2. SEED DATA CURRENCY INITIALIZATION HOOK (POST-INIT HOOK)
@@ -26,7 +23,7 @@ def _init_cloth_shop_currencies(env):
     if uah_currency:
         # Dynamically inject the currency ID parameter before Odoo starts reading XML demo files
         env["ir.config_parameter"].sudo().set_param(
-            "cloth_shop.retail_currency_id", uah_currency.id
+            "cloth_shop.retail_currency_id", uah_currency.id,
         )
 
     # Step C: Pre-load fresh currency exchange rate factors directly from PrivatBank API

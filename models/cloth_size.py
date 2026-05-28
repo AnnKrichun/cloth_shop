@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, _
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -26,16 +25,16 @@ class ClothSize(models.Model):
         for size in self:
             # FIXED: Queries the new active size-matrix stock lines registry instead of deleted field in core product card
             product_count = self.env["cloth.product.stock.line"].search_count(
-                [("size_id", "=", size.id)]
+                [("size_id", "=", size.id)],
             )
 
             if product_count > 0:
                 # Block the deletion pipeline and throw a user-facing security notification
                 raise UserError(
                     _(
-                        "You cannot delete the size '%s' because it is currently linked to %s active product(s)!"
+                        "You cannot delete the size '%s' because it is currently linked to %s active product(s)!",
                     )
-                    % (size.name, product_count)
+                    % (size.name, product_count),
                 )
 
         return super().unlink()

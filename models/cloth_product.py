@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 import logging  # ⚡ ОБОВ'ЯЗКОВИЙ ІМПОРТ
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 # ⚡ ОГОЛОШЕННЯ ОБ'ЄКТА ЛОГУВАННЯ ДЛЯ ЦЬОГО ФАЙЛУ
 _logger = logging.getLogger(__name__)
@@ -25,7 +24,7 @@ class ClothProduct(models.Model):
 
     brand_id = fields.Many2one("cloth.brand", string="Brand", required=True)
     collection_id = fields.Many2one(
-        "cloth.collection", string="Collection", required=True
+        "cloth.collection", string="Collection", required=True,
     )
 
     # =========================================================================
@@ -54,13 +53,13 @@ class ClothProduct(models.Model):
     # RELATIONAL SYSTEM DEPS & MATRIX STOCK LINES
     # =========================================================================
     receipt_line_ids = fields.One2many(
-        "cloth.receipt.line", "sku_id", string="Receipt Lines"
+        "cloth.receipt.line", "sku_id", string="Receipt Lines",
     )
     order_line_ids = fields.One2many(
-        "cloth.order.line", "product_id", string="Order Lines"
+        "cloth.order.line", "product_id", string="Order Lines",
     )
     stock_line_ids = fields.One2many(
-        "cloth.product.stock.line", "product_id", string="Stock Breakdown Matrix"
+        "cloth.product.stock.line", "product_id", string="Stock Breakdown Matrix",
     )
 
     _sql_constraints = [
@@ -68,7 +67,7 @@ class ClothProduct(models.Model):
             "sku_name_unique",
             "unique(name)",
             "A product with this SKU code already exists!",
-        )
+        ),
     ]
 
     def action_generate_stock_lines(self):
@@ -76,10 +75,10 @@ class ClothProduct(models.Model):
         StockLine = self.env["cloth.product.stock.line"]
         for product in self:
             received_sizes = product.receipt_line_ids.filtered(
-                lambda r: r.receipt_id.state == "done"
+                lambda r: r.receipt_id.state == "done",
             ).mapped("size_id.id")
             ordered_sizes = product.order_line_ids.filtered(
-                lambda o: o.order_id.state in ("shipped", "received")
+                lambda o: o.order_id.state in ("shipped", "received"),
             ).mapped("size_id.id")
             all_size_ids = list(set(received_sizes + ordered_sizes))
 
@@ -91,13 +90,13 @@ class ClothProduct(models.Model):
                         {
                             "product_id": product.id,
                             "size_id": size_id,
-                        }
+                        },
                     )
 
     @api.model
     def default_get(self, fields_list):
         """Автоматично підставляє введене значення у поле name (яке тепер є SKU)."""
-        res = super(ClothProduct, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         ctx = self.env.context
 
         typed_text = (
@@ -121,7 +120,7 @@ class ClothProduct(models.Model):
             if "product_title" in vals and isinstance(vals["product_title"], str):
                 vals["product_title"] = vals["product_title"].strip()
 
-        records = super(ClothProduct, self).create(vals_list)
+        records = super().create(vals_list)
         records.action_generate_stock_lines()
         return records
 
@@ -135,13 +134,13 @@ class ClothProduct(models.Model):
                 {
                     "name": cleaned_sku,
                     "product_title": cleaned_sku,
-                }
+                },
             )
         return product.id, product.name
 
     @api.model
     def search(
-        self, args, offset: int = 0, limit: int | None = None, order: str | None = None
+        self, args, offset: int = 0, limit: int | None = None, order: str | None = None,
     ):
         """
         ⚡ AUTOMATED DAILY EXCHANGE RATES TRIGGER:
@@ -157,13 +156,13 @@ class ClothProduct(models.Model):
         ):
             # Блокируем запуск синхронизации во время инсталляции или обновления модулей ядра
             if not self.env.context.get(
-                "plugin_install_mode"
+                "plugin_install_mode",
             ) and not self.env.context.get("install_mode"):
                 today_date = fields.Date.today()
 
                 # Проверяем, сохранен ли в базе комерческий курс ПриватБанка на текущую дату
                 today_rate_exists = self.env["res.currency.rate"].search_count(
-                    [("name", "=", today_date), ("is_privatbank_rate", "=", True)]
+                    [("name", "=", today_date), ("is_privatbank_rate", "=", True)],
                 )
 
                 # Если курса на сегодня еще нет — запускаем разовый автоматический запрос к API банка
@@ -181,8 +180,8 @@ class ClothProduct(models.Model):
                         )
 
         # Базовый возврат стандартной логики поиска Odoo (выравнен по левому краю метода)
-        return super(ClothProduct, self).search(
-            args, offset=offset, limit=limit, order=order
+        return super().search(
+            args, offset=offset, limit=limit, order=order,
         )
 
 
@@ -196,14 +195,14 @@ class ClothProductStockLine(models.Model):
     _description = "Product Size Stock Balance Log"
 
     product_id = fields.Many2one(
-        "cloth.product", string="Product Link", ondelete="cascade", index=True
+        "cloth.product", string="Product Link", ondelete="cascade", index=True,
     )
     size_id = fields.Many2one("cloth.size", string="Size Rows index", readonly=True)
     qty_available = fields.Integer(
-        string="Quantity On Hand", compute="_compute_metrics"
+        string="Quantity On Hand", compute="_compute_metrics",
     )
     retail_price = fields.Float(
-        string="Actual Retail Price", compute="_compute_metrics"
+        string="Actual Retail Price", compute="_compute_metrics",
     )
 
     # ⚡ ОНОВЛЕНИЙ ТРИГЕР: Додано відстеження змін у моделі cloth.product.price
@@ -225,16 +224,16 @@ class ClothProductStockLine(models.Model):
                     line.product_id.receipt_line_ids.filtered(
                         lambda r: (
                             r.size_id == line.size_id and r.receipt_id.state == "done"
-                        )
-                    ).mapped("qty")
+                        ),
+                    ).mapped("qty"),
                 )
                 outgoing = sum(
                     line.product_id.order_line_ids.filtered(
                         lambda o: (
                             o.size_id == line.size_id
                             and o.order_id.state in ("shipped", "received")
-                        )
-                    ).mapped("qty")
+                        ),
+                    ).mapped("qty"),
                 )
                 line.qty_available = incoming - outgoing
 

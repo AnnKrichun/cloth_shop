@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields
+from odoo import fields, models
 
 
 class ClothProductPrice(models.Model):
@@ -13,13 +12,13 @@ class ClothProductPrice(models.Model):
     _rec_name = "retail_price"
 
     product_id = fields.Many2one(
-        "cloth.product", string="Product", required=True, ondelete="cascade"
+        "cloth.product", string="Product", required=True, ondelete="cascade",
     )
     size_id = fields.Many2one(
-        "cloth.size", string="Size", required=True, ondelete="cascade"
+        "cloth.size", string="Size", required=True, ondelete="cascade",
     )
     retail_price = fields.Float(
-        string="Retail Price", required=True, digits=(12, 2), default=0.00
+        string="Retail Price", required=True, digits=(12, 2), default=0.00,
     )
 
     _sql_constraints = [
@@ -27,5 +26,5 @@ class ClothProductPrice(models.Model):
             "product_size_price_unique",
             "unique(product_id, size_id)",
             "The retail price for this specific product variant already exists!",
-        )
+        ),
     ]

@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-from odoo.tests.common import TransactionCase
 from odoo.exceptions import ValidationError
 from odoo.fields import Date
+from odoo.tests.common import TransactionCase
 
 
 class TestClothShopCore(TransactionCase):
@@ -13,24 +12,24 @@ class TestClothShopCore(TransactionCase):
     @classmethod
     def setUpClass(cls):
         """Initializes global master data counters and baseline configuration records."""
-        super(TestClothShopCore, cls).setUpClass()
+        super().setUpClass()
 
         # Setup master records for standalone tables to share across tests
         cls.brand = cls.env["cloth.brand"].create(
             {
                 "name": "Test Apex Athlete",
                 "country_id": cls.env.ref("base.us").id,
-            }
+            },
         )
         cls.size = cls.env["cloth.size"].create({"name": "XL"})
         cls.collection = cls.env["cloth.collection"].create(
-            {"name": "Winter Warmth 2026"}
+            {"name": "Winter Warmth 2026"},
         )
 
     def test_01_cloth_brand_creation(self):
         """Verifies successful database instantiation of independent brand master data records."""
         self.assertEqual(
-            self.brand.name, "Test Apex Athlete", "Brand master card name mismatch!"
+            self.brand.name, "Test Apex Athlete", "Brand master card name mismatch!",
         )
 
     def test_02_cloth_size_creation(self):
@@ -52,10 +51,10 @@ class TestClothShopCore(TransactionCase):
                 "brand_id": self.brand.id,
                 "collection_id": self.collection.id,
                 "coefficient": 2.25,
-            }
+            },
         )
         self.assertAlmostEqual(
-            markup.coefficient, 2.25, msg="Financial multiplier matrix precision fault!"
+            markup.coefficient, 2.25, msg="Financial multiplier matrix precision fault!",
         )
 
     def test_05_cloth_product_sku_formatting_trigger(self):
@@ -68,7 +67,7 @@ class TestClothShopCore(TransactionCase):
                 "product_title": "Performance Hoodie Pro",
                 "brand_id": self.brand.id,
                 "collection_id": self.collection.id,
-            }
+            },
         )
         # The create method from cloth_product.py must clean spaces and convert to UPPERCASE
         self.assertEqual(
@@ -86,7 +85,7 @@ class TestClothShopCore(TransactionCase):
                 "product_title": "Matrix Test Tee",
                 "brand_id": self.brand.id,
                 "collection_id": self.collection.id,
-            }
+            },
         )
 
         # 2. Емулюємо надходження товару на склад: створюємо проведену накладну
@@ -95,7 +94,7 @@ class TestClothShopCore(TransactionCase):
                 "name": "WH/IN/TEST/999",
                 "date": Date.today(),
                 "state": "done",  # Встановлюємо статус проведено
-            }
+            },
         )
 
         # Додаємо лінію надходження з нашим розміром (XL)
@@ -108,7 +107,7 @@ class TestClothShopCore(TransactionCase):
                 "qty": 15,
                 "purchase_price": 10.00,
                 "retail_price": 15.00,
-            }
+            },
         )
 
         # 3. Викликаємо метод генерації ліній матриці (код з вашого файлу cloth_product.py)
@@ -139,7 +138,7 @@ class TestClothShopCore(TransactionCase):
 
         # Negative Testing: Перевіряємо занадто велике значення (120%) — система також має викинути ValidationError
         with self.assertRaises(
-            ValidationError, msg="System allowed an invalid discount exceeding 100%!"
+            ValidationError, msg="System allowed an invalid discount exceeding 100%!",
         ):
             partner.write({"personal_discount": 120.0})
 
@@ -150,7 +149,7 @@ class TestClothShopCore(TransactionCase):
             {
                 "name": "WH/IN/TEST/001",
                 "date": Date.today(),
-            }
+            },
         )
 
         # Додаємо лінію з примусово нульовою роздрібною ціною (retail_price = 0.00)
@@ -164,7 +163,7 @@ class TestClothShopCore(TransactionCase):
                         "product_title": "Zero Price Tee",
                         "brand_id": self.brand.id,
                         "collection_id": self.collection.id,
-                    }
+                    },
                 )
                 .id,
                 "size_id": self.size.id,
@@ -172,7 +171,7 @@ class TestClothShopCore(TransactionCase):
                 "qty": 10,
                 "purchase_price": 10.00,
                 "retail_price": 0.00,  # Клінічний нуль
-            }
+            },
         )
 
         # Спроба провести таку накладну має миттєво викликати ValidationError

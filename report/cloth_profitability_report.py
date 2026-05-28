@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, tools
+from odoo import fields, models, tools
 
 
 class ClothProfitabilityReport(models.Model):
@@ -16,14 +15,14 @@ class ClothProfitabilityReport(models.Model):
 
     qty = fields.Integer(string="Quantity", readonly=True)
     purchase_price = fields.Float(
-        string="Cost Price Unit", readonly=True, digits=(12, 2)
+        string="Cost Price Unit", readonly=True, digits=(12, 2),
     )
     total_cost = fields.Float(string="Total Cost", readonly=True, digits=(12, 2))
     price_unit = fields.Float(string="Retail Price Unit", readonly=True, digits=(12, 2))
 
     discount_percent = fields.Float(string="Discount (%)", readonly=True)
     discount_amount = fields.Float(
-        string="Discount Amount", readonly=True, digits=(12, 2)
+        string="Discount Amount", readonly=True, digits=(12, 2),
     )
     turnover = fields.Float(string="Net Turnover", readonly=True, digits=(12, 2))
     profit = fields.Float(string="Margin Profit", readonly=True, digits=(12, 2))

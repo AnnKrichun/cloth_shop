@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
 import logging
+
 import requests
-from odoo import models, fields, api
+
+from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -74,7 +75,7 @@ class ResCurrency(models.Model):
                 for target_ccy in ["UAH", "USD", "EUR"]:
                     if rates_in_uah[target_ccy] > 0:
                         currency = self.search(
-                            [("name", "=", target_ccy), ("active", "=", True)], limit=1
+                            [("name", "=", target_ccy), ("active", "=", True)], limit=1,
                         )
                         if currency:
                             # THE UNIVERSAL FORMULA: base currency value in UAH divided by target currency value in UAH
@@ -82,7 +83,7 @@ class ResCurrency(models.Model):
 
                             # Calls the helper to either create a new row or overwrite the existing one
                             self._create_or_update_rate(
-                                currency.id, today_date, universal_odoo_rate, company.id
+                                currency.id, today_date, universal_odoo_rate, company.id,
                             )
                             _logger.info(
                                 "Universal factor written for %s relative to %s anchor: %s",
@@ -92,7 +93,7 @@ class ResCurrency(models.Model):
                             )
 
                 _logger.info(
-                    "PrivatBank cross-rate matrices successfully generated for the active session."
+                    "PrivatBank cross-rate matrices successfully generated for the active session.",
                 )
 
         except Exception as e:
@@ -120,14 +121,14 @@ class ResCurrency(models.Model):
                         "rate": rate_value,
                         "company_id": company_id,
                         "is_privatbank_rate": True,  # ⚡ Set marker for new entries
-                    }
+                    },
                 )
             else:
                 existing.write(
                     {
                         "rate": rate_value,
                         "is_privatbank_rate": True,  # ⚡ Force update marker on overwrite
-                    }
+                    },
                 )
                 _logger.info(
                     "Direct database log overwrite executed for currency ID %s on date %s",

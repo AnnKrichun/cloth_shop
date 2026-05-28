@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
-        <!-- БРЕНДИ -->
+    <data noupdate="1">
         <record id="demo_brand_urban" model="cloth.brand">
             <field name="name">Urban Style</field>
             <field name="country_id" ref="base.ua"/>
@@ -17,8 +16,6 @@
             <field name="country_id" ref="base.it"/>
             <field name="logo" type="base64" file="cloth_shop/demo/static/brand_milano.png"/>
         </record>
-
-        <!-- РОЗМІРИ -->
         <record id="demo_size_s" model="cloth.size">
             <field name="name">S</field>
         </record>
@@ -28,8 +25,6 @@
         <record id="demo_size_l" model="cloth.size">
             <field name="name">L</field>
         </record>
-
-        <!-- КОЛЕКЦІЇ -->
         <record id="demo_collection_summer" model="cloth.collection">
             <field name="name">Summer Breeze 2026</field>
         </record>
@@ -39,8 +34,6 @@
         <record id="demo_collection_essentials" model="cloth.collection">
             <field name="name">Core Essentials</field>
         </record>
-
-        <!-- КОЕФІЦІЄНТИ НАЦІНКИ -->
         <record id="demo_markup_standard" model="cloth.markup.coefficient">
             <field name="brand_id" ref="demo_brand_urban"/>
             <field name="collection_id" ref="demo_collection_summer"/>
@@ -56,8 +49,6 @@
             <field name="collection_id" ref="demo_collection_essentials"/>
             <field name="coefficient">2.50</field>
         </record>
-
-        <!-- ТОВАРИ -->
         <record id="demo_product_tshirt" model="cloth.product">
             <field name="name">TSH-URB-GEN</field>
             <field name="product_title">Classic Cotton T-Shirt</field>
@@ -76,8 +67,6 @@
             <field name="brand_id" ref="demo_brand_green"/>
             <field name="collection_id" ref="demo_collection_essentials"/>
         </record>
-
-        <!-- ДОКУМЕНТИ НАДХОДЖЕНЬ (ФІКС: Створюються як Чернетки, без поля state=done) -->
         <record id="demo_receipt_001" model="cloth.receipt">
             <field name="name">WH/IN/2026/0001</field>
             <field name="date" eval="datetime.now().strftime('%Y-%m-%d 09:00:00')"/>
@@ -90,8 +79,6 @@
             <field name="name">WH/IN/2026/0003</field>
             <field name="date" eval="datetime.now().strftime('%Y-%m-%d 09:00:00')"/>
         </record>
-
-        <!-- ЛІНІЇ НАДХОДЖЕНЬ -->
         <record id="demo_receipt_line_001" model="cloth.receipt.line">
             <field name="receipt_id" ref="demo_receipt_001"/>
             <field name="sku_id" ref="demo_product_tshirt"/>
@@ -124,8 +111,6 @@
             <field name="qty">10</field>
             <field name="purchase_price">15.00</field>
         </record>
-
-        <!-- ЗАМОВЛЕННЯ -->
         <record id="demo_order_001" model="cloth.order">
             <field name="date_order" eval="datetime.now().strftime('%Y-%m-%d 14:00:00')"/>
             <field name="partner_id" ref="base.partner_admin"/>
@@ -144,8 +129,6 @@
             <field name="delivery_address">78 Odeska Str, Odesa, Ukraine</field>
             <field name="state">draft</field>
         </record>
-
-        <!-- ЛІНІЇ ЗАМОВЛЕНЬ -->
         <record id="demo_order_line_001" model="cloth.order.line">
             <field name="order_id" ref="demo_order_001"/>
             <field name="product_id" ref="demo_product_tshirt"/>
@@ -165,16 +148,24 @@
             <field name="qty">2</field>
         </record>
 
-         <!-- ========================================================================= -->
-        <!-- ТРИГЕРИ БІЗНЕС-ЛОГІКИ: ПРАВИЛЬНИЙ РОЗРАХУНОК ТА ЗБЕРЕЖЕННЯ                -->
+                <!-- ========================================================================= -->
+        <!-- BUSINESS LOGIC TRIGGERS: AUTOMATED DATA VALUATION MATRIX                  -->
         <!-- ========================================================================= -->
 
-        <!-- КРОК 1: Розраховуємо та ПРИМУСОВО ЗБЕРЕЖУЄМО ціни в базу через метод ліній -->
+        <!--
+            STEP 1: Force computational fields logic on receipt lines layer.
+            This triggers the custom automated calculations in memory and physically writes
+            the retail price fields down to the database layout, clearing zero price triggers.
+        -->
         <function model="cloth.receipt.line" name="_compute_product_fields">
             <value eval="[ref('demo_receipt_line_001'), ref('demo_receipt_line_002'), ref('demo_receipt_line_003'), ref('demo_receipt_line_004')]"/>
         </function>
 
-        <!-- КРОК 2: Тепер, коли ціни вже фізично лежать у базі, валідація пройде без помилок -->
+        <!--
+            STEP 2: Sequential workflow state mutation execution for all documents.
+            Since calculated metrics are secured in the database at Step 1, the core business
+            validation rules execute without raising unexpected ValidationError events.
+        -->
         <function model="cloth.receipt" name="action_button_validate">
             <value eval="[ref('demo_receipt_001')]"/>
         </function>
@@ -187,12 +178,18 @@
             <value eval="[ref('demo_receipt_003')]"/>
         </function>
 
-        <!-- КРОК 3: Генеруємо матричні лінії залишків для карток товарів -->
+        <!--
+            STEP 3: Populating stock metrics across item variant size matrix profiles.
+            Triggers the generation of active warehouse stock balances based on validated inputs.
+        -->
         <function model="cloth.product" name="action_generate_stock_lines">
             <value eval="[ref('demo_product_tshirt'), ref('demo_product_hoodie'), ref('demo_product_jeans')]"/>
         </function>
 
-        <!-- КРОК 4: Обчислюємо ціни одиниць товарів у замовленнях клієнтів -->
+        <!--
+            STEP 4: Calculating unit price metrics across individual client order lines.
+            Secures correct automated customer price fetching based on the synchronized live matrix.
+        -->
         <function model="cloth.order.line" name="_compute_price_unit">
             <value eval="[ref('demo_order_line_001'), ref('demo_order_line_002'), ref('demo_order_line_003')]"/>
         </function>

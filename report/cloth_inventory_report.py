@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, tools
+from odoo import fields, models, tools
 
 
 class ClothInventoryReport(models.Model):
@@ -26,7 +25,7 @@ class ClothInventoryReport(models.Model):
     sku = fields.Char(string="SKU Code", readonly=True)
     brand_id = fields.Many2one("cloth.brand", string="Brand", readonly=True)
     collection_id = fields.Many2one(
-        "cloth.collection", string="Collection", readonly=True
+        "cloth.collection", string="Collection", readonly=True,
     )
     size_id = fields.Many2one("cloth.size", string="Size", readonly=True)
 
@@ -47,10 +46,10 @@ class ClothInventoryReport(models.Model):
     # =========================================================================
     currency_id = fields.Many2one("res.currency", string="Currency", readonly=True)
     purchase_value = fields.Monetary(
-        string="Total Purchase Value", readonly=True, currency_field="currency_id"
+        string="Total Purchase Value", readonly=True, currency_field="currency_id",
     )
     retail_value = fields.Monetary(
-        string="Total Retail Sales Value", readonly=True, currency_field="currency_id"
+        string="Total Retail Sales Value", readonly=True, currency_field="currency_id",
     )
     retail_price = fields.Monetary(
         string="Current Retail Price",

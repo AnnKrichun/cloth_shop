@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -22,7 +21,7 @@ class RecalculateMarkupWizard(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         """⚡ АВТОПОДСТАНОВКА ДЛЯ ODOO 19: Вычитывает бренд из активной строки матрицы наценок"""
-        res = super(RecalculateMarkupWizard, self).default_get(fields_list)
+        res = super().default_get(fields_list)
 
         active_model = self.env.context.get("active_model")
         active_id = self.env.context.get("active_id")
@@ -42,7 +41,7 @@ class RecalculateMarkupWizard(models.TransientModel):
         """
         # Find all operational product templates linked to the targeted brand layer
         products = self.env["cloth.product"].search(
-            [("brand_id", "=", self.brand_id.id)]
+            [("brand_id", "=", self.brand_id.id)],
         )
         if not products:
             raise UserError(_("No products found for the selected brand!"))
@@ -63,7 +62,7 @@ class RecalculateMarkupWizard(models.TransientModel):
 
             # Aggregate receipt line statistics for specific item configuration profiles
             receipt_lines = self.env["cloth.receipt.line"].search(
-                [("sku_id", "=", product.id), ("receipt_id.state", "=", "done")]
+                [("sku_id", "=", product.id), ("receipt_id.state", "=", "done")],
             )
 
             if not receipt_lines:
@@ -74,7 +73,7 @@ class RecalculateMarkupWizard(models.TransientModel):
 
             for size in sizes_in_receipts:
                 variant_lines = receipt_lines.filtered(
-                    lambda l: l.size_id.id == size.id
+                    lambda l: l.size_id.id == size.id,
                 )
 
                 # Complex business logic execution: Weighted average computation layer
@@ -101,7 +100,7 @@ class RecalculateMarkupWizard(models.TransientModel):
                                 "product_id": product.id,
                                 "size_id": size.id,
                                 "retail_price": new_retail_price,
-                            }
+                            },
                         )
                     updated_count += 1
 
@@ -112,7 +111,7 @@ class RecalculateMarkupWizard(models.TransientModel):
             "params": {
                 "title": _("AVCO Recalculation Complete"),
                 "message": _(
-                    "Successfully synchronized and updated %s price configurations for brand %s."
+                    "Successfully synchronized and updated %s price configurations for brand %s.",
                 )
                 % (updated_count, self.brand_id.name),
                 "type": "success",

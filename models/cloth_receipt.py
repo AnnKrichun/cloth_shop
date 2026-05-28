@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -20,7 +19,7 @@ class ClothReceipt(models.Model):
     )
     date = fields.Date(string="Date", default=fields.Date.context_today, required=True)
     line_ids = fields.One2many(
-        "cloth.receipt.line", "receipt_id", string="Product Lines"
+        "cloth.receipt.line", "receipt_id", string="Product Lines",
     )
     state = fields.Selection(
         [("draft", "Draft"), ("done", "Validated")],
@@ -34,7 +33,7 @@ class ClothReceipt(models.Model):
         for vals in vals_list:
             if vals.get("name", _("New")) == _("New"):
                 vals["name"] = self.env["ir.sequence"].next_by_code(
-                    "cloth.receipt"
+                    "cloth.receipt",
                 ) or _("New")
         return super().create(vals_list)
 
@@ -121,16 +120,16 @@ class ClothReceipt(models.Model):
             if not line.sku_id:
                 raise ValidationError(
                     _(
-                        "The document cannot be validated because some lines are missing an SKU!"
-                    )
+                        "The document cannot be validated because some lines are missing an SKU!",
+                    ),
                 )
 
             if line.retail_price <= 0:
                 raise ValidationError(
                     _(
-                        "The document cannot be validated without a calculated retail price for SKU %s!"
+                        "The document cannot be validated without a calculated retail price for SKU %s!",
                     )
-                    % line.sku_id.name
+                    % line.sku_id.name,
                 )
 
         # Force a fresh retail prices evaluation sequence right before posting to ensure actual market metrics
@@ -157,7 +156,7 @@ class ClothReceipt(models.Model):
                         "product_id": line.sku_id.id,
                         "size_id": line.size_id.id,
                         "retail_price": line.retail_price,
-                    }
+                    },
                 )
 
         self.write({"state": "done"})
@@ -172,7 +171,7 @@ class ClothReceiptLine(models.Model):
     _description = "Goods Receipt Line"
 
     receipt_id = fields.Many2one(
-        "cloth.receipt", ondelete="cascade", string="Parent Receipt"
+        "cloth.receipt", ondelete="cascade", string="Parent Receipt",
     )
 
     # REMOVED store=True to prevent registry initialization recursion deadlocks
@@ -194,7 +193,7 @@ class ClothReceiptLine(models.Model):
     name = fields.Char(related="sku_id.name", string="Product Name", readonly=True)
     brand_id = fields.Many2one(related="sku_id.brand_id", string="Brand", readonly=True)
     collection_id = fields.Many2one(
-        related="sku_id.collection_id", string="Collection", readonly=True
+        related="sku_id.collection_id", string="Collection", readonly=True,
     )
 
     # Converted from a related field to a direct Many2one link to fit the new size-matrix design
@@ -204,7 +203,7 @@ class ClothReceiptLine(models.Model):
     # MULTI-CURRENCY LOGIC INFRASTRUCTURE
     # =========================================================================
     purchase_currency_id = fields.Many2one(
-        "res.currency", string="Purchase Currency", required=True
+        "res.currency", string="Purchase Currency", required=True,
     )
 
     retail_currency_id = fields.Many2one(
@@ -223,7 +222,7 @@ class ClothReceiptLine(models.Model):
         currency_field="purchase_currency_id",
     )
     retail_price = fields.Monetary(
-        string="Retail Price Unit", currency_field="retail_currency_id"
+        string="Retail Price Unit", currency_field="retail_currency_id",
     )
 
     # COMPUTED SUB-FINANCIAL SUBTOTAL FIELDS: Automatically evaluated upon quantities input updates

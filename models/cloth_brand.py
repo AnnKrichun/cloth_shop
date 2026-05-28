@@ -1,23 +1,23 @@
-from odoo import models, fields
+from odoo import fields, models
 
 
 class ClothBrand(models.Model):
     """
-    Model representing clothing manufacturing brands.
-
-    Tracks the brand identity, its geographic origin country,
-    and store logo for retail representation.
+    Model for storing clothing brands.
+    Keeps information about brand name, country, and logo.
     """
 
     _name = "cloth.brand"
     _description = "Clothing Brands"
     _order = "name"
 
-    # Brand text identifier (e.g. 'Zara', 'Nike')
+    # Main brand name field (indexed for faster search)
     name = fields.Char(string="Brand Name", required=True, index=True)
 
-    # Relational foreign key linking to the Odoo global countries directory (res.country model)
+    # Link to the standard country model in Odoo
     country_id = fields.Many2one("res.country", string="Country of Origin")
 
-    # Binary storage for image uploads, kept as DB attachment for better scale performance
+    # Brand image file.
+    # COMMENT: attachment=True saves the image file into the Odoo storage folder
+    # instead of the database, to keep the database fast and small.
     logo = fields.Binary(string="Logo", attachment=True)

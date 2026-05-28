@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import fields, models
+
 
 class ResCompany(models.Model):
     _inherit = 'res.company'
@@ -6,5 +7,5 @@ class ResCompany(models.Model):
     default_markup_coef = fields.Float(
         string='Глобальний коефіцієнт націнки',
         default=1.2,
-        help="Використовується, якщо для Бренду та Колекції не задано індивідуальну націнку"
+        help="Використовується, якщо для Бренду та Колекції не задано індивідуальну націнку",
     )

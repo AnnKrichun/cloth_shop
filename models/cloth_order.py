@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -16,7 +15,7 @@ class ClothOrder(models.Model):
     )
     partner_id = fields.Many2one("res.partner", string="Customer", required=True)
     date_order = fields.Datetime(
-        string="Order Date", default=fields.Datetime.now, required=True
+        string="Order Date", default=fields.Datetime.now, required=True,
     )
     delivery_address = fields.Text(string="Delivery Address", required=True)
 
@@ -48,7 +47,7 @@ class ClothOrder(models.Model):
         for vals in vals_list:
             if vals.get("name", _("New")) == _("New"):
                 vals["name"] = self.env["ir.sequence"].next_by_code("cloth.order") or _(
-                    "New"
+                    "New",
                 )
         return super().create(vals_list)
 
@@ -70,9 +69,9 @@ class ClothOrder(models.Model):
                 if order.state in ["shipped", "received", "cancelled", "rejected"]:
                     raise ValidationError(
                         _(
-                            "Operation not allowed! Order '%s' is already in a final state (%s) and cannot be moved."
+                            "Operation not allowed! Order '%s' is already in a final state (%s) and cannot be moved.",
                         )
-                        % (order.name, order.state.upper())
+                        % (order.name, order.state.upper()),
                     )
 
         # Зберігаємо дані в базу
@@ -106,21 +105,21 @@ class ClothOrder(models.Model):
             if line.product_id and line.size_id:
                 # Ініціалізуємо віртуальну лінію для розрахунку залишку на льоту
                 transient_stock_line = self.env["cloth.product.stock.line"].new(
-                    {"product_id": line.product_id.id, "size_id": line.size_id.id}
+                    {"product_id": line.product_id.id, "size_id": line.size_id.id},
                 )
                 transient_stock_line._compute_metrics()
 
                 if transient_stock_line.qty_available < line.qty:
                     raise ValidationError(
                         _(
-                            "Insufficient stock balance for product [%s] %s in Size %s! Available on hand: %s"
+                            "Insufficient stock balance for product [%s] %s in Size %s! Available on hand: %s",
                         )
                         % (
                             line.product_id.name,
                             line.product_id.product_title,
                             line.size_id.name,
                             transient_stock_line.qty_available,
-                        )
+                        ),
                     )
 
     @api.onchange("partner_id")
@@ -130,7 +129,7 @@ class ClothOrder(models.Model):
             if order.partner_id:
                 # 🔒 Прямий запит до БД: читаємо значення поля personal_discount прямо з таблиці res_partner
                 partner_data = self.env["res.partner"].search_read(
-                    [("id", "=", order.partner_id.id)], ["personal_discount"]
+                    [("id", "=", order.partner_id.id)], ["personal_discount"],
                 )
                 if partner_data and partner_data[0].get("personal_discount"):
                     order.discount = partner_data[0]["personal_discount"]
@@ -174,7 +173,7 @@ class ClothOrderLine(models.Model):
     )
 
     price_subtotal = fields.Float(
-        string="Subtotal", compute="_compute_price_subtotal", store=True, digits=(12, 2)
+        string="Subtotal", compute="_compute_price_subtotal", store=True, digits=(12, 2),
     )
 
     # 🛠️ Обчислювальний метод, який тепер шукає ціну в актуальній матриці

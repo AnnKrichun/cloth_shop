@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -19,17 +18,17 @@ class ClothMarkupCoefficient(models.Model):
 
     # Relational foreign key mapping to the manufacturer brand catalog
     brand_id = fields.Many2one(
-        "cloth.brand", string="Brand", required=True, ondelete="cascade"
+        "cloth.brand", string="Brand", required=True, ondelete="cascade",
     )
 
     # Relational foreign key mapping to the seasonal designer release catalog
     collection_id = fields.Many2one(
-        "cloth.collection", string="Collection", required=True, ondelete="cascade"
+        "cloth.collection", string="Collection", required=True, ondelete="cascade",
     )
 
     # Multiplier ratio used to calculate consumer retail tags from purchase cost
     coefficient = fields.Float(
-        string="Markup Multiplier", required=True, default=1.0, digits=(12, 2)
+        string="Markup Multiplier", required=True, default=1.0, digits=(12, 2),
     )
 
     # ФІКС: Правильний синтаксис для унікальних обмежень на рівні PostgreSQL
@@ -38,7 +37,7 @@ class ClothMarkupCoefficient(models.Model):
             "brand_collection_unique",
             "unique(brand_id, collection_id)",
             "A pricing multiplier rule has already been registered for this specific brand and collection combination!",
-        )
+        ),
     ]
 
     @api.depends("brand_id", "collection_id", "coefficient")
@@ -60,5 +59,5 @@ class ClothMarkupCoefficient(models.Model):
         for rec in self:
             if rec.coefficient <= 0:
                 raise ValidationError(
-                    _("The markup multiplier coefficient value must be greater than 0!")
+                    _("The markup multiplier coefficient value must be greater than 0!"),
                 )

@@ -1,28 +1,27 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class ClothCollection(models.Model):
     """
-    Model representing fashion and seasonal clothing collections.
-
-    Tracks designer release themes, execution years, and seasonal
-    parameters to segregate products in retail catalogs.
+    Model for storing clothing collections.
+    Tracks fashion themes, years, and seasons to organize products.
     """
 
     _name = "cloth.collection"
     _description = "Clothing Collections"
     _order = "year desc, season"
 
-    # The title or main design topic of the fashion line (e.g. 'Denim', 'Urban')
+    # The title or name of the collection (e.g., 'Urban Breeze')
     name = fields.Char(string="Collection Theme", required=True)
 
-    # Calendar year of the collection release, defaults to the current year
+    # Execution year, defaults to the current year automatically
     year = fields.Char(
-        string="Year", required=True, default=lambda self: str(fields.Date.today().year)
+        string="Year",
+        required=True,
+        default=lambda self: str(fields.Date.today().year),
     )
 
-    # Seasonal classification partition parameters
+    # Seasonal choice filter for apparel separation
     season = fields.Selection(
         [("spring_summer", "Spring / Summer"), ("autumn_winter", "Autumn / Winter")],
         string="Season",
@@ -33,12 +32,13 @@ class ClothCollection(models.Model):
     @api.depends("year", "season", "name")
     def _compute_display_name(self):
         """
-        Computes the standard user-facing name representation for lookup panels.
-
-        Odoo 19 native mechanism replacing deprecated name_get().
-        Formats the visual output as: [Year] Season Label - Collection Theme.
+        Computes how the collection looks in selection fields.
+        Formats the output text as: [Year] Season - Theme Name.
         """
         for rec in self:
-            # Safely fetch the human-readable string translation from the selection mapping matrix
+            # COMMENT: We read the selection dictionary to get the nice text label
+            # (like 'Spring / Summer') instead of the technical database key.
             season_label = dict(self._fields["season"].selection).get(rec.season, "")
+
+            # Setting the final readable name for lookup panels
             rec.display_name = f"[{rec.year}] {season_label} - {rec.name}"
