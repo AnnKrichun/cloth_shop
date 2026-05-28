@@ -21,7 +21,15 @@
             <field name="model">cloth.order</field>
             <field name="arch" type="xml">
                 <form string="Customer Sales Order">
-                    <header>
+
+      <header>
+    <!-- ➕ НАША НОВА КНОПКА ПЕРЕРАХУНКУ -->
+    <button name="action_recalculate_discount"
+            string="Recalculate Discount"
+            type="object"
+            invisible="state != 'draft'"
+            class="btn-secondary"
+            icon="fa-refresh"/>
                         <button name="action_state_shipped" string="Ship to Customer" type="object"
                                 invisible="state != 'draft'" class="btn-primary" icon="fa-truck"/>
                         <button name="action_state_received" string="Mark as Received" type="object"

@@ -33,15 +33,21 @@
               sequence="20"/>
 
     <menuitem id="menu_cloth_shop_reporting"
-                  name="Reporting"
-                  parent="menu_cloth_shop_root"
-                  sequence="15"/>
+              name="Reporting"
+              parent="menu_cloth_shop_root"
+              sequence="15"/>
 
     <menuitem id="menu_cloth_inventory_report"
               name="Inventory Turnover &amp; Valuation"
               parent="menu_cloth_shop_reporting"
               action="action_cloth_inventory_report"
               sequence="10"/>
+
+    <menuitem id="menu_cloth_profitability_report"
+              name="Profitability Report"
+              parent="menu_cloth_shop_reporting"
+              action="action_cloth_profitability_report"
+              sequence="20"/>
 
     <!-- Configuration registries setup drop-down matrix nodes panels mappings -->
     <menuitem id="menu_cloth_shop_config"
@@ -89,7 +95,7 @@
               action="action_cloth_markup"
               sequence="40"/>
 
-<!-- ========================================================================= -->
+    <!-- ========================================================================= -->
     <!-- CUSTOM CURRENCY RATES HISTORY MANAGEMENT MENU ITEM                        -->
     <!-- ========================================================================= -->
 

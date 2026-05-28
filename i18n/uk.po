@@ -542,3 +542,79 @@ msgstr "Магазин одягу: Автоматичне оновлення к�
 #. module: cloth_shop
 msgid "Update Rates from PrivatBank"
 msgstr "Оновити курси з ПриватБанку"
+
+#. module: cloth_shop
+#: model:ir.model,name:cloth_shop.model_cloth_profitability_report
+msgid "Profitability Report"
+msgstr "Звіт по доходності"
+
+#. module: cloth_shop
+#: model:ir.actions.act_window,name:cloth_shop.action_cloth_profitability_report
+msgid "Profitability Report"
+msgstr "Звіт по доходності та знижках"
+
+#. module: cloth_shop
+#: code:addons/cloth_shop/report/cloth_profitability_report.py:0
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__name
+msgid "Order Reference"
+msgstr "Номер замовлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__date_order
+msgid "Order Date"
+msgstr "Дата замовлення"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__partner_id
+msgid "Customer"
+msgstr "Клієнт"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__product_id
+msgid "Product"
+msgstr "Товар"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__size_id
+msgid "Size"
+msgstr "Розмір"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__qty
+msgid "Quantity"
+msgstr "Кількість (шт)"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__purchase_price
+msgid "Cost Price Unit"
+msgstr "Собівартість од."
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__total_cost
+msgid "Total Cost"
+msgstr "Загальна собівартість закупки"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__price_unit
+msgid "Retail Price Unit"
+msgstr "Ціна роздрібна од."
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__discount_percent
+msgid "Discount (%)"
+msgstr "Знижка (%)"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__discount_amount
+msgid "Discount Amount"
+msgstr "Сума знижки"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__turnover
+msgid "Net Turnover"
+msgstr "Чистий виторг"
+
+#. module: cloth_shop
+#: model:ir.model.fields,field_description:cloth_shop.field_cloth_profitability_report__profit
+msgid "Margin Profit"
+msgstr "Маржинальний дохід"

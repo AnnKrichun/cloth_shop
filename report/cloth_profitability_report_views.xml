@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ТАБЛИЦЯ ЗВІТУ -->
+        <record id="view_cloth_profitability_report_list" model="ir.ui.view">
+            <field name="name">cloth.profitability.report.list</field>
+            <field name="model">cloth.profitability.report</field>
+            <field name="arch" type="xml">
+                <list string="Profitability Analysis" create="false" edit="false" delete="false">
+                    <field name="date_order"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <field name="size_id"/>
+                    <field name="qty" sum="Total Qty Sold"/>
+                    <field name="purchase_price" optional="hide"/>
+                    <field name="total_cost" sum="Total Cost"/>
+                    <field name="price_unit"/>
+                    <field name="discount_percent"/>
+                    <field name="discount_amount" sum="Total Discounts"/>
+                    <field name="turnover" sum="Total Net Turnover"/>
+                    <field name="profit" sum="Total Margin Profit" decoration-bf="1" decoration-success="profit &gt; 0" decoration-danger="profit &lt; 0"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- БЛОК ФІЛЬТРІВ ТА ПОШУКУ -->
+        <record id="view_cloth_profitability_report_search" model="ir.ui.view">
+            <field name="name">cloth.profitability.report.search</field>
+            <field name="model">cloth.profitability.report</field>
+            <field name="arch" type="xml">
+                <search string="Profitability Analysis Filters">
+                    <field name="product_id"/>
+                    <field name="partner_id"/>
+
+                    <filter string="Today" name="today" domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')), ('date_order', '&lt;=', context_today().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter string="This Month" name="this_month" domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
+
+                    <separator/>
+
+                    <!-- 🔒 ФІКС ODOO 19: Чистий group без атрибутів string та expand -->
+                    <group>
+                        <filter string="Customer" name="group_customer" context="{'group_by':'partner_id'}"/>
+                        <filter string="Product" name="group_product" context="{'group_by':'product_id'}"/>
+                        <filter string="Order Date" name="group_date" context="{'group_by':'date_order:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ДІЯ -->
+        <record id="action_cloth_profitability_report" model="ir.actions.act_window">
+            <field name="name">Profitability Report</field>
+            <field name="res_model">cloth.profitability.report</field>
+            <field name="view_mode">list</field>
+            <field name="search_view_id" ref="view_cloth_profitability_report_search"/>
+            <field name="context">{'search_default_group_product': 1}</field>
+        </record>
+
+    </data>
+</odoo>

@@ -114,12 +114,35 @@ class ClothOrder(models.Model):
 
     @api.onchange("partner_id")
     def _onchange_partner_id(self):
-        """Автоматично копіює персональну знижку клієнта в замовлення"""
+        """Пряме вичитування знижки з бази даних в обхід веб-кешу Odoo"""
         for order in self:
             if order.partner_id:
-                order.discount = order.partner_id.personal_discount
+                # 🔒 Прямий запит до БД: читаємо значення поля personal_discount прямо з таблиці res_partner
+                partner_data = self.env['res.partner'].search_read(
+                    [('id', '=', order.partner_id.id)],
+                    ['personal_discount']
+                )
+                if partner_data and partner_data[0].get('personal_discount'):
+                    order.discount = partner_data[0]['personal_discount']
+                else:
+                    order.discount = 0.0
             else:
                 order.discount = 0.0
+
+    def action_recalculate_discount(self):
+        """Кнопка для примусового перерахунку знижки та суми в існуючому замовленні"""
+        for order in self:
+            if order.partner_id:
+                # 1. Беремо актуальну знижку з картки клієнта
+                order.discount = order.partner_id.personal_discount or 0.0
+
+                # 2. Примусово викликаємо метод підрахунку суми замовлення
+                order._compute_amount_total()
+
+                # 3. Додатково оновлюємо суми рядків, якщо це необхідно (про всяк випадок)
+                for line in order.line_ids:
+                    line._compute_price_unit()
+                    line._compute_price_subtotal()
 
 
 class ClothOrderLine(models.Model):
